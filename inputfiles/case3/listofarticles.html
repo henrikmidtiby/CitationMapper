@@ -1,0 +1,878 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><HEAD><TITLE>HistCite - 1986 Guyer cited.txt</TITLE></HEAD>
+<BODY VLINK=blue OnLoad="focus()">
+<STYLE>
+body {
+	margin: 2px 10px; padding: 0;
+	background: #fff;
+}
+body, td, th {
+	font-size: 10pt; font-family: Verdana;
+}
+input, select, textarea {
+	font-size: 10px; font-family: Verdana;
+}
+.ui {
+	font-size: 10pt; font-family: Verdana;
+}
+.ui input, .ui select, .ui textarea {
+	font-size: 10px; font-family: Verdana;
+}
+.ci_title {
+	font-size: 8pt; font-weight: bold;
+}
+.ci_il {
+	color: black; text-decoration: none;	/* msie6 ! inherit */
+}
+.helpa { text-decoration: none;
+	cursor: help;
+}
+.helpt { background: #ffff77; padding: 4px;
+}
+.nu { text-decoration: none; 
+}
+.sc, .sc a { color: #904644 }
+.fnd { background-color: #beb;
+	padding: 0 3px 2px 2px;
+}
+.odd { background-color: #eeeeee }
+.evn { background-color: #dddddd }
+div.odd { padding: 5px; margin-bottom: 2px }
+div.evn { padding: 5px; margin-bottom: 2px }
+.yr { padding: 0; font-weight: bold }
+.ank:hover { cursor: pointer; text-decoration: none; color: inherit; }
+a {
+	text-decoration: none;
+}
+a:hover, a:hover .sc {
+	text-decoration: underline; color: blue;
+}
+.scr:hover, td a.scr:hover { color:#000; text-decoration:none; } /* FF td */
+@media print {
+	.nonprn, .ephemeral, .x, .ui { display: none; }
+	.index { border: solid #fff 0; }
+	body { font-size: 10pt; }
+	td, th { font-size: 10pt; }
+	.ci_title { font-size: 8pt; }
+}
+</STYLE>
+<SCRIPT>
+var root='http://127.0.0.1:1925/';
+function about () { window.open(root+'about.html','about','width=440,height=370,resizable=yes,scrollbars=yes') }
+	// This is a list of XMLHttpRequest-creation factory functions to try
+_factories = [
+    function() { return new XMLHttpRequest(); },
+    function() { return new ActiveXObject("Msxml2.XMLHTTP"); },
+    function() { return new ActiveXObject("Microsoft.XMLHTTP"); }
+];
+
+// When we find a factory that works, store it here.
+_factory = null;
+
+// Create and return a new XMLHttpRequest object.
+//
+// The first time we're called, try the list of factory functions until
+// we find one that returns a non-null value and does not throw an
+// exception. Once we find a working factory, remember it for later use.
+//
+newRequest = function() {
+    if (_factory != null) return _factory();
+
+    for(var i = 0; i < _factories.length; i++) {
+        try {
+            var factory = _factories[i];
+            var request = factory();
+            if (request != null) {
+                _factory = factory;
+                return request;
+            }
+        }
+        catch(e) {
+            continue;
+        }
+    }
+    // If we get here, none of the factory candidates succeeded,
+    // so throw an exception now and for all future calls.
+    _factory = function() {
+        //throw new Error("XMLHttpRequest not supported");
+        alert("XMLHttpRequest not supported");
+    }
+    _factory(); // Throw an error
+}
+
+function gethelp (url) {
+	var req = newRequest();
+	req.open("GET", url, true);
+
+	req.onreadystatechange=function() {
+  if (req.readyState==4) {
+   if (req.status == 200) {
+//    alert('OK');
+   } else {
+		alert("Err " + req.status + ": " + req.responseText);
+   }
+  }
+ }
+
+	req.send(null);
+}
+
+function gettip (ent, url) {
+	var req = newRequest();
+	req.open("GET", url, true);
+
+	req.onreadystatechange=function() {
+  if (req.readyState==4) {
+   if (req.status == 200) {
+		ent.innerHTML = req.responseText;
+   } else {
+		alert("Err " + req.status + ": " + req.responseText);
+   }
+  }
+ }
+
+	req.send(null);
+}
+
+</SCRIPT>
+<STYLE>
+div#tipshade {
+	position: fixed; top: 208px; left: 208px;
+	margin: 0px; width: 420px; height: 180px;
+	border: solid gray 2px;
+	background: gray;
+	opacity: .50; filter: alpha(opacity=50); -moz-opacity: 0.5;
+	z-index: 19; display: none;
+}
+div#tipoday {
+	position: fixed; top: 200px; left: 200px;
+	margin: 0px; width: 420px; height: 180px; padding: 0;
+	background: white;
+	border: solid #e44959 2px;
+	font: 10pt Verdana; cursor: default;
+	z-index: 20; display: none;
+}
+div#tiptitle {
+	background: #e44959; color: white; font-weight: bold;
+	padding-left: 4px;
+}
+div#tiptitle span.x {
+	background: white;
+}
+div#tipbox {
+	position: relative; /* top: 5px; */ margin: 8px;
+	max-height: 120px; overflow: auto;
+}
+div#tipctrl {
+	position: absolute; bottom: 0; margin: 4px;
+}
+div#tipctrl td {
+	font-size: 10px;
+}
+div#tipctrl form { margin: 0; }
+span.nw { white-space: nowrap; }
+</STYLE>
+<div id="tipshade" class="ui"> </div>
+<div id="tipoday" class="ui" align=left>
+<div id="tiptitle">HistCite Tip of the Day<span class="x"><a href=# OnClick="document.getElementById('tipshade').style.display='none';document.getElementById('tipoday').style.display='none';return false;" title="Close">X</a></span></div>
+<div id="tipbox">Tip of the day</div>
+<div id="tipctrl">
+<table align=bottom width=100%>
+<tr><td width=40% nowrap><form name=ft><label><input type=checkbox OnChange="nextStart(this);" checked> Show tip at next start</label></form></td>
+<td nowrap align=right><a href=javascript:gettip(otip,'/tip.txt?next=-1');>Previous Tip</a>
+<td nowrap align=right><a href=javascript:gettip(otip,'/tip.txt?next=1');>Next Tip</a>
+<td align=right><a href=# OnClick="document.getElementById('tipshade').style.display='none';document.getElementById('tipoday').style.display='none';return false;">Close</a>&nbsp;</td>
+</tr></table></div></div>
+<SCRIPT> var otip;
+function getit () { otip = document.getElementById('tipbox'); gettip(otip,'/tip.txt?next=0'); }
+function nextStart (start) {
+	if(start.checked == true) {
+		on = 1;
+	} else {
+		on = 0;
+	}
+	gethelp('/tipStart?on=' + on);
+}
+function tip_show () {
+	var W, H;
+	if(window.innerWidth) {
+		W = window.innerWidth; H = window.innerHeight;
+	} else {
+		var dd = document.documentElement;
+		W = dd.clientWidth; H = dd.clientHeight;
+	}
+//	alert(W + ' x ' + H);
+	var left = (W-420)/2;
+	var top = (H-180)/2;
+	var tipB = document.getElementById('tipshade');
+	var tipT = document.getElementById('tipoday');
+	tipB.style.left = left + 8 + 'px';
+	tipB.style.top = top + 8 + 'px';
+	tipT.style.left = left + 'px';
+	tipT.style.top = top + 'px';
+	tipB.style.display='block';
+	tipT.style.display='block';
+	getit();
+}
+</SCRIPT>
+
+<style>
+div#af_boxshado {
+	position: fixed; left:148px; top:128px; width: 460px; height: 110px;
+	background: gray; border: solid gray 2px;
+	opacity: .50; filter: alpha(opacity=50); -moz-opacity: 0.5;
+	z-index: 11; display: none;
+}
+div#af_box {
+	position: fixed; left:140px; top:120px; width: 460px; height: 110px;
+	background: white; border: solid #999 2px;
+	font: 10pt Verdana;
+	z-index: 12; display: none;
+}
+div#af_box input {
+	font: 10px Verdana;
+}
+div#af_box_title {
+	background: #d3d3d3; padding-left: 4px; font-weight: bold;
+}
+div#af_box_title span.x {
+	background: white;
+}
+div#af_form {
+	width: 445px; height: 70px;
+	padding: 8px; overflow: auto;
+}
+div#af_form #sub{
+	display: block; margin: 12px 0 0 0;
+}
+div#starh2 {
+	position: absolute; left: 88px; top: 78px; width: 420px; height: 156px;
+	background: gray; border: solid gray 2px;
+	opacity: .50; filter: alpha(opacity=50); -moz-opacity: 0.5;
+	padding: 8px;
+	z-index: 12; display: none;
+}
+div#starh {
+	position: absolute; left: 80px; top: 70px; width: 420px; height: 156px; overflow: auto;
+	border: outset gray 2px;
+	padding: 8px;
+	font: 10pt Verdana;
+	z-index: 12; display: none;
+}
+</style>
+<div id="af_boxshado"> </div>
+<div id="af_box">
+<div id="af_box_title">Add File<span class="x"><a onClick="af_close()" title="Close">X</a></span>
+<!--<a href=javascript:na() onMouseOver="na();" onClick="toggle('starh');" class=helpa style="color:#000">-->
+<a onClick="toggle('starh');" class=helpa style="color:#000"><span class="x" id=mstarh style="top:0;right:14px;">?</span><span class="x" id=lstarh style="top:0;right:14px;display:none">_</span></a>
+</div>
+<div id="af_form">
+<FORM action=/input method=GET OnSubmit="return false" name=af style="margin:0">
+	Use [Browse...] to select a file with bibliography data:<br>
+	<INPUT type=hidden name=inputpath>
+	<INPUT type=file name=inputset size=48 OnChange="af.sub.focus()" value="">
+	<INPUT type=submit value="Add File" OnClick="afSubmit();return false" name=sub id="sub">
+</div><div id=starh2> </div>
+<div id=starh class=helpt>
+Use wildcard '*' to add more than one file at a time.
+For example, if you have <code>file1</code>,
+<code>file2</code>, etc. all in the same folder or directory;
+first, locate one of the files with the [Browse...] button.  Then alter the
+file path in the box above to include '*' character (eg. <code>file*</code>).
+Wildcard '?' to blanket only one character works too.<br>
+<b>Note</b>: In Windows you can select multiple files and "drag and drop" them 
+onto HistCite icon or shortcut.  The program would start and load those files.
+</div>
+</FORM><SCRIPT>
+var af = document.af;
+function afSubmit() {
+	if ("" == af.inputset.value ) { alert("Select a file."); return }
+	af.inputpath.value = af.inputset.value;
+	af.submit();
+}
+function af_show() {
+	document.getElementById('af_boxshado').style.display = 'block';
+	document.getElementById('af_box').style.display = 'block';
+	a = document.af.inputset.value;
+	document.af.inputset.focus();
+}
+function af_close() {
+	document.getElementById('af_boxshado').style.display = 'none';
+	document.getElementById('af_box').style.display = 'none';
+}
+</SCRIPT></div>
+
+<STYLE>
+div#menu {
+	position: fixed; top: 0; left: 0;
+	margin: 0; width: 100%;
+	behavior: url(/csshover2.htc);	/* MSIE6 */
+	background: #d3d3d3; border-bottom: solid black 1px;
+	font: 12px Verdana; cursor: default;
+	z-index: 10;
+}
+div#menu ul {
+	margin: 0; padding: 0; background: #d3d3d3;
+/*  border: 1px solid #fff; border-width: 0 1px; */
+}
+div#menu li {
+	position: relative; list-style: none; margin: 0;
+	float: left; line-height: 1em;
+	display: block; padding: 0.25em 0.5em 0.25em 1em;
+	white-space: nowrap;
+	z-index: 10;	/* thus sez MSIE6 */
+}
+div#menu div#logo {
+	text-align: right;
+}
+div#menu span#logo {
+	padding: 0 1em; background: #eee;
+	font: 17px Helvetica bold;
+}
+div#menu ul.level2 {
+	border: outset #222 1px;
+}
+div#menu ul.level2#AnalysesBox {
+	width: 16.5em;
+}
+div#menu ul.level2#view {
+	width: 9em;
+}
+div#menu ul.level2#ToolsBox {
+	width: 12em;
+}
+div#menu li:hover {
+	background-color: #08246b; color: #fff;
+}
+div#menu ul.level2 li {
+	width: 100%; padding: 0; margin: 0;
+}
+div#menu ul.level2 li a div {
+	text-align: right; display: inline; position: absolute; right: 10px;
+}
+div#menu ul.level2 li.hr {
+	line-height: 4px; height: 4px;
+}
+div#menu ul.level2 li.hr:hover {
+	background: #d3d3d3;
+}
+div#menu ul.level2 li.hr div.hr {
+	background-color:#555;
+	line-height: 1px; height: 1px;
+	margin: 0; padding: 0; border: 0; margin-top: 1px;
+/*	border: groove #ddd; border-width: 0; border-top-width: 1px; */
+	position: absolute; left: 2%;
+	width: 96%; font-size: 1px;
+}
+div#menu li.submenu {
+	background: url(/submenu.gif) 95% 50% no-repeat;
+}
+div#menu li.submenu a:hover {
+	background: url(/submenu_i.gif) 95% 50% no-repeat;
+	background-color: #08246b; color: #fff;
+}
+div#menu .radio_vu,
+div#menu .radio_vu:hover {
+	background: url(/radio.gif) 2% 50% no-repeat;
+	background-color: #d3d3d3; color: #000;
+	font-weight: bold;
+}
+div#menu .check {
+	background: url(/check.gif) 2% 50% no-repeat;
+}
+div#menu .check:hover {
+	background: url(/check_i.gif) 2% 50% no-repeat;
+	background-color: #08246b;
+}
+div#menu ul.level3 a:hover,
+div#menu ul.level3v a:hover {
+	background: #08246b;
+}
+div#menu li a {
+	text-decoration: none; color: #000;
+	display: block; padding: 0.25em 0.5em 0.25em 1em;
+	cursor: default;
+}
+div#menu>ul a {
+	width: auto;
+}
+div#menu li a.current,
+div#menu li a.current:hover {
+	font-weight: bold; color: #000; background: #d3d3d3;
+}
+div#menu li a.dimmed, .dimmed,
+div#menu li a.dimmed:hover {
+	color: #7b7b7b; background: #d3d3d3;
+}
+div#menu li a:hover {
+	color: white; background: #08246b;
+}
+div#menu ul ul {
+	position: absolute; width: 11em; display: none;
+}
+div#menu ul.level1 li:hover ul.level2,
+div#menu ul.level1 li.submenu:hover ul.level2,
+div#menu ul.level2 li.submenu:hover ul.level3v,
+div#menu ul.level2 li.submenu:hover ul.level3 {
+	display: block;
+}
+div#menu ul.level2 {
+	top: 1.5em; left: 0;
+	border-top: outset #222 3px;
+}
+div#menu ul.level3 {
+	top: -1px; left: 11em; width: 12em;
+	border: outset #222 1px;
+}
+div#menu ul.level3v {
+	top: -1px; left: 9em; width: 8em;
+	border: outset #222 1px;
+}
+br#menu_pm {
+	line-height: 22px;
+}
+div.ephemeral, div.index {
+	border: solid #d3d3d3 1px; padding: 2px 2px 3px 2px;
+	font: 12px Verdana; position: relative; margin: 4px 0;
+	line-height: 17px; z-index: 1;
+}
+div.ephemeral td {
+	font: 12px Verdana;
+}
+div.ephemeral input,select {
+	font: 10px Verdana;
+}
+/* div.ephemeral a, div.index a {
+	text-decoration: none;
+}*/
+span.x {
+	position: absolute; top: 0; right: 0;  /*1px;*/
+	background: #d3d3d3; padding: 2px;
+	border: 0; font-size: 10px; line-height: 10px;
+	font-weight: normal;
+	text-decoration: none;
+}
+span.x a, a span.x {
+	color: #000; cursor: default;
+	text-decoration: none;
+}
+span.x a:hover, span.x:hover  {
+	font-weight: bold;
+}
+</STYLE>
+<SCRIPT>
+var tid;
+function hold_on (id) {
+	clearTimeout(tid);
+	document.getElementById(id).style.display = 'block';
+	tid = setTimeout("document.getElementById('"+id+"').style.display='none';document.getElementById('"+id+"').style.display='';", 500);
+}
+var id = ['File', 'AnalysesBox', 'view', 'ToolsBox', 'HelpBox'];
+function clear_others() {
+	for(var i=0; i<id.length; i++) {
+		document.getElementById(id[i]).style.display = 'none';
+		document.getElementById(id[i]).style.display = '';
+	}
+}
+
+</SCRIPT>
+<div id="menu" class="nonprn">
+<ul class="level1">
+	<li ><span onmouseover=clear_others()><span onmouseover="getElementById('Exports').style.display='none';getElementById('Exports').style.display=''">File</span></span><ul class="level2" id="File" onmouseover=clearTimeout(tid) onmouseout=hold_on('File')>
+		<li><a href=# onClick=af_show() title=" Load bibliography data">Add File...<div>Alt+F</div></a></li>
+		<li><a href=# OnClick="window.open('/node/edit-.html','edit','width=770,height=570,resizable=yes,scrollbars=yes')" title=" Create a new record">New record...<div></div></a></li>
+		<li><a href='/?cmd=close' onclick="return (confirm('There are unsaved changes.\n\nClick OK to discard them,\nCancel to go back.'))" title=" Close collection">Close<div></div></a></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href=# onclick="location.replace('/?cmd=savenow&url='+location.pathname+'&1297941807');return false" title=" Save changes to NEW '1986 Guyer cited.txt.hci'"><b>Save</b><div></div></a>
+</li><li><a href='/?cmd=savemain' title=" Save under a different name" >Save as...<div></div></a></li>
+		<li class="submenu"><a href=#>Export<div></div></a><ul class="level3" id="Exports">
+			<li><a href=/?cmd=savemain title=" Save full bibliography to a separate file (HistCite format)">Records...<div></div></a></li>
+<!--			<li><a href=# class=dimmed title="Available in appropriate Analytical lists">As CSV... <div></div></a></li> -->
+			<li><a href=/?cmd=savecsv&li=tl title=" Save this list in CSV format">As CSV... <div></div></a></li>
+			<li class=hr><div class=hr></div></li>
+			<li><a href=# OnClick="window.open('/savehtmlestimate','esti','resizable=yes,scrollbars=yes')" title=" Generate HTML presentation for publishing">HTML presentation<div></div></a></li>
+		</ul></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href=# OnClick="window.open('/properties','settings','width=490,height=480,resizable=yes,scrollbars=yes,status=yes')" title=" Collection properties">Properties...<div></div></a></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href=javascript:print()>Print...<div>Ctrl+P</div></a></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href='/?cmd=exit' onclick="return (confirm('There are unsaved changes.\n\nClick OK to discard them,\nCancel to go back.'))" title=" Exit the program">Quit<div>Alt+Q</div></a></li>
+	</ul></li>
+	<li ><span onmouseover=clear_others()>Analyses</span><ul class="level2" id="AnalysesBox" onmouseover=clearTimeout(tid) onmouseout=hold_on('AnalysesBox')>
+		<li><a class="current">Records<div>121</div></a></li><li class=hr><div class=hr></div></li><li><a href=list/au.html>Authors<div>284</div></a></li><li><a href=list/so.html>Journals<div>52</div></a></li><li><a href=list/or.html>Cited References<div>2317</div></a></li><li><a href=list/wd.html>Words<div>396</div></a></li><li><a href=list/py.html title=' Publication Years: 24 '>Yearly output<div></div></a></li><li><a href=list/dt.html title=' Document Types: 4 '>Document Type<div></div></a></li><li><a href=list/la.html title=' Languages: 3 '>Language<div></div></a></li><li><a href=list/in.html title=' Institutions: 96 '>Institution<div></div></a></li><li><a href=list/i2.html title=' Institution with Subdivisions: 140 '>Institution with Subdivision<div></div></a></li><li><a href=list/co.html title=' Countries: 24 '>Country<div></div></a></li>
+	</ul>
+	</li>
+	<li><span onmouseover=clear_others()>View</span><ul class="level2" id="view" onmouseover=clearTimeout(tid) onmouseout=hold_on('view')>
+		<li><a href=# class=radio_vu>Standard</a></li>
+		<li><a href="?VIEW=bibl" title=" Switch to Bibliometric view">Bibliometric<div></div></a></li>
+		<li><a href="?VIEW=cust" title=" Switch to Custom view">Custom<div></div></a>
+		<li class=hr><div class=hr></div></li>
+		<li><a href="/customize" title=" Select parameters for Custom view">Customize<div></div></a></li>
+	</ul></li>
+	<li ><span onmouseover=clear_others()>Tools</span><ul class="level2" id="ToolsBox" onmouseover=clearTimeout(tid) onmouseout=hold_on('ToolsBox')>
+		<li><a href=# OnClick="window.open('/graph/GraphMaker','graph','resizable=yes,scrollbars=yes')" title=" Make Historiographs">Graph Maker...<div></div></a></li>
+		<li><a href=# class=dimmed title=" There are no saved Historiographs">Historiographs<div></div></a></li> <li class=hr><div class=hr></div></li> <li><a href=/search/ title=" New search">Search<div></div></a></li>
+		<li><a href=?showgo=ON title=" Show Move to">Move to<div></div></a></li>
+		<li><a href=?showmm=ON title=" Show mark & tag menu">Mark & Tag<div>Alt+M</div></a></li>
+		<li><a href=# class=dimmed title=" Edit is available in Authors, Cited References, Institution lists">Edit<div></div></a></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href="?showai=OFF" class=check title=" Hide Analyses index">Analyses index<div></div></a></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href=# OnClick="window.open('/settings/','settings','width=490,height=480,resizable=yes,scrollbars=yes,status=yes')" title=" Change settings">Settings...<div>Alt+S</div></a></li>
+		<li><a href=# OnClick="window.open('/?cmd=viewlog','log','resizable=yes,scrollbars=yes')" title=" View session log">Log...<div></div></a></li>
+		
+	</ul></li>
+	<li><span onmouseover=clear_others()>Help</span><ul class="level2" id="HelpBox" onmouseover=clearTimeout(tid) onmouseout=hold_on('HelpBox')>
+		<li><a href=# OnClick="gethelp('/?help=listofallrecords.html')">Help<div></div></a></li>
+		<li><a href=# OnClick="gethelp('/?help=glossary.html')" title=" Glossary of acronyms">Glossary<div></div></a></li>
+		<li><a href=javascript:tip_show()>Tip of the Day<div></div></a></li>
+		<li class=hr><div class=hr></div></li>
+		<li><a href=# OnClick="window.open('http://www.histcite.com/','hc','resizable=yes,menubar=yes,toolbar=yes,location=yes,scrollbars=yes')" title=" Go to HistCite's Web site">Web Site<div></div></a></li>
+		<li><a href=javascript:about()>About HistCite<div></div></a></li>
+	</ul></li>
+</ul>
+	<div id=logo><span id=logo><a title=" Bibliometric Analysis and Visualization Software " style="color:#000;text-decoration:none;">HistCite&trade;</a></span></div>
+</div>
+<style>.hid { color:#fff }</style>
+<span class=hid>
+<a href=#></a><a href=#></a><a href=#></a>
+<a href="javascript:af_show();" onfocus="blur();click()" accesskey="f"></a>
+<a href=?showmm=ON onfocus="blur();click()" accesskey="m"></a>
+<a href=# OnClick="window.open('/settings/','settings','width=490,height=480,resizable=yes,scrollbars=yes,status=yes')" onfocus="blur();click()" accesskey="s"></a>
+<a href='/?cmd=exit' onfocus="blur();click()" onclick="return (confirm('There are unsaved changes.\n\nClick OK to discard them,\nCancel to go back.'))" accesskey="q"></a>
+</span>
+<SCRIPT>
+function toggle (id) {
+  var eid = document.getElementById(id);
+  var eid2 = document.getElementById(id + '2');
+  var mid = document.getElementById('m' + id);
+  var lid = document.getElementById('l' + id);
+  if(eid.style.display == 'none') {
+    eid.style.display = 'block';
+		if(eid2) eid2.style.display = 'block';
+    mid.style.display = 'none';
+    lid.style.display = '';
+  } else {
+    eid.style.display = 'none';
+		if(eid2) eid2.style.display = 'none';
+    mid.style.display = '';
+    lid.style.display = 'none';
+  }
+}
+</SCRIPT>
+<SCRIPT>
+function glossary () { window.open(root+'glossary.html','gloss','width=640,height=570,resizable=yes,scrollbars=yes') }
+function opeNod (a) { window.open(root+'node/'+a+'.html',a,'width=770,height=570,resizable=yes,scrollbars=yes') }
+function opeLod (dp, a) { if(''==dp) d='main'; else d=dp; var w = d; w = w.replace(/[-\/]/g, '');
+	window.open(root+d+'/'+a+'.html',w+a,'width=640,height=546,resizable=yes,scrollbars=yes') }
+function na(){}
+</SCRIPT>
+<br id="menu_pm"><STYLE>
+#head {
+	position: fixed;top:21px;padding-right:3px;left:0; padding-left:4px; background:#fff;
+	z-index:2; margin:0 0 8px 0; border-bottom:solid #000 1px;
+}
+#title {
+	padding-bottom: 4px; font-size: 1.3em; font-weight: bold;
+	max-width: 600px; /* non default overflow gives odd z-effects in FF */
+}
+#desc {
+	position: fixed; left: 4px; top: 3.1em;
+	padding: 2px 8px 4px 8px; white-space: normal; max-width: 480px;
+	background: #ffffcc; font-weight: normal; font-size: 10pt;
+	border: solid #000 1px;
+	display: none; z-index: 11;
+}
+#atitle { cursor: pointer;}
+#atitle, #stats {
+	text-decoration: none; color: #000;
+}
+#stats2 {
+	position: fixed; right: 0px; padding: 0;
+	background: white;
+	display: none; z-index: 11;
+}
+#atitle:hover #desc, #stats:hover #stats2 {
+	display: block;
+}
+@media print {
+	#head { position: static; }
+	#menu_pm { line-height: 0; }
+	#back { display: none; }
+}
+</STYLE>
+<!-- FF 3 only? fix -->
+<div id=head style="width:99%">
+<TABLE width=100% cellpadding=0 cellspacing=0 style="margin:0 0 3px 0">
+<TR valign=top><TD align=left width=60%>
+<div id=title><a id=atitle OnClick="window.open('/properties','settings','width=490,height=480,resizable=yes,scrollbars=no,status=yes');return false;">Untitled Collection<div id=desc>Click to change title and description</div></a></div>
+<TD align=center><TD nowrap align=right rowspan=2 width=5%><a id=stats>
+Grand Totals: LCS 446, GCS 1886, CR 3569<br>Collection span: 1986 - 2010<br></a><TR><TD colspan=2 width=95%><b>List of All Records</b> </TABLE></div><div id=back style="visibility:hidden;margin-bottom:8px;">
+<TABLE width=100% cellpadding=0 cellspacing=0 style="margin:0 0 3px 0;">
+<TR valign=top><TD align=left width=60%>
+<div id=title><a>Untitled Collection</a></div>
+<TD align=center>
+<TD nowrap align=right rowspan=2 width=5%>
+<a id=stats>Grand Totals: LCS 446, GCS 1886, CR 3569<br>Collection span: 1986 - 2010<br>
+</div>
+<TR><TD colspan=2 width=95%><b>List of All Records</b> </TABLE></div>
+<div class="index" style=""><span class="x"><a href="?showai=OFF" title="Hide Analyses index">X</a></span>Records: 121, <a href=list/au.html>Authors</a>: 284, <a href=list/so.html>Journals</a>: 52, <a href=list/or.html>Cited References</a>: 2317, <a href=list/wd.html>Words</a>: 396
+<br><span class=nonprn><a href=list/py.html title=' Publication Years: 24 '>Yearly output</a>
+|&nbsp;<a href=list/dt.html title=' Document Types: 4 '>Document Type</a>
+|&nbsp;<a href=list/la.html title=' Languages: 3 '>Language</a>
+|&nbsp;<a href=list/in.html title=' Institutions: 96 '>Institution</a>
+|&nbsp;<a href=list/i2.html title=' Institution with Subdivisions: 140 '>Institution with Subdivision</a>
+|&nbsp;<a href=list/co.html title=' Countries: 24 '>Country</a></span></div><FORM method=post name=t style=margin:2px><INPUT type=hidden name=showmm><style>a.navbtn:hover { background: #d3d3d3; text-decoration: none; }</style><div class=nonprn style="margin:4px 0;font:12px Verdana;">&nbsp;|&lt; &nbsp; &lt;&lt; &nbsp; &lt; &nbsp; &nbsp;<a href='?advance=next&item=10' class=navbtn title=' Next 10 items '> &gt; </a>&nbsp;<a href='?advance=next&item=100' class=navbtn title=' Next 100 items '> &gt;&gt; </a>&nbsp;<a href='?advance=next&item=21#bot' class=navbtn title=' Last item '> &gt;|&nbsp;</a></div><TABLE border=0 width="100%" cellpadding=5 cellspacing=2 style="border: 2px solid #cccccc;margin: 4px 0;">
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR><TD colspan=6 align=center class=yr>1986
+<TR valign=top align=right class=odd><TD>1<TD align=left><a TITLE=" Article " href=javascript:opeNod(0)>1</a>  <a href=/au/93/ title=" 2 records, TLCS 88, TGCS 115 " class="ci_il">GUYER DE</a>, <a href=/au/161/ title=" 2 records, TLCS 88, TGCS 115 " class="ci_il">MILES GE</a>, <a href=/au/218/ title=" 2 records, TLCS 88, TGCS 115 " class="ci_il">SCHREIBER MM</a>, <a href=/au/163/ title=" 1 records, TLCS 72, TGCS 72 " class="ci_il">MITCHELL OR</a>, <a href=/au/257/ title=" 1 records, TLCS 72, TGCS 72 " class="ci_il">VANDERBILT VC</a><div class=ci_title><a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">MACHINE</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">VISION</a> AND <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">IMAGE</a>-<a href=/wd/261/ title=" 6 records, TLCS 80, TGCS 144 " class="ci_il">PROCESSING</a> FOR <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">PLANT</a>-<a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">IDENTIFICATION</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/0/ title=" 1 records, TLCS 72, TGCS 72 " class="ci_il">1986</a> NOV-DEC</SPAN>;  29 (6): 1500-1507
+<TD><a href=/citers/0/ class=nu>72</a><TD>72<TD>0<TD>7
+<TR><TD colspan=6 align=center class=yr>1988
+<TR valign=top align=right class=evn><TD>2<TD align=left><a TITLE=" Article " href=javascript:opeNod(1)>2</a>  <a href=/au/159/ title=" 6 records, TLCS 56, TGCS 216 " class="ci_il">MEYER GE</a>, <a href=/au/234/ title=" 1 records, TLCS 2, TGCS 17 " class="ci_il">STEPANEK A</a>, <a href=/au/223/ title=" 1 records, TLCS 2, TGCS 17 " class="ci_il">SHELTON DP</a>, <a href=/au/58/ title=" 1 records, TLCS 2, TGCS 17 " class="ci_il">DICKEY EC</a><div class=ci_title><a href=/wd/102/ title=" 1 records, TLCS 2, TGCS 17 " class="ci_il">ELECTRONIC</a>-<a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">IMAGE</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">ANALYSIS</a> OF <a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">CROP</a> <a href=/wd/279/ title=" 2 records, TLCS 15, TGCS 80 " class="ci_il">RESIDUE</a> <a href=/wd/64/ title=" 2 records, TLCS 2, TGCS 40 " class="ci_il">COVER</a> ON <a href=/wd/316/ title=" 2 records, TLCS 15, TGCS 80 " class="ci_il">SOIL</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/1/ title=" 1 records, TLCS 2, TGCS 17 " class="ci_il">1988</a> MAY-JUN</SPAN>;  31 (3): 968-973
+<TD><a href=/citers/1/ class=nu>2</a><TD>17<TD><a href=/citees/1/ class=nu>1</a><TD>9
+<TR><TD colspan=6 align=center class=yr>1989
+<TR valign=top align=right class=odd><TD>3<TD align=left><a TITLE=" Article " href=javascript:opeNod(2)>3</a>  <a href=/au/22/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">BERLAGE AG</a>, <a href=/au/48/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">CHURCHILL DB</a>, <a href=/au/50/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">COOPER TM</a>, <a href=/au/25/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">BISLAND DM</a><div class=ci_title>THE <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">APPLICATION</a> OF <a href=/wd/224/ title=" 2 records, TLCS 0, TGCS 10 " class="ci_il">NEW</a> <a href=/wd/349/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">TECHNOLOGIES</a> TO <a href=/wd/296/ title=" 2 records, TLCS 0, TGCS 3 " class="ci_il">SEED</a> <a href=/wd/58/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">CONDITIONING</a></div><SPAN><a href=/so/23/ title=" 6 records, TLCS 20, TGCS 155 " class="ci_il">JOURNAL OF AGRICULTURAL ENGINEERING RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/2/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">1989</a> MAR</SPAN>;  42 (3): 193-202
+<TD>0<TD>2<TD><a href=/citees/2/ class=nu>1</a><TD>13
+<TR><TD colspan=6 align=center class=yr>1990
+<TR valign=top align=right class=evn><TD>4<TD align=left><a TITLE=" Article " href=javascript:opeNod(3)>4</a>  <a href=/au/154/ title=" 1 records, TLCS 3, TGCS 12 " class="ci_il">MCDONALD T</a>, <a href=/au/44/ title=" 1 records, TLCS 3, TGCS 12 " class="ci_il">CHEN YR</a><div class=ci_title><a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">APPLICATION</a> OF <a href=/wd/216/ title=" 1 records, TLCS 3, TGCS 12 " class="ci_il">MORPHOLOGICAL</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">IMAGE</a>-<a href=/wd/261/ title=" 6 records, TLCS 80, TGCS 144 " class="ci_il">PROCESSING</a> IN <a href=/wd/5/ title=" 8 records, TLCS 4, TGCS 118 " class="ci_il">AGRICULTURE</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/3/ title=" 1 records, TLCS 3, TGCS 12 " class="ci_il">1990</a> JUL-AUG</SPAN>;  33 (4): 1345-1352
+<TD><a href=/citers/3/ class=nu>3</a><TD>12<TD><a href=/citees/3/ class=nu>1</a><TD>19
+<TR><TD colspan=6 align=center class=yr>1991
+<TR valign=top align=right class=odd><TD>5<TD align=left><a TITLE=" Article " href=javascript:opeNod(4)>5</a>  <a href=/au/222/ title=" 5 records, TLCS 34, TGCS 88 " class="ci_il">SHEARER SA</a>, <a href=/au/117/ title=" 1 records, TLCS 19, TGCS 19 " class="ci_il">JONES PT</a><div class=ci_title><a href=/wd/304/ title=" 10 records, TLCS 82, TGCS 121 " class="ci_il">SELECTIVE</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">APPLICATION</a> OF <a href=/wd/254/ title=" 1 records, TLCS 19, TGCS 19 " class="ci_il">POSTEMERGENCE</a> <a href=/wd/145/ title=" 2 records, TLCS 25, TGCS 44 " class="ci_il">HERBICIDES</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">USING</a> <a href=/wd/247/ title=" 1 records, TLCS 19, TGCS 19 " class="ci_il">PHOTOELECTRICS</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/4/ title=" 2 records, TLCS 75, TGCS 75 " class="ci_il">1991</a> JUL-AUG</SPAN>;  34 (4): 1661-1666
+<TD><a href=/citers/4/ class=nu>19</a><TD>19<TD><a href=/citees/4/ class=nu>1</a><TD>4
+<TR valign=top align=right class=evn><TD>6<TD align=left><a TITLE=" Review " href=javascript:opeNod(5)>6</a>  <a href=/au/244/ title=" 1 records, TLCS 56, TGCS 56 " class="ci_il">THOMPSON JF</a>, <a href=/au/232/ title=" 2 records, TLCS 62, TGCS 80 " class="ci_il">STAFFORD JV</a>, <a href=/au/162/ title=" 4 records, TLCS 73, TGCS 141 " class="ci_il">MILLER PCH</a><div class=ci_title><a href=/wd/256/ title=" 3 records, TLCS 72, TGCS 150 " class="ci_il">POTENTIAL</a> FOR <a href=/wd/22/ title=" 4 records, TLCS 63, TGCS 76 " class="ci_il">AUTOMATIC</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">WEED</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">DETECTION</a> AND <a href=/wd/304/ title=" 10 records, TLCS 82, TGCS 121 " class="ci_il">SELECTIVE</a> <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">HERBICIDE</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">APPLICATION</a></div><SPAN><a href=/so/14/ title=" 3 records, TLCS 62, TGCS 116 " class="ci_il">CROP PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/4/ title=" 2 records, TLCS 75, TGCS 75 " class="ci_il">1991</a> AUG</SPAN>;  10 (4): 254-259
+<TD><a href=/citers/5/ class=nu>56</a><TD>56<TD><a href=/citees/5/ class=nu>1</a><TD>23
+<TR><TD colspan=6 align=center class=yr>1992
+<TR valign=top align=right class=odd><TD>7<TD align=left><a TITLE=" Article " href=javascript:opeNod(6)>7</a>  <a href=/au/18/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">BARRETT JR</a>, <a href=/au/116/ title=" 2 records, TLCS 0, TGCS 17 " class="ci_il">JONES DD</a>, <a href=/au/245/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">THOMPSON TL</a><div class=ci_title><a href=/wd/181/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">KNOWLEDGE</a> <a href=/wd/344/ title=" 4 records, TLCS 1, TGCS 24 " class="ci_il">SYSTEMS</a>-<a href=/wd/82/ title=" 4 records, TLCS 15, TGCS 80 " class="ci_il">DEVELOPMENT</a> IN <a href=/wd/366/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">UNITED</a>-<a href=/wd/335/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">STATES</a> <a href=/wd/5/ title=" 8 records, TLCS 4, TGCS 118 " class="ci_il">AGRICULTURE</a></div><SPAN><a href=/so/17/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">EXPERT SYSTEMS WITH APPLICATIONS</a></SPAN>. <SPAN class=sc><a href=/py/5/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">1992</a></SPAN>;  4 (1): 45-51
+<TD>0<TD>0<TD><a href=/citees/6/ class=nu>1</a><TD>22
+<TR><TD colspan=6 align=center class=yr>1993
+<TR valign=top align=right class=evn><TD>8<TD align=left><a TITLE=" Article " href=javascript:opeNod(7)>8</a>  <a href=/au/93/ title=" 2 records, TLCS 88, TGCS 115 " class="ci_il">GUYER DE</a>, <a href=/au/161/ title=" 2 records, TLCS 88, TGCS 115 " class="ci_il">MILES GE</a>, <a href=/au/83/ title=" 1 records, TLCS 16, TGCS 43 " class="ci_il">GAULTNEY LD</a>, <a href=/au/218/ title=" 2 records, TLCS 88, TGCS 115 " class="ci_il">SCHREIBER MM</a><div class=ci_title><a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">APPLICATION</a> OF <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">MACHINE</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">VISION</a> TO <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">SHAPE</a>-<a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">ANALYSIS</a> IN <a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">LEAF</a> AND <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">PLANT</a>-<a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">IDENTIFICATION</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/6/ title=" 3 records, TLCS 27, TGCS 73 " class="ci_il">1993</a> JAN-FEB</SPAN>;  36 (1): 163-171
+<TD><a href=/citers/7/ class=nu>16</a><TD>43<TD><a href=/citees/7/ class=nu>1</a><TD>11
+<TR valign=top align=right class=odd><TD>9<TD align=left><a TITLE=" Article " href=javascript:opeNod(8)>9</a>  <a href=/au/106/ title=" 1 records, TLCS 4, TGCS 10 " class="ci_il">HUMPHRIES S</a>, <a href=/au/225/ title=" 1 records, TLCS 4, TGCS 10 " class="ci_il">SIMONTON W</a><div class=ci_title><a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">IDENTIFICATION</a> OF <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">PLANT</a>-<a href=/wd/237/ title=" 1 records, TLCS 4, TGCS 10 " class="ci_il">PARTS</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">USING</a> <a href=/wd/53/ title=" 6 records, TLCS 30, TGCS 140 " class="ci_il">COLOR</a> AND <a href=/wd/136/ title=" 1 records, TLCS 4, TGCS 10 " class="ci_il">GEOMETRIC</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">IMAGE</a> <a href=/wd/71/ title=" 3 records, TLCS 10, TGCS 56 " class="ci_il">DATA</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/6/ title=" 3 records, TLCS 27, TGCS 73 " class="ci_il">1993</a> SEP-OCT</SPAN>;  36 (5): 1493-1500
+<TD><a href=/citers/8/ class=nu>4</a><TD>10<TD><a href=/citees/8/ class=nu>1</a><TD>13
+<TR valign=top align=right class=evn><TD>10<TD align=left><a TITLE=" Article " href=javascript:opeNod(9)>10</a>  <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">GERHARDS R</a>, <a href=/au/170/ title=" 2 records, TLCS 7, TGCS 25 " class="ci_il">NABOUT A</a>, <a href=/au/229/ title=" 6 records, TLCS 15, TGCS 77 " class="ci_il">SOKEFELD M</a>, <a href=/au/131/ title=" 4 records, TLCS 15, TGCS 77 " class="ci_il">KUHBAUCH W</a>, <a href=/au/69/ title=" 1 records, TLCS 7, TGCS 20 " class="ci_il">ELDIN HAN</a><div class=ci_title><a href=/wd/22/ title=" 4 records, TLCS 63, TGCS 76 " class="ci_il">AUTOMATIC</a> <a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">IDENTIFICATION</a> OF 10 <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">WEED</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">SPECIES</a> IN <a href=/wd/84/ title=" 5 records, TLCS 9, TGCS 35 " class="ci_il">DIGITAL</a> <a href=/wd/163/ title=" 3 records, TLCS 13, TGCS 60 " class="ci_il">IMAGES</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">USING</a> <a href=/wd/127/ title=" 3 records, TLCS 7, TGCS 46 " class="ci_il">FOURIER</a> <a href=/wd/76/ title=" 2 records, TLCS 8, TGCS 29 " class="ci_il">DESCRIPTORS</a> AND <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">SHAPE</a>-<a href=/wd/236/ title=" 2 records, TLCS 7, TGCS 21 " class="ci_il">PARAMETERS</a></div><SPAN><a href=/so/24/ title=" 3 records, TLCS 15, TGCS 72 " class="ci_il">JOURNAL OF AGRONOMY AND CROP SCIENCE-ZEITSCHRIFT FUR ACKER UND PFLANZENBAU</a></SPAN>. <SPAN class=sc><a href=/py/6/ title=" 3 records, TLCS 27, TGCS 73 " class="ci_il">1993</a> DEC</SPAN>;  171 (5): 321-328
+<TD><a href=/citers/9/ class=nu>7</a><TD>20<TD><a href=/citees/9/ class=nu>3</a><TD>17
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR><TD colspan=6 align=center class=yr>1994
+<TR valign=top align=right class=odd><TD>11<TD align=left><a TITLE=" Article " href=javascript:opeNod(10)>11</a>  <a href=/au/145/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">LOTZ LAP</a>, <a href=/au/130/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">KROPFF MJ</a>, <a href=/au/259/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">WALLINGA J</a>, <a href=/au/31/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">BOS HJ</a>, <a href=/au/92/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">GROENEVELD RMW</a><div class=ci_title><a href=/wd/348/ title=" 3 records, TLCS 3, TGCS 81 " class="ci_il">TECHNIQUES</a> TO <a href=/wd/109/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">ESTIMATE</a> <a href=/wd/275/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">RELATIVE</a> <a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">LEAF</a>-<a href=/wd/14/ title=" 3 records, TLCS 0, TGCS 29 " class="ci_il">AREA</a> AND <a href=/wd/64/ title=" 2 records, TLCS 2, TGCS 40 " class="ci_il">COVER</a> OF <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">WEEDS</a> IN <a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">CROPS</a> FOR <a href=/wd/394/ title=" 2 records, TLCS 0, TGCS 27 " class="ci_il">YIELD</a> <a href=/wd/195/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">LOSS</a> <a href=/wd/259/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">PREDICTION</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/7/ title=" 1 records, TLCS 0, TGCS 23 " class="ci_il">1994</a> JUN</SPAN>;  34 (3): 167-175
+<TD>0<TD>23<TD><a href=/citees/10/ class=nu>1</a><TD>19
+<TR><TD colspan=6 align=center class=yr>1995
+<TR valign=top align=right class=evn><TD>12<TD align=left><a TITLE=" Article " href=javascript:opeNod(11)>12</a>  <a href=/au/270/ title=" 2 records, TLCS 44, TGCS 132 " class="ci_il">WOEBBECKE DM</a>, <a href=/au/159/ title=" 6 records, TLCS 56, TGCS 216 " class="ci_il">MEYER GE</a>, <a href=/au/258/ title=" 2 records, TLCS 44, TGCS 132 " class="ci_il">VONBARGEN K</a>, <a href=/au/167/ title=" 5 records, TLCS 77, TGCS 283 " class="ci_il">MORTENSEN DA</a><div class=ci_title><a href=/wd/53/ title=" 6 records, TLCS 30, TGCS 140 " class="ci_il">COLOR</a> <a href=/wd/168/ title=" 1 records, TLCS 13, TGCS 63 " class="ci_il">INDEXES</a> FOR <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">WEED</a> <a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">IDENTIFICATION</a> UNDER VARIOUS <a href=/wd/316/ title=" 2 records, TLCS 15, TGCS 80 " class="ci_il">SOIL</a>, <a href=/wd/279/ title=" 2 records, TLCS 15, TGCS 80 " class="ci_il">RESIDUE</a>, AND <a href=/wd/190/ title=" 2 records, TLCS 18, TGCS 74 " class="ci_il">LIGHTING</a> <a href=/wd/59/ title=" 6 records, TLCS 20, TGCS 79 " class="ci_il">CONDITIONS</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/8/ title=" 6 records, TLCS 87, TGCS 275 " class="ci_il">1995</a> JAN-FEB</SPAN>;  38 (1): 259-269
+<TD><a href=/citers/11/ class=nu>13</a><TD>63<TD><a href=/citees/11/ class=nu>2</a><TD>24
+<TR valign=top align=right class=odd><TD>13<TD align=left><a TITLE=" Article " href=javascript:opeNod(12)>13</a>  <a href=/au/270/ title=" 2 records, TLCS 44, TGCS 132 " class="ci_il">WOEBBECKE DM</a>, <a href=/au/159/ title=" 6 records, TLCS 56, TGCS 216 " class="ci_il">MEYER GE</a>, <a href=/au/258/ title=" 2 records, TLCS 44, TGCS 132 " class="ci_il">VONBARGEN K</a>, <a href=/au/167/ title=" 5 records, TLCS 77, TGCS 283 " class="ci_il">MORTENSEN DA</a><div class=ci_title><a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">SHAPE</a>-<a href=/wd/121/ title=" 3 records, TLCS 36, TGCS 98 " class="ci_il">FEATURES</a> FOR <a href=/wd/158/ title=" 1 records, TLCS 31, TGCS 69 " class="ci_il">IDENTIFYING</a> <a href=/wd/395/ title=" 1 records, TLCS 31, TGCS 69 " class="ci_il">YOUNG</a> <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">WEEDS</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">USING</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">IMAGE</a>-<a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">ANALYSIS</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/8/ title=" 6 records, TLCS 87, TGCS 275 " class="ci_il">1995</a> JAN-FEB</SPAN>;  38 (1): 271-281
+<TD><a href=/citers/12/ class=nu>31</a><TD>69<TD><a href=/citees/12/ class=nu>2</a><TD>21
+<TR valign=top align=right class=evn><TD>14<TD align=left><a TITLE=" Article " href=javascript:opeNod(13)>14</a>  <a href=/au/186/ title=" 2 records, TLCS 7, TGCS 43 " class="ci_il">PAICE MER</a>, <a href=/au/162/ title=" 4 records, TLCS 73, TGCS 141 " class="ci_il">MILLER PCH</a>, <a href=/au/28/ title=" 1 records, TLCS 6, TGCS 25 " class="ci_il">BODLE JD</a><div class=ci_title>AN <a href=/wd/115/ title=" 1 records, TLCS 6, TGCS 25 " class="ci_il">EXPERIMENTAL</a> <a href=/wd/329/ title=" 5 records, TLCS 24, TGCS 121 " class="ci_il">SPRAYER</a> FOR THE <a href=/wd/320/ title=" 2 records, TLCS 7, TGCS 43 " class="ci_il">SPATIALLY</a> <a href=/wd/304/ title=" 10 records, TLCS 82, TGCS 121 " class="ci_il">SELECTIVE</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">APPLICATION</a> OF <a href=/wd/145/ title=" 2 records, TLCS 25, TGCS 44 " class="ci_il">HERBICIDES</a></div><SPAN><a href=/so/23/ title=" 6 records, TLCS 20, TGCS 155 " class="ci_il">JOURNAL OF AGRICULTURAL ENGINEERING RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/8/ title=" 6 records, TLCS 87, TGCS 275 " class="ci_il">1995</a> FEB</SPAN>;  60 (2): 107-116
+<TD><a href=/citers/13/ class=nu>6</a><TD>25<TD><a href=/citees/13/ class=nu>1</a><TD>12
+<TR valign=top align=right class=odd><TD>15<TD align=left><a TITLE=" Article " href=javascript:opeNod(14)>15</a>  <a href=/au/181/ title=" 1 records, TLCS 1, TGCS 14 " class="ci_il">NORDBO E</a>, <a href=/au/47/ title=" 3 records, TLCS 4, TGCS 71 " class="ci_il">CHRISTENSEN S</a>, <a href=/au/129/ title=" 1 records, TLCS 1, TGCS 14 " class="ci_il">KRISTENSEN K</a><div class=ci_title><a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">WEED</a> <a href=/wd/238/ title=" 2 records, TLCS 11, TGCS 56 " class="ci_il">PATCH</a> <a href=/wd/199/ title=" 8 records, TLCS 27, TGCS 150 " class="ci_il">MANAGEMENT</a></div><SPAN><a href=/so/51/ title=" 4 records, TLCS 1, TGCS 20 " class="ci_il">ZEITSCHRIFT FUR PFLANZENKRANKHEITEN UND PFLANZENSCHUTZ-JOURNAL OF PLANT DISEASES AND PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/8/ title=" 6 records, TLCS 87, TGCS 275 " class="ci_il">1995</a> FEB</SPAN>;  102 (1): 75-85
+<TD><a href=/citers/14/ class=nu>1</a><TD>14<TD><a href=/citees/14/ class=nu>2</a><TD>28
+<TR valign=top align=right class=evn><TD>16<TD align=left><a TITLE=" Article " href=javascript:opeNod(15)>16</a>  <a href=/au/282/ title=" 4 records, TLCS 19, TGCS 70 " class="ci_il">ZHANG N</a>, <a href=/au/41/ title=" 1 records, TLCS 17, TGCS 40 " class="ci_il">CHAISATTAPAGON C</a><div class=ci_title><a href=/wd/100/ title=" 1 records, TLCS 17, TGCS 40 " class="ci_il">EFFECTIVE</a> <a href=/wd/66/ title=" 1 records, TLCS 17, TGCS 40 " class="ci_il">CRITERIA</a> FOR <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">WEED</a> <a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">IDENTIFICATION</a> IN <a href=/wd/390/ title=" 6 records, TLCS 28, TGCS 98 " class="ci_il">WHEAT</a> <a href=/wd/124/ title=" 8 records, TLCS 24, TGCS 117 " class="ci_il">FIELDS</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">USING</a> <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">MACHINE</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">VISION</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/8/ title=" 6 records, TLCS 87, TGCS 275 " class="ci_il">1995</a> MAY-JUN</SPAN>;  38 (3): 965-974
+<TD><a href=/citers/15/ class=nu>17</a><TD>40<TD><a href=/citees/15/ class=nu>3</a><TD>27
+<TR valign=top align=right class=odd><TD>17<TD align=left><a TITLE=" Article " href=javascript:opeNod(16)>17</a>  <a href=/au/114/ title=" 2 records, TLCS 25, TGCS 129 " class="ci_il">JOHNSON GA</a>, <a href=/au/167/ title=" 5 records, TLCS 77, TGCS 283 " class="ci_il">MORTENSEN DA</a>, <a href=/au/151/ title=" 1 records, TLCS 19, TGCS 64 " class="ci_il">MARTIN AR</a><div class=ci_title>A <a href=/wd/311/ title=" 1 records, TLCS 19, TGCS 64 " class="ci_il">SIMULATION</a> OF <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">HERBICIDE</a> <a href=/wd/370/ title=" 4 records, TLCS 30, TGCS 176 " class="ci_il">USE</a> <a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">BASED</a> ON <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">WEED</a> <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">SPATIAL</a>-<a href=/wd/93/ title=" 6 records, TLCS 33, TGCS 121 " class="ci_il">DISTRIBUTION</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/8/ title=" 6 records, TLCS 87, TGCS 275 " class="ci_il">1995</a> JUN</SPAN>;  35 (3): 197-205
+<TD><a href=/citers/16/ class=nu>19</a><TD>64<TD><a href=/citees/16/ class=nu>2</a><TD>21
+<TR><TD colspan=6 align=center class=yr>1996
+<TR valign=top align=right class=evn><TD>18<TD align=left><a TITLE=" Article " href=javascript:opeNod(17)>18</a>  <a href=/au/186/ title=" 2 records, TLCS 7, TGCS 43 " class="ci_il">Paice MER</a>, <a href=/au/162/ title=" 4 records, TLCS 73, TGCS 141 " class="ci_il">Miller PCH</a>, <a href=/au/55/ title=" 1 records, TLCS 1, TGCS 18 " class="ci_il">Day W</a><div class=ci_title><a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">Control</a> <a href=/wd/278/ title=" 2 records, TLCS 5, TGCS 39 " class="ci_il">requirements</a> for <a href=/wd/320/ title=" 2 records, TLCS 7, TGCS 43 " class="ci_il">spatially</a> <a href=/wd/304/ title=" 10 records, TLCS 82, TGCS 121 " class="ci_il">selective</a> <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/330/ title=" 1 records, TLCS 1, TGCS 18 " class="ci_il">sprayers</a></div><SPAN><a href=/so/12/ title=" 9 records, TLCS 11, TGCS 167 " class="ci_il">COMPUTERS AND ELECTRONICS IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> FEB</SPAN>;  14 (2-3): 163-177
+<TD><a href=/citers/17/ class=nu>1</a><TD>18<TD><a href=/citees/17/ class=nu>2</a><TD>35
+<TR valign=top align=right class=odd><TD>19<TD align=left><a TITLE=" Article " href=javascript:opeNod(18)>19</a>  <a href=/au/232/ title=" 2 records, TLCS 62, TGCS 80 " class="ci_il">Stafford JV</a>, <a href=/au/136/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">LeBars JM</a>, <a href=/au/6/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">Ambler B</a><div class=ci_title>A <a href=/wd/142/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">hand</a>-<a href=/wd/143/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">held</a> <a href=/wd/71/ title=" 3 records, TLCS 10, TGCS 56 " class="ci_il">data</a> <a href=/wd/194/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">logger</a> with <a href=/wd/175/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">integral</a> <a href=/wd/140/ title=" 2 records, TLCS 6, TGCS 32 " class="ci_il">GPS</a> for <a href=/wd/262/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">producing</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/202/ title=" 4 records, TLCS 15, TGCS 112 " class="ci_il">maps</a> by <a href=/wd/123/ title=" 6 records, TLCS 17, TGCS 52 " class="ci_il">field</a> <a href=/wd/383/ title=" 1 records, TLCS 6, TGCS 24 " class="ci_il">walking</a></div><SPAN><a href=/so/12/ title=" 9 records, TLCS 11, TGCS 167 " class="ci_il">COMPUTERS AND ELECTRONICS IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> FEB</SPAN>;  14 (2-3): 235-247
+<TD><a href=/citers/18/ class=nu>6</a><TD>24<TD><a href=/citees/18/ class=nu>1</a><TD>11
+<TR valign=top align=right class=evn><TD>20<TD align=left><a TITLE=" Article " href=javascript:opeNod(19)>20</a>  <a href=/au/32/ title=" 2 records, TLCS 5, TGCS 39 " class="ci_il">Brivot R</a>, <a href=/au/150/ title=" 2 records, TLCS 5, TGCS 39 " class="ci_il">Marchant JA</a><div class=ci_title><a href=/wd/301/ title=" 5 records, TLCS 8, TGCS 75 " class="ci_il">Segmentation</a> of <a href=/wd/252/ title=" 4 records, TLCS 11, TGCS 92 " class="ci_il">plants</a> and <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a> for a <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">crop</a> <a href=/wd/265/ title=" 2 records, TLCS 4, TGCS 39 " class="ci_il">protection</a> <a href=/wd/285/ title=" 1 records, TLCS 4, TGCS 31 " class="ci_il">robot</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/172/ title=" 1 records, TLCS 4, TGCS 31 " class="ci_il">infrared</a> <a href=/wd/163/ title=" 3 records, TLCS 13, TGCS 60 " class="ci_il">images</a></div><SPAN><a href=/so/19/ title=" 1 records, TLCS 4, TGCS 31 " class="ci_il">IEE PROCEEDINGS-VISION IMAGE AND SIGNAL PROCESSING</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> APR</SPAN>;  143 (2): 118-124
+<TD><a href=/citers/19/ class=nu>4</a><TD>31<TD><a href=/citees/19/ class=nu>1</a><TD>16
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR valign=top align=right class=odd><TD>21<TD align=left><a TITLE=" Article " href=javascript:opeNod(20)>21</a>  <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">Gerhards R</a>, <a href=/au/229/ title=" 6 records, TLCS 15, TGCS 77 " class="ci_il">Sokefeld M</a>, <a href=/au/122/ title=" 1 records, TLCS 4, TGCS 14 " class="ci_il">Knuf D</a>, <a href=/au/131/ title=" 4 records, TLCS 15, TGCS 77 " class="ci_il">Kuhbauch W</a><div class=ci_title><a href=/wd/201/ title=" 6 records, TLCS 17, TGCS 107 " class="ci_il">Mapping</a> and <a href=/wd/137/ title=" 1 records, TLCS 4, TGCS 14 " class="ci_il">geostatistical</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/93/ title=" 6 records, TLCS 33, TGCS 121 " class="ci_il">distribution</a> in <a href=/wd/341/ title=" 1 records, TLCS 4, TGCS 14 " class="ci_il">sugarbeet</a> <a href=/wd/124/ title=" 8 records, TLCS 24, TGCS 117 " class="ci_il">fields</a> for <a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">site</a>-<a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/199/ title=" 8 records, TLCS 27, TGCS 150 " class="ci_il">management</a></div><SPAN><a href=/so/24/ title=" 3 records, TLCS 15, TGCS 72 " class="ci_il">JOURNAL OF AGRONOMY AND CROP SCIENCE-ZEITSCHRIFT FUR ACKER UND PFLANZENBAU</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> JUN</SPAN>;  176 (4): 259-266
+<TD><a href=/citers/20/ class=nu>4</a><TD>14<TD><a href=/citees/20/ class=nu>2</a><TD>21
+<TR valign=top align=right class=evn><TD>22<TD align=left><a TITLE=" Article " href=javascript:opeNod(21)>22</a>  <a href=/au/279/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">Yonekawa S</a>, <a href=/au/215/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">Sakai N</a>, <a href=/au/121/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">Kitani O</a><div class=ci_title><a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">Identification</a> of <a href=/wd/155/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">idealized</a> <a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">leaf</a> <a href=/wd/365/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">types</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/310/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">simple</a> <a href=/wd/87/ title=" 2 records, TLCS 6, TGCS 18 " class="ci_il">dimensionless</a> <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">shape</a> <a href=/wd/117/ title=" 1 records, TLCS 6, TGCS 18 " class="ci_il">factors</a> by <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> JUL-AUG</SPAN>;  39 (4): 1525-1533
+<TD><a href=/citers/21/ class=nu>6</a><TD>18<TD><a href=/citees/21/ class=nu>3</a><TD>20
+<TR valign=top align=right class=odd><TD>23<TD align=left><a TITLE=" Article " href=javascript:opeNod(22)>23</a>  <a href=/au/208/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">Rew LJ</a>, <a href=/au/53/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">Cussans GW</a>, <a href=/au/169/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">Mugglestone MA</a>, <a href=/au/162/ title=" 4 records, TLCS 73, TGCS 141 " class="ci_il">Miller PCH</a><div class=ci_title>A <a href=/wd/347/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">technique</a> for <a href=/wd/201/ title=" 6 records, TLCS 17, TGCS 107 " class="ci_il">mapping</a> the <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/93/ title=" 6 records, TLCS 33, TGCS 121 " class="ci_il">distribution</a> of <a href=/wd/106/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">Elymus</a> <a href=/wd/277/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">repens</a>, with <a href=/wd/110/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">estimates</a> of the <a href=/wd/256/ title=" 3 records, TLCS 72, TGCS 150 " class="ci_il">potential</a> <a href=/wd/271/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">reduction</a> in <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/369/ title=" 1 records, TLCS 10, TGCS 42 " class="ci_il">usage</a> from <a href=/wd/238/ title=" 2 records, TLCS 11, TGCS 56 " class="ci_il">patch</a> <a href=/wd/331/ title=" 4 records, TLCS 20, TGCS 96 " class="ci_il">spraying</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> AUG</SPAN>;  36 (4): 283-292
+<TD><a href=/citers/22/ class=nu>10</a><TD>42<TD><a href=/citees/22/ class=nu>3</a><TD>19
+<TR valign=top align=right class=evn><TD>24<TD align=left><a TITLE=" Article " href=javascript:opeNod(23)>24</a>  <a href=/au/100/ title=" 2 records, TLCS 7, TGCS 49 " class="ci_il">Heisel T</a>, <a href=/au/9/ title=" 2 records, TLCS 12, TGCS 87 " class="ci_il">Andreasen C</a>, <a href=/au/70/ title=" 1 records, TLCS 7, TGCS 48 " class="ci_il">Ersboll AK</a><div class=ci_title><a href=/wd/9/ title=" 1 records, TLCS 7, TGCS 48 " class="ci_il">Annual</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/94/ title=" 1 records, TLCS 7, TGCS 48 " class="ci_il">distributions</a> can be <a href=/wd/200/ title=" 1 records, TLCS 7, TGCS 48 " class="ci_il">mapped</a> with <a href=/wd/182/ title=" 1 records, TLCS 7, TGCS 48 " class="ci_il">kriging</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/9/ title=" 7 records, TLCS 38, TGCS 195 " class="ci_il">1996</a> AUG</SPAN>;  36 (4): 325-337
+<TD><a href=/citers/23/ class=nu>7</a><TD>48<TD><a href=/citees/23/ class=nu>3</a><TD>29
+<TR><TD colspan=6 align=center class=yr>1997
+<TR valign=top align=right class=odd><TD>25<TD align=left><a TITLE=" Article " href=javascript:opeNod(24)>25</a>  <a href=/au/101/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">Hetzroni A</a>, <a href=/au/65/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">Edan Y</a>, <a href=/au/3/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">Alchanatis V</a><div class=ci_title><a href=/wd/164/ title=" 6 records, TLCS 16, TGCS 87 " class="ci_il">Imaging</a> <a href=/wd/348/ title=" 3 records, TLCS 3, TGCS 81 " class="ci_il">techniques</a> for <a href=/wd/43/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">chemical</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a> on <a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">crops</a></div><SPAN><a href=/so/33/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">PHYTOPARASITICA</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a></SPAN>;  25: S59-S69
+<TD>0<TD>2<TD><a href=/citees/24/ class=nu>6</a><TD>50
+<TR valign=top align=right class=evn><TD>26<TD align=left><a TITLE=" Article " href=javascript:opeNod(25)>26</a>  <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">Gerhards R</a>, <a href=/au/274/ title=" 1 records, TLCS 6, TGCS 65 " class="ci_il">WysePester DY</a>, <a href=/au/166/ title=" 1 records, TLCS 6, TGCS 65 " class="ci_il">Mortensen D</a>, <a href=/au/114/ title=" 2 records, TLCS 25, TGCS 129 " class="ci_il">Johnson GA</a><div class=ci_title><a href=/wd/41/ title=" 1 records, TLCS 6, TGCS 65 " class="ci_il">Characterizing</a> <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/333/ title=" 1 records, TLCS 6, TGCS 65 " class="ci_il">stability</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/253/ title=" 2 records, TLCS 7, TGCS 72 " class="ci_il">populations</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/178/ title=" 1 records, TLCS 6, TGCS 65 " class="ci_il">interpolated</a> <a href=/wd/202/ title=" 4 records, TLCS 15, TGCS 112 " class="ci_il">maps</a></div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> JAN-FEB</SPAN>;  45 (1): 108-119
+<TD><a href=/citers/25/ class=nu>6</a><TD>65<TD><a href=/citees/25/ class=nu>4</a><TD>23
+<TR valign=top align=right class=odd><TD>27<TD align=left><a TITLE=" Article " href=javascript:opeNod(26)>27</a>  <a href=/au/9/ title=" 2 records, TLCS 12, TGCS 87 " class="ci_il">Andreasen C</a>, <a href=/au/214/ title=" 1 records, TLCS 5, TGCS 39 " class="ci_il">Rudemo M</a>, <a href=/au/220/ title=" 1 records, TLCS 5, TGCS 39 " class="ci_il">Sevestre S</a><div class=ci_title><a href=/wd/18/ title=" 1 records, TLCS 5, TGCS 39 " class="ci_il">Assessment</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/74/ title=" 2 records, TLCS 10, TGCS 50 " class="ci_il">density</a> at an <a href=/wd/98/ title=" 1 records, TLCS 5, TGCS 39 " class="ci_il">early</a> <a href=/wd/334/ title=" 2 records, TLCS 7, TGCS 51 " class="ci_il">stage</a> by <a href=/wd/370/ title=" 4 records, TLCS 30, TGCS 176 " class="ci_il">use</a> of <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/261/ title=" 6 records, TLCS 80, TGCS 144 " class="ci_il">processing</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> FEB</SPAN>;  37 (1): 5-18
+<TD><a href=/citers/26/ class=nu>5</a><TD>39<TD><a href=/citees/26/ class=nu>4</a><TD>18
+<TR valign=top align=right class=evn><TD>28<TD align=left><a TITLE=" Article " href=javascript:opeNod(27)>28</a>  <a href=/au/52/ title=" 1 records, TLCS 2, TGCS 15 " class="ci_il">Critten DL</a><div class=ci_title><a href=/wd/128/ title=" 2 records, TLCS 3, TGCS 24 " class="ci_il">Fractal</a> <a href=/wd/85/ title=" 2 records, TLCS 3, TGCS 24 " class="ci_il">dimension</a> <a href=/wd/274/ title=" 1 records, TLCS 2, TGCS 15 " class="ci_il">relationships</a> and <a href=/wd/374/ title=" 1 records, TLCS 2, TGCS 15 " class="ci_il">values</a> <a href=/wd/20/ title=" 1 records, TLCS 2, TGCS 15 " class="ci_il">associated</a> with certain <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">plant</a> <a href=/wd/35/ title=" 1 records, TLCS 2, TGCS 15 " class="ci_il">canopies</a></div><SPAN><a href=/so/23/ title=" 6 records, TLCS 20, TGCS 155 " class="ci_il">JOURNAL OF AGRICULTURAL ENGINEERING RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> MAY</SPAN>;  67 (1): 61-72
+<TD><a href=/citers/27/ class=nu>2</a><TD>15<TD><a href=/citees/27/ class=nu>1</a><TD>14
+<TR valign=top align=right class=odd><TD>29<TD align=left><a TITLE=" Article " href=javascript:opeNod(28)>29</a>  <a href=/au/89/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Goense D</a><div class=ci_title>The <a href=/wd/0/ title=" 3 records, TLCS 0, TGCS 11 " class="ci_il">accuracy</a> of <a href=/wd/118/ title=" 2 records, TLCS 0, TGCS 5 " class="ci_il">farm</a> <a href=/wd/197/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">machinery</a> for <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/5/ title=" 8 records, TLCS 4, TGCS 118 " class="ci_il">agriculture</a>: a <a href=/wd/36/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">case</a> for <a href=/wd/122/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">fertilizer</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a></div><SPAN><a href=/so/28/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">NETHERLANDS JOURNAL OF AGRICULTURAL SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> JUL</SPAN>;  45 (1): 199-215
+<TD>0<TD>1<TD><a href=/citees/28/ class=nu>1</a><TD>18
+<TR valign=top align=right class=evn><TD>30<TD align=left><a TITLE=" Article " href=javascript:opeNod(29)>30</a>  <a href=/au/193/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">Perrin RM</a><div class=ci_title><a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">Crop</a> <a href=/wd/265/ title=" 2 records, TLCS 4, TGCS 39 " class="ci_il">protection</a>: Taking <a href=/wd/338/ title=" 2 records, TLCS 0, TGCS 8 " class="ci_il">stock</a> for the <a href=/wd/224/ title=" 2 records, TLCS 0, TGCS 10 " class="ci_il">new</a> <a href=/wd/211/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">millennium</a></div><SPAN><a href=/so/14/ title=" 3 records, TLCS 62, TGCS 116 " class="ci_il">CROP PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> AUG</SPAN>;  16 (5): 449-456
+<TD>0<TD>8<TD><a href=/citees/29/ class=nu>1</a><TD>43
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR valign=top align=right class=odd><TD>31<TD align=left><a TITLE=" Article " href=javascript:opeNod(30)>31</a>  <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">Gerhards R</a>, <a href=/au/229/ title=" 6 records, TLCS 15, TGCS 77 " class="ci_il">Sokefeld M</a>, <a href=/au/219/ title=" 1 records, TLCS 4, TGCS 38 " class="ci_il">SchulzeLohne K</a>, <a href=/au/167/ title=" 5 records, TLCS 77, TGCS 283 " class="ci_il">Mortensen DA</a>, <a href=/au/131/ title=" 4 records, TLCS 15, TGCS 77 " class="ci_il">Kuhbauch W</a><div class=ci_title><a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">Site</a> <a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a> in <a href=/wd/393/ title=" 2 records, TLCS 8, TGCS 46 " class="ci_il">winter</a> <a href=/wd/390/ title=" 6 records, TLCS 28, TGCS 98 " class="ci_il">wheat</a></div><SPAN><a href=/so/24/ title=" 3 records, TLCS 15, TGCS 72 " class="ci_il">JOURNAL OF AGRONOMY AND CROP SCIENCE-ZEITSCHRIFT FUR ACKER UND PFLANZENBAU</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> AUG</SPAN>;  178 (4): 219-225
+<TD><a href=/citers/30/ class=nu>4</a><TD>38<TD><a href=/citees/30/ class=nu>4</a><TD>25
+<TR valign=top align=right class=evn><TD>32<TD align=left><a TITLE=" Article " href=javascript:opeNod(31)>32</a>  <a href=/au/248/ title=" 6 records, TLCS 24, TGCS 112 " class="ci_il">Tian L</a>, <a href=/au/226/ title=" 3 records, TLCS 11, TGCS 66 " class="ci_il">Slaughter DC</a>, <a href=/au/183/ title=" 1 records, TLCS 9, TGCS 22 " class="ci_il">Norris RF</a><div class=ci_title><a href=/wd/235/ title=" 4 records, TLCS 16, TGCS 37 " class="ci_il">Outdoor</a> <a href=/wd/123/ title=" 6 records, TLCS 17, TGCS 52 " class="ci_il">field</a> <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a> <a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">identification</a> of <a href=/wd/358/ title=" 1 records, TLCS 9, TGCS 22 " class="ci_il">tomato</a> <a href=/wd/299/ title=" 2 records, TLCS 9, TGCS 28 " class="ci_il">seedlings</a> for <a href=/wd/21/ title=" 1 records, TLCS 9, TGCS 22 " class="ci_il">automated</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> NOV-DEC</SPAN>;  40 (6): 1761-1768
+<TD><a href=/citers/31/ class=nu>9</a><TD>22<TD><a href=/citees/31/ class=nu>2</a><TD>18
+<TR valign=top align=right class=odd><TD>33<TD align=left><a TITLE=" Article " href=javascript:opeNod(32)>33</a>  <a href=/au/54/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Dammer KH</a>, <a href=/au/126/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Korner S</a>, <a href=/au/269/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Wittmann C</a><div class=ci_title><a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">Analysis</a> of the <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/93/ title=" 6 records, TLCS 33, TGCS 121 " class="ci_il">distribution</a> of <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a> and the <a href=/wd/250/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">planning</a> of a <a href=/wd/132/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">future</a> <a href=/wd/214/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">monitoring</a> by <a href=/wd/114/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">example</a> of the <a href=/wd/228/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">occurrence</a> of <a href=/wd/46/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Cirsium</a> <a href=/wd/16/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">arvense</a> L. within a <a href=/wd/123/ title=" 6 records, TLCS 17, TGCS 52 " class="ci_il">field</a> <a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">site</a></div><SPAN><a href=/so/51/ title=" 4 records, TLCS 1, TGCS 20 " class="ci_il">ZEITSCHRIFT FUR PFLANZENKRANKHEITEN UND PFLANZENSCHUTZ-JOURNAL OF PLANT DISEASES AND PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/10/ title=" 9 records, TLCS 26, TGCS 191 " class="ci_il">1997</a> DEC</SPAN>;  104 (6): 557-568
+<TD>0<TD>1<TD><a href=/citees/32/ class=nu>2</a><TD>24
+<TR><TD colspan=6 align=center class=yr>1998
+<TR valign=top align=right class=evn><TD>34<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(33)>34</a>  <a href=/au/251/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Tyystjarvi E</a>, <a href=/au/120/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Keranen M</a>, <a href=/au/127/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Koski A</a>, <a href=/au/176/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Nevalainen O</a>, <a href=/au/14/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Aro EM</a><div class=ci_title><a href=/wd/45/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Chlorophyll</a> <a href=/wd/126/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">fluorescence</a> can be <a href=/wd/371/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">used</a> to <a href=/wd/157/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">identify</a> <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">plant</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/23/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">automatically</a></div><SPAN><a href=/so/32/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">PHOTOSYNTHESIS: MECHANISMS AND EFFECTS, VOLS I-V</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a></SPAN>;  : 3857-3860
+<TD>0<TD>0<TD><a href=/citees/33/ class=nu>1</a><TD>3
+<TR valign=top align=right class=odd><TD>35<TD align=left><a TITLE=" Article " href=javascript:opeNod(34)>35</a>  <a href=/au/281/ title=" 1 records, TLCS 3, TGCS 27 " class="ci_il">Zanin G</a>, <a href=/au/23/ title=" 1 records, TLCS 3, TGCS 27 " class="ci_il">Berti A</a>, <a href=/au/210/ title=" 1 records, TLCS 3, TGCS 27 " class="ci_il">Riello L</a><div class=ci_title><a href=/wd/167/ title=" 1 records, TLCS 3, TGCS 27 " class="ci_il">Incorporation</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/375/ title=" 3 records, TLCS 6, TGCS 55 " class="ci_il">variability</a> into the <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a> <a href=/wd/72/ title=" 2 records, TLCS 3, TGCS 31 " class="ci_il">decision</a>-making <a href=/wd/260/ title=" 1 records, TLCS 3, TGCS 27 " class="ci_il">process</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a> APR</SPAN>;  38 (2): 107-118
+<TD><a href=/citers/34/ class=nu>3</a><TD>27<TD><a href=/citees/34/ class=nu>8</a><TD>45
+<TR valign=top align=right class=evn><TD>36<TD align=left><a TITLE=" Article " href=javascript:opeNod(35)>36</a>  <a href=/au/95/ title=" 2 records, TLCS 2, TGCS 18 " class="ci_il">Hanks JE</a>, <a href=/au/19/ title=" 1 records, TLCS 2, TGCS 16 " class="ci_il">Beck JL</a><div class=ci_title><a href=/wd/307/ title=" 7 records, TLCS 2, TGCS 23 " class="ci_il">Sensor</a>-<a href=/wd/61/ title=" 1 records, TLCS 2, TGCS 16 " class="ci_il">controlled</a> <a href=/wd/149/ title=" 1 records, TLCS 2, TGCS 16 " class="ci_il">hooded</a> <a href=/wd/329/ title=" 5 records, TLCS 24, TGCS 121 " class="ci_il">sprayer</a> for <a href=/wd/288/ title=" 2 records, TLCS 8, TGCS 68 " class="ci_il">row</a> <a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">crops</a></div><SPAN><a href=/so/50/ title=" 3 records, TLCS 8, TGCS 38 " class="ci_il">WEED TECHNOLOGY</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a> APR-JUN</SPAN>;  12 (2): 308-314
+<TD><a href=/citers/35/ class=nu>2</a><TD>16<TD><a href=/citees/35/ class=nu>2</a><TD>15
+<TR valign=top align=right class=odd><TD>37<TD align=left><a TITLE=" Review " href=javascript:opeNod(36)>37</a>  <a href=/au/283/ title=" 1 records, TLCS 6, TGCS 52 " class="ci_il">Zwiggelaar R</a><div class=ci_title>A <a href=/wd/281/ title=" 2 records, TLCS 7, TGCS 76 " class="ci_il">review</a> of <a href=/wd/324/ title=" 6 records, TLCS 12, TGCS 73 " class="ci_il">spectral</a> <a href=/wd/264/ title=" 1 records, TLCS 6, TGCS 52 " class="ci_il">properties</a> of <a href=/wd/252/ title=" 4 records, TLCS 11, TGCS 92 " class="ci_il">plants</a> and their <a href=/wd/256/ title=" 3 records, TLCS 72, TGCS 150 " class="ci_il">potential</a> <a href=/wd/370/ title=" 4 records, TLCS 30, TGCS 176 " class="ci_il">use</a> for <a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">crop</a>/<a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/89/ title=" 7 records, TLCS 16, TGCS 134 " class="ci_il">discrimination</a> in <a href=/wd/288/ title=" 2 records, TLCS 8, TGCS 68 " class="ci_il">row</a>-<a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">crops</a></div><SPAN><a href=/so/14/ title=" 3 records, TLCS 62, TGCS 116 " class="ci_il">CROP PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a> MAY</SPAN>;  17 (3): 189-206
+<TD><a href=/citers/36/ class=nu>6</a><TD>52<TD><a href=/citees/36/ class=nu>4</a><TD>142
+<TR valign=top align=right class=evn><TD>38<TD align=left><a TITLE=" Article " href=javascript:opeNod(37)>38</a>  <a href=/au/159/ title=" 6 records, TLCS 56, TGCS 216 " class="ci_il">Meyer GE</a>, <a href=/au/157/ title=" 1 records, TLCS 10, TGCS 49 " class="ci_il">Mehta T</a>, <a href=/au/123/ title=" 1 records, TLCS 10, TGCS 49 " class="ci_il">Kocher M</a>, <a href=/au/167/ title=" 5 records, TLCS 77, TGCS 283 " class="ci_il">Mortensen DA</a>, <a href=/au/216/ title=" 1 records, TLCS 10, TGCS 49 " class="ci_il">Samal A</a><div class=ci_title><a href=/wd/352/ title=" 1 records, TLCS 10, TGCS 49 " class="ci_il">Textural</a> <a href=/wd/164/ title=" 6 records, TLCS 16, TGCS 87 " class="ci_il">imaging</a> and <a href=/wd/88/ title=" 4 records, TLCS 15, TGCS 72 " class="ci_il">discriminant</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a> for <a href=/wd/92/ title=" 1 records, TLCS 10, TGCS 49 " class="ci_il">distinguishing</a> <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a> for <a href=/wd/327/ title=" 1 records, TLCS 10, TGCS 49 " class="ci_il">spot</a> <a href=/wd/331/ title=" 4 records, TLCS 20, TGCS 96 " class="ci_il">spraying</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a> JUL-AUG</SPAN>;  41 (4): 1189-1197
+<TD><a href=/citers/37/ class=nu>10</a><TD>49<TD><a href=/citees/37/ class=nu>5</a><TD>26
+<TR valign=top align=right class=odd><TD>39<TD align=left><a TITLE=" Article " href=javascript:opeNod(38)>39</a>  <a href=/au/150/ title=" 2 records, TLCS 5, TGCS 39 " class="ci_il">Marchant JA</a>, <a href=/au/250/ title=" 1 records, TLCS 1, TGCS 8 " class="ci_il">Tillett RD</a>, <a href=/au/32/ title=" 2 records, TLCS 5, TGCS 39 " class="ci_il">Brivot R</a><div class=ci_title><a href=/wd/269/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">Real</a>-<a href=/wd/356/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">time</a> <a href=/wd/301/ title=" 5 records, TLCS 8, TGCS 75 " class="ci_il">segmentation</a> of <a href=/wd/252/ title=" 4 records, TLCS 11, TGCS 92 " class="ci_il">plants</a> and <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a></div><SPAN><a href=/so/42/ title=" 1 records, TLCS 1, TGCS 8 " class="ci_il">REAL-TIME IMAGING</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a> AUG</SPAN>;  4 (4): 243-253
+<TD><a href=/citers/38/ class=nu>1</a><TD>8<TD><a href=/citees/38/ class=nu>2</a><TD>14
+<TR valign=top align=right class=evn><TD>40<TD align=left><a TITLE=" Article " href=javascript:opeNod(39)>40</a>  <a href=/au/21/ title=" 1 records, TLCS 1, TGCS 7 " class="ci_il">Bennett AL</a>, <a href=/au/187/ title=" 1 records, TLCS 1, TGCS 7 " class="ci_il">Pannell DJ</a><div class=ci_title><a href=/wd/99/ title=" 2 records, TLCS 4, TGCS 23 " class="ci_il">Economic</a> <a href=/wd/113/ title=" 4 records, TLCS 10, TGCS 50 " class="ci_il">evaluation</a> of a <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a>-<a href=/wd/1/ title=" 1 records, TLCS 1, TGCS 7 " class="ci_il">activated</a> <a href=/wd/329/ title=" 5 records, TLCS 24, TGCS 121 " class="ci_il">sprayer</a> for <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a> to <a href=/wd/240/ title=" 1 records, TLCS 1, TGCS 7 " class="ci_il">patchy</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/253/ title=" 2 records, TLCS 7, TGCS 72 " class="ci_il">populations</a></div><SPAN><a href=/so/5/ title=" 1 records, TLCS 1, TGCS 7 " class="ci_il">AUSTRALIAN JOURNAL OF AGRICULTURAL AND RESOURCE ECONOMICS</a></SPAN>. <SPAN class=sc><a href=/py/11/ title=" 7 records, TLCS 23, TGCS 159 " class="ci_il">1998</a> DEC</SPAN>;  42 (4): 389-408
+<TD><a href=/citers/39/ class=nu>1</a><TD>7<TD><a href=/citees/39/ class=nu>1</a><TD>41
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR><TD colspan=6 align=center class=yr>1999
+<TR valign=top align=right class=odd><TD>41<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(40)>41</a>  <a href=/au/72/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Feyaerts F</a>, <a href=/au/199/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Pollet P</a>, <a href=/au/254/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Van Gool L</a>, <a href=/au/260/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Wambacq P</a><div class=ci_title><a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">Vision</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a> for <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/153/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">hyper</a>-<a href=/wd/324/ title=" 6 records, TLCS 12, TGCS 73 " class="ci_il">spectral</a> <a href=/wd/164/ title=" 6 records, TLCS 16, TGCS 87 " class="ci_il">imaging</a>, <a href=/wd/339/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">structural</a> <a href=/wd/123/ title=" 6 records, TLCS 17, TGCS 52 " class="ci_il">field</a> <a href=/wd/171/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">information</a> and <a href=/wd/368/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">unsupervised</a> <a href=/wd/359/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">training</a> <a href=/wd/291/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">sample</a> <a href=/wd/52/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">collection</a></div><SPAN><a href=/so/0/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">1999 BRIGHTON CONFERENCE: WEEDS, VOLS 1-3</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  : 607-614
+<TD>0<TD>1<TD><a href=/citees/40/ class=nu>3</a><TD>14
+<TR valign=top align=right class=evn><TD>42<TD align=left><a TITLE=" Review " href=javascript:opeNod(41)>42</a>  <a href=/au/197/ title=" 1 records, TLCS 1, TGCS 104 " class="ci_il">Pierce FJ</a>, <a href=/au/184/ title=" 1 records, TLCS 1, TGCS 104 " class="ci_il">Nowak P</a><div class=ci_title><a href=/wd/17/ title=" 1 records, TLCS 1, TGCS 104 " class="ci_il">Aspects</a> of <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/5/ title=" 8 records, TLCS 4, TGCS 118 " class="ci_il">agriculture</a></div><SPAN><a href=/so/2/ title=" 1 records, TLCS 1, TGCS 104 " class="ci_il">ADVANCES IN AGRONOMY, VOL 67</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  67: 1-85
+<TD><a href=/citers/41/ class=nu>1</a><TD>104<TD><a href=/citees/41/ class=nu>5</a><TD>315
+<TR valign=top align=right class=odd><TD>43<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(42)>43</a>  <a href=/au/236/ title=" 4 records, TLCS 7, TGCS 28 " class="ci_il">Steward BL</a>, <a href=/au/249/ title=" 4 records, TLCS 8, TGCS 22 " class="ci_il">Tian LF</a><div class=ci_title><a href=/wd/269/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">Real</a>-<a href=/wd/356/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">time</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> in <a href=/wd/235/ title=" 4 records, TLCS 16, TGCS 37 " class="ci_il">outdoor</a> <a href=/wd/123/ title=" 6 records, TLCS 17, TGCS 52 " class="ci_il">field</a> <a href=/wd/59/ title=" 6 records, TLCS 20, TGCS 79 " class="ci_il">conditions</a></div><SPAN><a href=/so/36/ title=" 4 records, TLCS 2, TGCS 7 " class="ci_il">PRECISION AGRICULTURE AND BIOLOGICAL QUALITY</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  3543: 266-278
+<TD><a href=/citers/42/ class=nu>2</a><TD>4<TD><a href=/citees/42/ class=nu>8</a><TD>45
+<TR valign=top align=right class=evn><TD>44<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(43)>44</a>  <a href=/au/20/ title=" 3 records, TLCS 3, TGCS 58 " class="ci_il">Benlloch JV</a>, <a href=/au/213/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Rodas A</a><div class=ci_title><a href=/wd/97/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Dynamic</a> <a href=/wd/212/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">model</a> to <a href=/wd/78/ title=" 2 records, TLCS 9, TGCS 38 " class="ci_il">detect</a> <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a> in <a href=/wd/39/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">cereals</a> under actual <a href=/wd/124/ title=" 8 records, TLCS 24, TGCS 117 " class="ci_il">fields</a> <a href=/wd/59/ title=" 6 records, TLCS 20, TGCS 79 " class="ci_il">conditions</a></div><SPAN><a href=/so/36/ title=" 4 records, TLCS 2, TGCS 7 " class="ci_il">PRECISION AGRICULTURE AND BIOLOGICAL QUALITY</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  3543: 302-310
+<TD>0<TD>1<TD><a href=/citees/43/ class=nu>3</a><TD>18
+<TR valign=top align=right class=odd><TD>45<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(44)>45</a>  <a href=/au/159/ title=" 6 records, TLCS 56, TGCS 216 " class="ci_il">Meyer GE</a>, <a href=/au/103/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Hindman T</a>, <a href=/au/132/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Laksmi K</a><div class=ci_title><a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">Machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> <a href=/wd/236/ title=" 2 records, TLCS 7, TGCS 21 " class="ci_il">parameters</a> for <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">plant</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">identification</a></div><SPAN><a href=/so/36/ title=" 4 records, TLCS 2, TGCS 7 " class="ci_il">PRECISION AGRICULTURE AND BIOLOGICAL QUALITY</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  3543: 327-335
+<TD>0<TD>1<TD><a href=/citees/44/ class=nu>6</a><TD>12
+<TR valign=top align=right class=evn><TD>46<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(45)>46</a>  <a href=/au/27/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Blasco J</a>, <a href=/au/20/ title=" 3 records, TLCS 3, TGCS 58 " class="ci_il">Benlloch JV</a>, <a href=/au/1/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Agusti M</a>, <a href=/au/164/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Molto E</a><div class=ci_title><a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">Machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a> for <a href=/wd/257/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">precise</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a> of <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a></div><SPAN><a href=/so/36/ title=" 4 records, TLCS 2, TGCS 7 " class="ci_il">PRECISION AGRICULTURE AND BIOLOGICAL QUALITY</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  3543: 336-343
+<TD>0<TD>1<TD><a href=/citees/45/ class=nu>1</a><TD>7
+<TR valign=top align=right class=odd><TD>47<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(46)>47</a>  <a href=/au/273/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Wyse-Pester D</a>, <a href=/au/264/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Westra P</a>, <a href=/au/267/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Wiles LJ</a><div class=ci_title><a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">Spatial</a> <a href=/wd/292/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">sampling</a> for <a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">crop</a> <a href=/wd/245/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">pests</a> in <a href=/wd/364/ title=" 2 records, TLCS 0, TGCS 0 " class="ci_il">two</a> <a href=/wd/37/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">center</a> <a href=/wd/249/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">pivot</a> <a href=/wd/180/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">irrigated</a> <a href=/wd/124/ title=" 8 records, TLCS 24, TGCS 117 " class="ci_il">fields</a></div><SPAN><a href=/so/37/ title=" 3 records, TLCS 0, TGCS 2 " class="ci_il">PROCEEDINGS OF THE FOURTH INTERNATIONAL CONFERENCE ON PRECISION AGRICULTURE, PTS A AND B</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  : 511-522
+<TD>0<TD>0<TD><a href=/citees/46/ class=nu>2</a><TD>10
+<TR valign=top align=right class=evn><TD>48<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(47)>48</a>  <a href=/au/100/ title=" 2 records, TLCS 7, TGCS 49 " class="ci_il">Heisel T</a>, <a href=/au/47/ title=" 3 records, TLCS 4, TGCS 71 " class="ci_il">Christensen S</a><div class=ci_title>A <a href=/wd/84/ title=" 5 records, TLCS 9, TGCS 35 " class="ci_il">digital</a> <a href=/wd/33/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">camera</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a> for <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a></div><SPAN><a href=/so/37/ title=" 3 records, TLCS 0, TGCS 2 " class="ci_il">PROCEEDINGS OF THE FOURTH INTERNATIONAL CONFERENCE ON PRECISION AGRICULTURE, PTS A AND B</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  : 1569-1577
+<TD>0<TD>1<TD><a href=/citees/47/ class=nu>4</a><TD>15
+<TR valign=top align=right class=odd><TD>49<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(48)>49</a>  <a href=/au/199/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Pollet P</a>, <a href=/au/72/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Feyaerts F</a>, <a href=/au/260/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Wambacq P</a>, <a href=/au/254/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">Van Gool L</a><div class=ci_title><a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">Weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> <a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> on <a href=/wd/339/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">structural</a> <a href=/wd/171/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">information</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> an <a href=/wd/164/ title=" 6 records, TLCS 16, TGCS 87 " class="ci_il">imaging</a> <a href=/wd/325/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">spectrograph</a></div><SPAN><a href=/so/37/ title=" 3 records, TLCS 0, TGCS 2 " class="ci_il">PROCEEDINGS OF THE FOURTH INTERNATIONAL CONFERENCE ON PRECISION AGRICULTURE, PTS A AND B</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a></SPAN>;  : 1579-1591
+<TD>0<TD>1<TD><a href=/citees/48/ class=nu>2</a><TD>10
+<TR valign=top align=right class=evn><TD>50<TD align=left><a TITLE=" Article " href=javascript:opeNod(49)>50</a>  <a href=/au/125/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Koku K</a>, <a href=/au/12/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Aoki N</a>, <a href=/au/60/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Dohi M</a>, <a href=/au/77/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Fujiura T</a>, <a href=/au/240/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Takeyama K</a><div class=ci_title>Studies on <a href=/wd/22/ title=" 4 records, TLCS 63, TGCS 76 " class="ci_il">automatic</a> <a href=/wd/89/ title=" 7 records, TLCS 16, TGCS 134 " class="ci_il">discrimination</a> of <a href=/wd/95/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">double</a> <a href=/wd/125/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">flowering</a> <a href=/wd/338/ title=" 2 records, TLCS 0, TGCS 8 " class="ci_il">stock</a> from <a href=/wd/312/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">single</a> <a href=/wd/125/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">flowering</a> <a href=/wd/298/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">seedling</a> by <a href=/wd/133/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">fuzzy</a> <a href=/wd/354/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">theory</a></div><SPAN><a href=/so/27/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">JOURNAL OF THE JAPANESE SOCIETY FOR HORTICULTURAL SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a> JAN</SPAN>;  68 (1): 49-54
+<TD>0<TD>0<TD><a href=/citees/49/ class=nu>2</a><TD>12
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR valign=top align=right class=odd><TD>51<TD align=left><a TITLE=" Article " href=javascript:opeNod(50)>51</a>  <a href=/au/248/ title=" 6 records, TLCS 24, TGCS 112 " class="ci_il">Tian L</a>, <a href=/au/205/ title=" 1 records, TLCS 15, TGCS 73 " class="ci_il">Reid JF</a>, <a href=/au/105/ title=" 1 records, TLCS 15, TGCS 73 " class="ci_il">Hummel JW</a><div class=ci_title><a href=/wd/82/ title=" 4 records, TLCS 15, TGCS 80 " class="ci_il">Development</a> of a <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/329/ title=" 5 records, TLCS 24, TGCS 121 " class="ci_il">sprayer</a> for <a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">site</a>-<a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/199/ title=" 8 records, TLCS 27, TGCS 150 " class="ci_il">management</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a> JUL-AUG</SPAN>;  42 (4): 893-900
+<TD><a href=/citers/50/ class=nu>15</a><TD>73<TD><a href=/citees/50/ class=nu>7</a><TD>30
+<TR valign=top align=right class=evn><TD>52<TD align=left><a TITLE=" Article " href=javascript:opeNod(51)>52</a>  <a href=/au/29/ title=" 1 records, TLCS 1, TGCS 9 " class="ci_il">Borkowski W</a><div class=ci_title><a href=/wd/128/ title=" 2 records, TLCS 3, TGCS 24 " class="ci_il">Fractal</a> <a href=/wd/85/ title=" 2 records, TLCS 3, TGCS 24 " class="ci_il">dimension</a> <a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/121/ title=" 3 records, TLCS 36, TGCS 98 " class="ci_il">features</a> are <a href=/wd/372/ title=" 1 records, TLCS 1, TGCS 9 " class="ci_il">useful</a> <a href=/wd/76/ title=" 2 records, TLCS 8, TGCS 29 " class="ci_il">descriptors</a> of <a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">leaf</a> <a href=/wd/57/ title=" 1 records, TLCS 1, TGCS 9 " class="ci_il">complexity</a> and <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">shape</a></div><SPAN><a href=/so/9/ title=" 1 records, TLCS 1, TGCS 9 " class="ci_il">CANADIAN JOURNAL OF FOREST RESEARCH-REVUE CANADIENNE DE RECHERCHE FORESTIERE</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a> SEP</SPAN>;  29 (9): 1301-1310
+<TD><a href=/citers/51/ class=nu>1</a><TD>9<TD><a href=/citees/51/ class=nu>4</a><TD>31
+<TR valign=top align=right class=odd><TD>53<TD align=left><a TITLE=" Article " href=javascript:opeNod(52)>53</a>  <a href=/au/51/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Criner BR</a>, <a href=/au/230/ title=" 2 records, TLCS 4, TGCS 8 " class="ci_il">Solie JB</a>, <a href=/au/237/ title=" 2 records, TLCS 4, TGCS 8 " class="ci_il">Stone ML</a>, <a href=/au/265/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Whitney RW</a><div class=ci_title><a href=/wd/123/ title=" 6 records, TLCS 17, TGCS 52 " class="ci_il">Field</a>-of-<a href=/wd/380/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">view</a> <a href=/wd/81/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">determination</a> for a <a href=/wd/28/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">bindweed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> <a href=/wd/307/ title=" 7 records, TLCS 2, TGCS 23 " class="ci_il">sensor</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a> SEP-OCT</SPAN>;  42 (5): 1485-1491
+<TD>0<TD>0<TD><a href=/citees/52/ class=nu>1</a><TD>18
+<TR valign=top align=right class=evn><TD>54<TD align=left><a TITLE=" Article " href=javascript:opeNod(53)>54</a>  <a href=/au/188/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Parvis M</a>, <a href=/au/198/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Pirola M</a><div class=ci_title>A <a href=/wd/207/ title=" 3 records, TLCS 0, TGCS 7 " class="ci_il">measurement</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a> for on-<a href=/wd/192/ title=" 2 records, TLCS 6, TGCS 35 " class="ci_il">line</a> <a href=/wd/111/ title=" 2 records, TLCS 5, TGCS 12 " class="ci_il">estimation</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/65/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">coverage</a></div><SPAN><a href=/so/20/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">IEEE TRANSACTIONS ON INSTRUMENTATION AND MEASUREMENT</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a> OCT</SPAN>;  48 (5): 990-994
+<TD>0<TD>1<TD><a href=/citees/53/ class=nu>2</a><TD>9
+<TR valign=top align=right class=odd><TD>55<TD align=left><a TITLE=" Article " href=javascript:opeNod(54)>55</a>  <a href=/au/236/ title=" 4 records, TLCS 7, TGCS 28 " class="ci_il">Steward BL</a>, <a href=/au/249/ title=" 4 records, TLCS 8, TGCS 22 " class="ci_il">Tian LF</a><div class=ci_title><a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">Machine</a>-<a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/74/ title=" 2 records, TLCS 10, TGCS 50 " class="ci_il">density</a> <a href=/wd/111/ title=" 2 records, TLCS 5, TGCS 12 " class="ci_il">estimation</a> for <a href=/wd/269/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">real</a>-<a href=/wd/356/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">time</a>, <a href=/wd/235/ title=" 4 records, TLCS 16, TGCS 37 " class="ci_il">outdoor</a> <a href=/wd/190/ title=" 2 records, TLCS 18, TGCS 74 " class="ci_il">lighting</a> <a href=/wd/59/ title=" 6 records, TLCS 20, TGCS 79 " class="ci_il">conditions</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/12/ title=" 15 records, TLCS 24, TGCS 208 " class="ci_il">1999</a> NOV-DEC</SPAN>;  42 (6): 1897-1909
+<TD><a href=/citers/54/ class=nu>5</a><TD>11<TD><a href=/citees/54/ class=nu>9</a><TD>52
+<TR><TD colspan=6 align=center class=yr>2000
+<TR valign=top align=right class=evn><TD>56<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(55)>56</a>  <a href=/au/248/ title=" 6 records, TLCS 24, TGCS 112 " class="ci_il">Tian L</a>, <a href=/au/235/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Steward B</a>, <a href=/au/241/ title=" 3 records, TLCS 0, TGCS 13 " class="ci_il">Tang L</a><div class=ci_title><a href=/wd/315/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Smart</a> <a href=/wd/329/ title=" 5 records, TLCS 24, TGCS 121 " class="ci_il">sprayer</a> <a href=/wd/263/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">project</a>: <a href=/wd/307/ title=" 7 records, TLCS 2, TGCS 23 " class="ci_il">Sensor</a>-<a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/304/ title=" 10 records, TLCS 82, TGCS 121 " class="ci_il">selective</a> <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a></div><SPAN><a href=/so/7/ title=" 2 records, TLCS 0, TGCS 0 " class="ci_il">BIOLOGICAL QUALITY AND PRECISION AGRICULTURE II</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a></SPAN>;  4203: 73-80
+<TD>0<TD>0<TD><a href=/citees/55/ class=nu>5</a><TD>18
+<TR valign=top align=right class=odd><TD>57<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(56)>57</a>  <a href=/au/278/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Ying YB</a>, <a href=/au/113/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Jing HS</a>, <a href=/au/242/ title=" 2 records, TLCS 0, TGCS 9 " class="ci_il">Tao Y</a>, <a href=/au/111/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Jin JQ</a>, <a href=/au/107/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Ibarra J</a>, et al.<div class=ci_title><a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">Application</a> of <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a> in <a href=/wd/174/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">inspecting</a> <a href=/wd/337/ title=" 2 records, TLCS 0, TGCS 9 " class="ci_il">stem</a> and <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">shape</a> of <a href=/wd/129/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">fruits</a></div><SPAN><a href=/so/7/ title=" 2 records, TLCS 0, TGCS 0 " class="ci_il">BIOLOGICAL QUALITY AND PRECISION AGRICULTURE II</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a></SPAN>;  4203: 122-130
+<TD>0<TD>0<TD><a href=/citees/56/ class=nu>1</a><TD>20
+<TR valign=top align=right class=evn><TD>58<TD align=left><a TITLE=" Article " href=javascript:opeNod(57)>58</a>  <a href=/au/192/ title=" 1 records, TLCS 3, TGCS 56 " class="ci_il">Perez AJ</a>, <a href=/au/143/ title=" 1 records, TLCS 3, TGCS 56 " class="ci_il">Lopez F</a>, <a href=/au/20/ title=" 3 records, TLCS 3, TGCS 58 " class="ci_il">Benlloch JV</a>, <a href=/au/47/ title=" 3 records, TLCS 4, TGCS 71 " class="ci_il">Christensen S</a><div class=ci_title><a href=/wd/54/ title=" 2 records, TLCS 3, TGCS 77 " class="ci_il">Colour</a> and <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">shape</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a> <a href=/wd/348/ title=" 3 records, TLCS 3, TGCS 81 " class="ci_il">techniques</a> for <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> in <a href=/wd/38/ title=" 2 records, TLCS 3, TGCS 64 " class="ci_il">cereal</a> <a href=/wd/124/ title=" 8 records, TLCS 24, TGCS 117 " class="ci_il">fields</a></div><SPAN><a href=/so/12/ title=" 9 records, TLCS 11, TGCS 167 " class="ci_il">COMPUTERS AND ELECTRONICS IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> FEB</SPAN>;  25 (3): 197-212
+<TD><a href=/citers/57/ class=nu>3</a><TD>56<TD><a href=/citees/57/ class=nu>3</a><TD>22
+<TR valign=top align=right class=odd><TD>59<TD align=left><a TITLE=" Article " href=javascript:opeNod(58)>59</a>  <a href=/au/36/ title=" 4 records, TLCS 15, TGCS 69 " class="ci_il">Burks TF</a>, <a href=/au/222/ title=" 5 records, TLCS 34, TGCS 88 " class="ci_il">Shearer SA</a>, <a href=/au/189/ title=" 1 records, TLCS 4, TGCS 20 " class="ci_il">Payne FA</a><div class=ci_title><a href=/wd/48/ title=" 12 records, TLCS 7, TGCS 42 " class="ci_il">Classification</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/53/ title=" 6 records, TLCS 30, TGCS 140 " class="ci_il">color</a> <a href=/wd/353/ title=" 3 records, TLCS 11, TGCS 46 " class="ci_il">texture</a> <a href=/wd/121/ title=" 3 records, TLCS 36, TGCS 98 " class="ci_il">features</a> and <a href=/wd/88/ title=" 4 records, TLCS 15, TGCS 72 " class="ci_il">discriminant</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> MAR-APR</SPAN>;  43 (2): 441-448
+<TD><a href=/citers/58/ class=nu>4</a><TD>20<TD><a href=/citees/58/ class=nu>4</a><TD>21
+<TR valign=top align=right class=evn><TD>60<TD align=left><a TITLE=" Article " href=javascript:opeNod(59)>60</a>  <a href=/au/30/ title=" 1 records, TLCS 6, TGCS 34 " class="ci_il">Borregaard T</a>, <a href=/au/178/ title=" 1 records, TLCS 6, TGCS 34 " class="ci_il">Nielsen H</a>, <a href=/au/182/ title=" 1 records, TLCS 6, TGCS 34 " class="ci_il">Norgaard L</a>, <a href=/au/97/ title=" 1 records, TLCS 6, TGCS 34 " class="ci_il">Have H</a><div class=ci_title><a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">Crop</a>-<a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/89/ title=" 7 records, TLCS 16, TGCS 134 " class="ci_il">discrimination</a> by <a href=/wd/192/ title=" 2 records, TLCS 6, TGCS 35 " class="ci_il">line</a> <a href=/wd/164/ title=" 6 records, TLCS 16, TGCS 87 " class="ci_il">imaging</a> <a href=/wd/326/ title=" 1 records, TLCS 6, TGCS 34 " class="ci_il">spectroscopy</a></div><SPAN><a href=/so/23/ title=" 6 records, TLCS 20, TGCS 155 " class="ci_il">JOURNAL OF AGRICULTURAL ENGINEERING RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> APR</SPAN>;  75 (4): 389-400
+<TD><a href=/citers/59/ class=nu>6</a><TD>34<TD><a href=/citees/59/ class=nu>2</a><TD>28
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR valign=top align=right class=odd><TD>61<TD align=left><a TITLE=" Article " href=javascript:opeNod(60)>61</a>  <a href=/au/156/ title=" 3 records, TLCS 14, TGCS 62 " class="ci_il">Medlin CR</a>, <a href=/au/221/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Shaw DR</a>, <a href=/au/84/ title=" 1 records, TLCS 9, TGCS 37 " class="ci_il">Gerard PD</a>, <a href=/au/133/ title=" 1 records, TLCS 9, TGCS 37 " class="ci_il">LaMastus FE</a><div class=ci_title><a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">Using</a> <a href=/wd/276/ title=" 5 records, TLCS 15, TGCS 94 " class="ci_il">remote</a> <a href=/wd/306/ title=" 7 records, TLCS 19, TGCS 117 " class="ci_il">sensing</a> to <a href=/wd/78/ title=" 2 records, TLCS 9, TGCS 38 " class="ci_il">detect</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/169/ title=" 2 records, TLCS 13, TGCS 50 " class="ci_il">infestations</a> in <a href=/wd/138/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Glycine</a> <a href=/wd/204/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">max</a></div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> MAY-JUN</SPAN>;  48 (3): 393-398
+<TD><a href=/citers/60/ class=nu>9</a><TD>37<TD><a href=/citees/60/ class=nu>2</a><TD>18
+<TR valign=top align=right class=evn><TD>62<TD align=left><a TITLE=" Article " href=javascript:opeNod(61)>62</a>  <a href=/au/36/ title=" 4 records, TLCS 15, TGCS 69 " class="ci_il">Burks TF</a>, <a href=/au/222/ title=" 5 records, TLCS 34, TGCS 88 " class="ci_il">Shearer SA</a>, <a href=/au/82/ title=" 1 records, TLCS 7, TGCS 26 " class="ci_il">Gates RS</a>, <a href=/au/61/ title=" 2 records, TLCS 9, TGCS 41 " class="ci_il">Donohue KD</a><div class=ci_title><a href=/wd/25/ title=" 1 records, TLCS 7, TGCS 26 " class="ci_il">Backpropagation</a> <a href=/wd/223/ title=" 9 records, TLCS 10, TGCS 64 " class="ci_il">neural</a> <a href=/wd/221/ title=" 7 records, TLCS 9, TGCS 61 " class="ci_il">network</a> <a href=/wd/77/ title=" 2 records, TLCS 7, TGCS 27 " class="ci_il">design</a> and <a href=/wd/113/ title=" 4 records, TLCS 10, TGCS 50 " class="ci_il">evaluation</a> for <a href=/wd/51/ title=" 1 records, TLCS 7, TGCS 26 " class="ci_il">classifying</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/53/ title=" 6 records, TLCS 30, TGCS 140 " class="ci_il">color</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/353/ title=" 3 records, TLCS 11, TGCS 46 " class="ci_il">texture</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> JUL-AUG</SPAN>;  43 (4): 1029-1037
+<TD><a href=/citers/61/ class=nu>7</a><TD>26<TD><a href=/citees/61/ class=nu>3</a><TD>17
+<TR valign=top align=right class=odd><TD>63<TD align=left><a TITLE=" Article " href=javascript:opeNod(62)>63</a>  <a href=/au/156/ title=" 3 records, TLCS 14, TGCS 62 " class="ci_il">Medlin CR</a>, <a href=/au/221/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Shaw DR</a><div class=ci_title><a href=/wd/99/ title=" 2 records, TLCS 4, TGCS 23 " class="ci_il">Economic</a> <a href=/wd/56/ title=" 2 records, TLCS 3, TGCS 17 " class="ci_il">comparison</a> of <a href=/wd/31/ title=" 1 records, TLCS 3, TGCS 16 " class="ci_il">broadcast</a> and <a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">site</a>-<a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/11/ title=" 6 records, TLCS 4, TGCS 21 " class="ci_il">applications</a> in <a href=/wd/226/ title=" 1 records, TLCS 3, TGCS 16 " class="ci_il">nontransgenic</a> and <a href=/wd/139/ title=" 1 records, TLCS 3, TGCS 16 " class="ci_il">glyphosate</a>-<a href=/wd/357/ title=" 1 records, TLCS 3, TGCS 16 " class="ci_il">tolerant</a> <a href=/wd/138/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Glycine</a> <a href=/wd/204/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">max</a></div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> SEP-OCT</SPAN>;  48 (5): 653-661
+<TD><a href=/citers/62/ class=nu>3</a><TD>16<TD><a href=/citees/62/ class=nu>2</a><TD>24
+<TR valign=top align=right class=evn><TD>64<TD align=left><a TITLE=" Article " href=javascript:opeNod(63)>64</a>  <a href=/au/68/ title=" 1 records, TLCS 2, TGCS 21 " class="ci_il">El-Faki MS</a>, <a href=/au/282/ title=" 4 records, TLCS 19, TGCS 70 " class="ci_il">Zhang N</a>, <a href=/au/194/ title=" 1 records, TLCS 2, TGCS 21 " class="ci_il">Peterson DE</a><div class=ci_title><a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">Weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/53/ title=" 6 records, TLCS 30, TGCS 140 " class="ci_il">color</a> <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/13/ title=" 9 records, TLCS 34, TGCS 210 " class="ci_il">2000</a> NOV-DEC</SPAN>;  43 (6): 1969-1978
+<TD><a href=/citers/63/ class=nu>2</a><TD>21<TD><a href=/citees/63/ class=nu>4</a><TD>22
+<TR><TD colspan=6 align=center class=yr>2001
+<TR valign=top align=right class=odd><TD>65<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(64)>65</a>  <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">Gerhards R</a>, <a href=/au/229/ title=" 6 records, TLCS 15, TGCS 77 " class="ci_il">Sokefeld M</a><div class=ci_title><a href=/wd/307/ title=" 7 records, TLCS 2, TGCS 23 " class="ci_il">Sensor</a> <a href=/wd/344/ title=" 4 records, TLCS 1, TGCS 24 " class="ci_il">systems</a> for <a href=/wd/22/ title=" 4 records, TLCS 63, TGCS 76 " class="ci_il">automatic</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a></div><SPAN><a href=/so/6/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">BCPC CONFERENCE - WEEDS 2001, VOLS 1 AND 2</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a></SPAN>;  : 827-834
+<TD>0<TD>0<TD><a href=/citees/64/ class=nu>5</a><TD>18
+<TR valign=top align=right class=evn><TD>66<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(65)>66</a>  <a href=/au/137/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Lei T</a><div class=ci_title><a href=/wd/307/ title=" 7 records, TLCS 2, TGCS 23 " class="ci_il">Sensor</a>-<a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/43/ title=" 2 records, TLCS 0, TGCS 2 " class="ci_il">chemical</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a> <a href=/wd/344/ title=" 4 records, TLCS 1, TGCS 24 " class="ci_il">systems</a></div><SPAN><a href=/so/38/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">PROCEEDINGS OF THE WORLD CONGRESS OF COMPUTERS IN AGRICULTURE AND NATURAL RESOURCES</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a></SPAN>;  : 279-289
+<TD>0<TD>0<TD><a href=/citees/65/ class=nu>6</a><TD>14
+<TR valign=top align=right class=odd><TD>67<TD align=left><a TITLE=" Review " href=javascript:opeNod(66)>67</a>  <a href=/au/134/ title=" 1 records, TLCS 3, TGCS 43 " class="ci_il">Lamb DW</a>, <a href=/au/33/ title=" 2 records, TLCS 7, TGCS 64 " class="ci_il">Brown RB</a><div class=ci_title><a href=/wd/276/ title=" 5 records, TLCS 15, TGCS 94 " class="ci_il">Remote</a>-<a href=/wd/306/ title=" 7 records, TLCS 19, TGCS 117 " class="ci_il">sensing</a> and <a href=/wd/201/ title=" 6 records, TLCS 17, TGCS 107 " class="ci_il">mapping</a> of <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a> in <a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">crops</a></div><SPAN><a href=/so/23/ title=" 6 records, TLCS 20, TGCS 155 " class="ci_il">JOURNAL OF AGRICULTURAL ENGINEERING RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a> FEB</SPAN>;  78 (2): 117-125
+<TD><a href=/citers/66/ class=nu>3</a><TD>43<TD><a href=/citees/66/ class=nu>9</a><TD>89
+<TR valign=top align=right class=evn><TD>68<TD align=left><a TITLE=" Article " href=javascript:opeNod(67)>68</a>  <a href=/au/17/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Axman P</a>, <a href=/au/128/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Kren J</a><div class=ci_title><a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">Identification</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/87/ title=" 2 records, TLCS 6, TGCS 18 " class="ci_il">dimensionless</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a> of <a href=/wd/186/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">leaves</a></div><SPAN><a href=/so/44/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">ROSTLINNA VYROBA</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a> MAY</SPAN>;  47 (5): 233-239
+<TD>0<TD>0<TD><a href=/citees/67/ class=nu>4</a><TD>12
+<TR valign=top align=right class=odd><TD>69<TD align=left><a TITLE=" Article " href=javascript:opeNod(68)>69</a>  <a href=/au/149/ title=" 1 records, TLCS 3, TGCS 36 " class="ci_il">Manh AG</a>, <a href=/au/201/ title=" 1 records, TLCS 3, TGCS 36 " class="ci_il">Rabatel G</a>, <a href=/au/15/ title=" 1 records, TLCS 3, TGCS 36 " class="ci_il">Assemat L</a>, <a href=/au/4/ title=" 1 records, TLCS 3, TGCS 36 " class="ci_il">Aldon MJ</a><div class=ci_title><a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">Weed</a> <a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">leaf</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/301/ title=" 5 records, TLCS 8, TGCS 75 " class="ci_il">segmentation</a> by <a href=/wd/73/ title=" 1 records, TLCS 3, TGCS 36 " class="ci_il">deformable</a> <a href=/wd/351/ title=" 1 records, TLCS 3, TGCS 36 " class="ci_il">templates</a></div><SPAN><a href=/so/23/ title=" 6 records, TLCS 20, TGCS 155 " class="ci_il">JOURNAL OF AGRICULTURAL ENGINEERING RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a> OCT</SPAN>;  80 (2): 139-146
+<TD><a href=/citers/68/ class=nu>3</a><TD>36<TD><a href=/citees/68/ class=nu>7</a><TD>37
+<TR valign=top align=right class=evn><TD>70<TD align=left><a TITLE=" Article " href=javascript:opeNod(69)>70</a>  <a href=/au/43/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Chen X</a>, <a href=/au/263/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Welch SM</a>, <a href=/au/282/ title=" 4 records, TLCS 19, TGCS 70 " class="ci_il">Zhang N</a>, <a href=/au/13/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Armbrust D</a><div class=ci_title><a href=/wd/207/ title=" 3 records, TLCS 0, TGCS 7 " class="ci_il">Measurement</a> of <a href=/wd/40/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">change</a> in <a href=/wd/317/ title=" 4 records, TLCS 6, TGCS 44 " class="ci_il">soybean</a> <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">plant</a> <a href=/wd/69/ title=" 2 records, TLCS 0, TGCS 0 " class="ci_il">cross</a>-<a href=/wd/294/ title=" 2 records, TLCS 0, TGCS 0 " class="ci_il">sectional</a> <a href=/wd/14/ title=" 3 records, TLCS 0, TGCS 29 " class="ci_il">area</a> under <a href=/wd/392/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">wind</a> <a href=/wd/59/ title=" 6 records, TLCS 20, TGCS 79 " class="ci_il">conditions</a> via <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/261/ title=" 6 records, TLCS 80, TGCS 144 " class="ci_il">processing</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a> NOV-DEC</SPAN>;  44 (6): 1923-1929
+<TD>0<TD>0<TD><a href=/citees/69/ class=nu>3</a><TD>19
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR valign=top align=right class=odd><TD>71<TD align=left><a TITLE=" Review " href=javascript:opeNod(70)>71</a>  <a href=/au/81/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Garibay SV</a>, <a href=/au/209/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Richner W</a>, <a href=/au/233/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Stamp P</a>, <a href=/au/173/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Nakamoto T</a>, <a href=/au/275/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Yamagishi J</a>, et al.<div class=ci_title><a href=/wd/116/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Extent</a> and <a href=/wd/165/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">implications</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/375/ title=" 3 records, TLCS 6, TGCS 55 " class="ci_il">variability</a> in <a href=/wd/13/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">arable</a> <a href=/wd/67/ title=" 7 records, TLCS 18, TGCS 147 " class="ci_il">crop</a> <a href=/wd/124/ title=" 8 records, TLCS 24, TGCS 117 " class="ci_il">fields</a></div><SPAN><a href=/so/34/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">PLANT PRODUCTION SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/14/ title=" 7 records, TLCS 6, TGCS 84 " class="ci_il">2001</a> DEC</SPAN>;  4 (4): 259-269
+<TD>0<TD>5<TD><a href=/citees/70/ class=nu>10</a><TD>103
+<TR><TD colspan=6 align=center class=yr>2002
+<TR valign=top align=right class=evn><TD>72<TD align=left><a TITLE=" Article " href=javascript:opeNod(71)>72</a>  <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">Gerhards R</a>, <a href=/au/229/ title=" 6 records, TLCS 15, TGCS 77 " class="ci_il">Sokefeld M</a>, <a href=/au/170/ title=" 2 records, TLCS 7, TGCS 25 " class="ci_il">Nabout A</a>, <a href=/au/243/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Therburg RD</a>, <a href=/au/131/ title=" 4 records, TLCS 15, TGCS 77 " class="ci_il">Kuhbauch W</a><div class=ci_title><a href=/wd/229/ title=" 1 records, TLCS 0, TGCS 5 " class="ci_il">Online</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/84/ title=" 5 records, TLCS 9, TGCS 35 " class="ci_il">digital</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a></div><SPAN><a href=/so/51/ title=" 4 records, TLCS 1, TGCS 20 " class="ci_il">ZEITSCHRIFT FUR PFLANZENKRANKHEITEN UND PFLANZENSCHUTZ-JOURNAL OF PLANT DISEASES AND PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a></SPAN>;  : 421-427
+<TD>0<TD>5<TD><a href=/citees/71/ class=nu>5</a><TD>19
+<TR valign=top align=right class=odd><TD>73<TD align=left><a TITLE=" Article " href=javascript:opeNod(72)>73</a>  <a href=/au/135/ title=" 1 records, TLCS 1, TGCS 20 " class="ci_il">Lamm RD</a>, <a href=/au/226/ title=" 3 records, TLCS 11, TGCS 66 " class="ci_il">Slaughter DC</a>, <a href=/au/87/ title=" 2 records, TLCS 2, TGCS 44 " class="ci_il">Giles DK</a><div class=ci_title><a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">Precision</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a> for <a href=/wd/63/ title=" 1 records, TLCS 1, TGCS 20 " class="ci_il">cotton</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> JAN-FEB</SPAN>;  45 (1): 231-238
+<TD><a href=/citers/72/ class=nu>1</a><TD>20<TD><a href=/citees/72/ class=nu>5</a><TD>20
+<TR valign=top align=right class=evn><TD>74<TD align=left><a TITLE=" Article " href=javascript:opeNod(73)>74</a>  <a href=/au/256/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">Van Wychen LR</a>, <a href=/au/147/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">Luschei EC</a>, <a href=/au/37/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">Bussan AJ</a>, <a href=/au/153/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">Maxwell BD</a><div class=ci_title><a href=/wd/0/ title=" 3 records, TLCS 0, TGCS 11 " class="ci_il">Accuracy</a> and <a href=/wd/62/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">cost</a> <a href=/wd/101/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">effectiveness</a> of <a href=/wd/140/ title=" 2 records, TLCS 6, TGCS 32 " class="ci_il">GPS</a>-<a href=/wd/19/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">assisted</a> <a href=/wd/391/ title=" 2 records, TLCS 0, TGCS 8 " class="ci_il">wild</a> <a href=/wd/227/ title=" 2 records, TLCS 0, TGCS 8 " class="ci_il">oat</a> <a href=/wd/201/ title=" 6 records, TLCS 17, TGCS 107 " class="ci_il">mapping</a> in <a href=/wd/332/ title=" 1 records, TLCS 0, TGCS 8 " class="ci_il">spring</a> <a href=/wd/38/ title=" 2 records, TLCS 3, TGCS 64 " class="ci_il">cereal</a> <a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">crops</a></div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> JAN-FEB</SPAN>;  50 (1): 120-129
+<TD>0<TD>8<TD><a href=/citees/73/ class=nu>5</a><TD>22
+<TR valign=top align=right class=odd><TD>75<TD align=left><a TITLE=" Article " href=javascript:opeNod(74)>75</a>  <a href=/au/195/ title=" 1 records, TLCS 0, TGCS 21 " class="ci_il">Philipp I</a>, <a href=/au/202/ title=" 1 records, TLCS 0, TGCS 21 " class="ci_il">Rath T</a><div class=ci_title><a href=/wd/166/ title=" 1 records, TLCS 0, TGCS 21 " class="ci_il">Improving</a> <a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">plant</a> <a href=/wd/89/ title=" 7 records, TLCS 16, TGCS 134 " class="ci_il">discrimination</a> in <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/261/ title=" 6 records, TLCS 80, TGCS 144 " class="ci_il">processing</a> by <a href=/wd/370/ title=" 4 records, TLCS 30, TGCS 176 " class="ci_il">use</a> of <a href=/wd/83/ title=" 1 records, TLCS 0, TGCS 21 " class="ci_il">different</a> <a href=/wd/54/ title=" 2 records, TLCS 3, TGCS 77 " class="ci_il">colour</a> <a href=/wd/318/ title=" 1 records, TLCS 0, TGCS 21 " class="ci_il">space</a> <a href=/wd/362/ title=" 1 records, TLCS 0, TGCS 21 " class="ci_il">transformations</a></div><SPAN><a href=/so/12/ title=" 9 records, TLCS 11, TGCS 167 " class="ci_il">COMPUTERS AND ELECTRONICS IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> JUL</SPAN>;  35 (1): 1-15
+<TD>0<TD>21<TD><a href=/citees/74/ class=nu>5</a><TD>31
+<TR valign=top align=right class=evn><TD>76<TD align=left><a TITLE=" Article " href=javascript:opeNod(75)>76</a>  <a href=/au/236/ title=" 4 records, TLCS 7, TGCS 28 " class="ci_il">Steward BL</a>, <a href=/au/249/ title=" 4 records, TLCS 8, TGCS 22 " class="ci_il">Tian LF</a>, <a href=/au/241/ title=" 3 records, TLCS 0, TGCS 13 " class="ci_il">Tang L</a><div class=ci_title><a href=/wd/91/ title=" 1 records, TLCS 0, TGCS 3 " class="ci_il">Distance</a>-<a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/60/ title=" 10 records, TLCS 19, TGCS 158 " class="ci_il">control</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a> for <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a>-<a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/304/ title=" 10 records, TLCS 82, TGCS 121 " class="ci_il">selective</a> <a href=/wd/331/ title=" 4 records, TLCS 20, TGCS 96 " class="ci_il">spraying</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> SEP-OCT</SPAN>;  45 (5): 1255-1262
+<TD>0<TD>3<TD><a href=/citees/75/ class=nu>7</a><TD>32
+<TR valign=top align=right class=odd><TD>77<TD align=left><a TITLE=" Article " href=javascript:opeNod(76)>77</a>  <a href=/au/46/ title=" 1 records, TLCS 0, TGCS 6 " class="ci_il">Chien CF</a>, <a href=/au/140/ title=" 1 records, TLCS 0, TGCS 6 " class="ci_il">Lin TT</a><div class=ci_title><a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">Leaf</a> <a href=/wd/14/ title=" 3 records, TLCS 0, TGCS 29 " class="ci_il">area</a> <a href=/wd/207/ title=" 3 records, TLCS 0, TGCS 7 " class="ci_il">measurement</a> of <a href=/wd/303/ title=" 1 records, TLCS 0, TGCS 6 " class="ci_il">selected</a> <a href=/wd/379/ title=" 1 records, TLCS 0, TGCS 6 " class="ci_il">vegetable</a> <a href=/wd/299/ title=" 2 records, TLCS 9, TGCS 28 " class="ci_il">seedlings</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/105/ title=" 1 records, TLCS 0, TGCS 6 " class="ci_il">elliptical</a> <a href=/wd/150/ title=" 1 records, TLCS 0, TGCS 6 " class="ci_il">Hough</a> <a href=/wd/360/ title=" 2 records, TLCS 0, TGCS 6 " class="ci_il">transform</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> SEP-OCT</SPAN>;  45 (5): 1669-1677
+<TD>0<TD>6<TD><a href=/citees/76/ class=nu>3</a><TD>28
+<TR valign=top align=right class=evn><TD>78<TD align=left><a TITLE=" Article " href=javascript:opeNod(77)>78</a>  <a href=/au/266/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">Wiedemann HT</a>, <a href=/au/252/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">Ueckert DN</a>, <a href=/au/155/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">McGinty WA</a><div class=ci_title><a href=/wd/328/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">Spray</a> <a href=/wd/30/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">boom</a> for <a href=/wd/306/ title=" 7 records, TLCS 19, TGCS 117 " class="ci_il">sensing</a> and <a href=/wd/305/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">selectively</a> <a href=/wd/331/ title=" 4 records, TLCS 20, TGCS 96 " class="ci_il">spraying</a> <a href=/wd/314/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">small</a> <a href=/wd/208/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">mesquite</a> on <a href=/wd/147/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">highway</a> <a href=/wd/284/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">rights</a>-of-way</div><SPAN><a href=/so/4/ title=" 1 records, TLCS 0, TGCS 2 " class="ci_il">APPLIED ENGINEERING IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> NOV</SPAN>;  18 (6): 661-666
+<TD>0<TD>2<TD><a href=/citees/77/ class=nu>3</a><TD>14
+<TR valign=top align=right class=odd><TD>79<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(78)>79</a>  <a href=/au/248/ title=" 6 records, TLCS 24, TGCS 112 " class="ci_il">Tian L</a><div class=ci_title><a href=/wd/82/ title=" 4 records, TLCS 15, TGCS 80 " class="ci_il">Development</a> of a <a href=/wd/307/ title=" 7 records, TLCS 2, TGCS 23 " class="ci_il">sensor</a>-<a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a></div><SPAN><a href=/so/12/ title=" 9 records, TLCS 11, TGCS 167 " class="ci_il">COMPUTERS AND ELECTRONICS IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> NOV</SPAN>;  36 (2-3): 133-149
+<TD>0<TD>7<TD><a href=/citees/78/ class=nu>6</a><TD>25
+<TR valign=top align=right class=evn><TD>80<TD align=left><a TITLE=" Article " href=javascript:opeNod(79)>80</a>  <a href=/au/36/ title=" 4 records, TLCS 15, TGCS 69 " class="ci_il">Burks TF</a>, <a href=/au/222/ title=" 5 records, TLCS 34, TGCS 88 " class="ci_il">Shearer SA</a>, <a href=/au/91/ title=" 1 records, TLCS 2, TGCS 8 " class="ci_il">Green JD</a>, <a href=/au/99/ title=" 2 records, TLCS 4, TGCS 23 " class="ci_il">Heath JR</a><div class=ci_title><a href=/wd/170/ title=" 1 records, TLCS 2, TGCS 8 " class="ci_il">Influence</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/203/ title=" 1 records, TLCS 2, TGCS 8 " class="ci_il">maturity</a> <a href=/wd/188/ title=" 1 records, TLCS 2, TGCS 8 " class="ci_il">levels</a> on <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/48/ title=" 12 records, TLCS 7, TGCS 42 " class="ci_il">classification</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/196/ title=" 12 records, TLCS 123, TGCS 222 " class="ci_il">machine</a> <a href=/wd/381/ title=" 13 records, TLCS 123, TGCS 223 " class="ci_il">vision</a></div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/15/ title=" 9 records, TLCS 3, TGCS 80 " class="ci_il">2002</a> NOV-DEC</SPAN>;  50 (6): 802-811
+<TD><a href=/citers/79/ class=nu>2</a><TD>8<TD><a href=/citees/79/ class=nu>6</a><TD>24
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR><TD colspan=6 align=center class=yr>2003
+<TR valign=top align=right class=odd><TD>81<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(80)>81</a>  <a href=/au/229/ title=" 6 records, TLCS 15, TGCS 77 " class="ci_il">Sokefeld M</a>, <a href=/au/85/ title=" 8 records, TLCS 21, TGCS 146 " class="ci_il">Gerhards R</a><div class=ci_title><a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">Weed</a> <a href=/wd/201/ title=" 6 records, TLCS 17, TGCS 107 " class="ci_il">mapping</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/84/ title=" 5 records, TLCS 9, TGCS 35 " class="ci_il">digital</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/261/ title=" 6 records, TLCS 80, TGCS 144 " class="ci_il">processing</a></div><SPAN><a href=/so/13/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">CONFERENCE: AGRICULTURAL ENGINEERING, 2003</a></SPAN>. <SPAN class=sc><a href=/py/16/ title=" 6 records, TLCS 7, TGCS 77 " class="ci_il">2003</a></SPAN>;  1798: 103-108
+<TD>0<TD>0<TD><a href=/citees/80/ class=nu>2</a><TD>9
+<TR valign=top align=right class=evn><TD>82<TD align=left><a TITLE=" Article " href=javascript:opeNod(81)>82</a>  <a href=/au/277/ title=" 1 records, TLCS 0, TGCS 9 " class="ci_il">Ying Y</a>, <a href=/au/112/ title=" 1 records, TLCS 0, TGCS 9 " class="ci_il">Jing H</a>, <a href=/au/242/ title=" 2 records, TLCS 0, TGCS 9 " class="ci_il">Tao Y</a>, <a href=/au/282/ title=" 4 records, TLCS 19, TGCS 70 " class="ci_il">Zhang N</a><div class=ci_title><a href=/wd/79/ title=" 4 records, TLCS 8, TGCS 52 " class="ci_il">Detecting</a> <a href=/wd/337/ title=" 2 records, TLCS 0, TGCS 9 " class="ci_il">stem</a> and <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">shape</a> of <a href=/wd/241/ title=" 1 records, TLCS 0, TGCS 9 " class="ci_il">pears</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/127/ title=" 3 records, TLCS 7, TGCS 46 " class="ci_il">Fourier</a> <a href=/wd/361/ title=" 1 records, TLCS 0, TGCS 9 " class="ci_il">transformation</a> and an <a href=/wd/15/ title=" 4 records, TLCS 0, TGCS 19 " class="ci_il">artificial</a> <a href=/wd/223/ title=" 9 records, TLCS 10, TGCS 64 " class="ci_il">neural</a> <a href=/wd/221/ title=" 7 records, TLCS 9, TGCS 61 " class="ci_il">network</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/16/ title=" 6 records, TLCS 7, TGCS 77 " class="ci_il">2003</a> JAN-FEB</SPAN>;  46 (1): 157-162
+<TD>0<TD>9<TD><a href=/citees/81/ class=nu>1</a><TD>21
+<TR valign=top align=right class=odd><TD>83<TD align=left><a TITLE=" Article " href=javascript:opeNod(82)>83</a>  <a href=/au/119/ title=" 4 records, TLCS 6, TGCS 35 " class="ci_il">Jurado-Exposito M</a>, <a href=/au/144/ title=" 5 records, TLCS 8, TGCS 47 " class="ci_il">Lopez-Granados F</a>, <a href=/au/80/ title=" 4 records, TLCS 7, TGCS 44 " class="ci_il">Garcia-Torres L</a>, <a href=/au/79/ title=" 2 records, TLCS 3, TGCS 23 " class="ci_il">Garcia-Ferrer A</a>, <a href=/au/56/ title=" 1 records, TLCS 3, TGCS 23 " class="ci_il">de la Orden MS</a>, et al.<div class=ci_title><a href=/wd/217/ title=" 2 records, TLCS 3, TGCS 23 " class="ci_il">Multi</a>-<a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/375/ title=" 3 records, TLCS 6, TGCS 55 " class="ci_il">variability</a> and <a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">site</a>-<a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/199/ title=" 8 records, TLCS 27, TGCS 150 " class="ci_il">management</a> <a href=/wd/202/ title=" 4 records, TLCS 15, TGCS 112 " class="ci_il">maps</a> in <a href=/wd/70/ title=" 1 records, TLCS 3, TGCS 23 " class="ci_il">cultivated</a> <a href=/wd/342/ title=" 2 records, TLCS 5, TGCS 35 " class="ci_il">sunflower</a></div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/16/ title=" 6 records, TLCS 7, TGCS 77 " class="ci_il">2003</a> MAY-JUN</SPAN>;  51 (3): 319-328
+<TD><a href=/citers/82/ class=nu>3</a><TD>23<TD><a href=/citees/82/ class=nu>7</a><TD>55
+<TR valign=top align=right class=evn><TD>84<TD align=left><a TITLE=" Article " href=javascript:opeNod(83)>84</a>  <a href=/au/124/ title=" 2 records, TLCS 4, TGCS 35 " class="ci_il">Koger CH</a>, <a href=/au/34/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">Bruce LM</a>, <a href=/au/221/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Shaw DR</a>, <a href=/au/204/ title=" 2 records, TLCS 4, TGCS 35 " class="ci_il">Reddy KN</a><div class=ci_title><a href=/wd/385/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">Wavelet</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a> of <a href=/wd/154/ title=" 2 records, TLCS 0, TGCS 22 " class="ci_il">hyperspectral</a> <a href=/wd/272/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">reflectance</a> <a href=/wd/71/ title=" 3 records, TLCS 10, TGCS 56 " class="ci_il">data</a> for <a href=/wd/79/ title=" 4 records, TLCS 8, TGCS 52 " class="ci_il">detecting</a> <a href=/wd/248/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">pitted</a> <a href=/wd/215/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">morningglory</a> (<a href=/wd/179/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">Ipomoea</a> <a href=/wd/183/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">lacunosa</a>) in <a href=/wd/317/ title=" 4 records, TLCS 6, TGCS 44 " class="ci_il">soybean</a> (<a href=/wd/138/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Glycine</a> <a href=/wd/204/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">max</a>)</div><SPAN><a href=/so/43/ title=" 1 records, TLCS 0, TGCS 22 " class="ci_il">REMOTE SENSING OF ENVIRONMENT</a></SPAN>. <SPAN class=sc><a href=/py/16/ title=" 6 records, TLCS 7, TGCS 77 " class="ci_il">2003</a> JUN 30</SPAN>;  86 (1): 108-119
+<TD>0<TD>22<TD><a href=/citees/83/ class=nu>2</a><TD>32
+<TR valign=top align=right class=odd><TD>85<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(84)>85</a>  <a href=/au/241/ title=" 3 records, TLCS 0, TGCS 13 " class="ci_il">Tang L</a>, <a href=/au/248/ title=" 6 records, TLCS 24, TGCS 112 " class="ci_il">Tian L</a>, <a href=/au/236/ title=" 4 records, TLCS 7, TGCS 28 " class="ci_il">Steward BL</a><div class=ci_title><a href=/wd/48/ title=" 12 records, TLCS 7, TGCS 42 " class="ci_il">Classification</a> of <a href=/wd/32/ title=" 1 records, TLCS 0, TGCS 10 " class="ci_il">broadleaf</a> and <a href=/wd/141/ title=" 4 records, TLCS 3, TGCS 22 " class="ci_il">grass</a> <a href=/wd/389/ title=" 11 records, TLCS 50, TGCS 239 " class="ci_il">weeds</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/134/ title=" 1 records, TLCS 0, TGCS 10 " class="ci_il">gabor</a> <a href=/wd/386/ title=" 1 records, TLCS 0, TGCS 10 " class="ci_il">wavelets</a> and an <a href=/wd/15/ title=" 4 records, TLCS 0, TGCS 19 " class="ci_il">artificial</a> <a href=/wd/223/ title=" 9 records, TLCS 10, TGCS 64 " class="ci_il">neural</a> <a href=/wd/221/ title=" 7 records, TLCS 9, TGCS 61 " class="ci_il">network</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/16/ title=" 6 records, TLCS 7, TGCS 77 " class="ci_il">2003</a> JUL-AUG</SPAN>;  46 (4): 1247-1254
+<TD>0<TD>10<TD><a href=/citees/84/ class=nu>7</a><TD>26
+<TR valign=top align=right class=evn><TD>86<TD align=left><a TITLE=" Article " href=javascript:opeNod(85)>86</a>  <a href=/au/124/ title=" 2 records, TLCS 4, TGCS 35 " class="ci_il">Koger CH</a>, <a href=/au/221/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Shaw DR</a>, <a href=/au/261/ title=" 1 records, TLCS 4, TGCS 13 " class="ci_il">Watson CE</a>, <a href=/au/204/ title=" 2 records, TLCS 4, TGCS 35 " class="ci_il">Reddy KN</a><div class=ci_title><a href=/wd/79/ title=" 4 records, TLCS 8, TGCS 52 " class="ci_il">Detecting</a> <a href=/wd/184/ title=" 2 records, TLCS 6, TGCS 22 " class="ci_il">late</a>-<a href=/wd/293/ title=" 2 records, TLCS 6, TGCS 22 " class="ci_il">season</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/169/ title=" 2 records, TLCS 13, TGCS 50 " class="ci_il">infestations</a> in <a href=/wd/317/ title=" 4 records, TLCS 6, TGCS 44 " class="ci_il">soybean</a> (<a href=/wd/138/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">Glycine</a> <a href=/wd/204/ title=" 4 records, TLCS 16, TGCS 88 " class="ci_il">max</a>)</div><SPAN><a href=/so/50/ title=" 3 records, TLCS 8, TGCS 38 " class="ci_il">WEED TECHNOLOGY</a></SPAN>. <SPAN class=sc><a href=/py/16/ title=" 6 records, TLCS 7, TGCS 77 " class="ci_il">2003</a> OCT-DEC</SPAN>;  17 (4): 696-704
+<TD><a href=/citers/85/ class=nu>4</a><TD>13<TD><a href=/citees/85/ class=nu>3</a><TD>37
+<TR><TD colspan=6 align=center class=yr>2004
+<TR valign=top align=right class=odd><TD>87<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(86)>87</a>  <a href=/au/248/ title=" 6 records, TLCS 24, TGCS 112 " class="ci_il">Tian L</a><div class=ci_title><a href=/wd/107/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Engineering</a> <a href=/wd/173/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">innovations</a> for <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/5/ title=" 8 records, TLCS 4, TGCS 118 " class="ci_il">agriculture</a> in <a href=/wd/159/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">ILARS</a> at <a href=/wd/367/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">University</a> of <a href=/wd/160/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Illinois</a></div><SPAN><a href=/so/39/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">PROCEEDINGS OF THE WORLD ENGINEERS' CONVENTION 2004, VOL E, AGRICULTURAL ENGINEERING AND FOOD SECURITY</a></SPAN>. <SPAN class=sc><a href=/py/17/ title=" 5 records, TLCS 3, TGCS 14 " class="ci_il">2004</a></SPAN>;  : 115-120
+<TD>0<TD>0<TD><a href=/citees/86/ class=nu>5</a><TD>24
+<TR valign=top align=right class=evn><TD>88<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(87)>88</a>  <a href=/au/172/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Nagy S</a>, <a href=/au/206/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Reisinger P</a>, <a href=/au/10/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Antal K</a><div class=ci_title><a href=/wd/201/ title=" 6 records, TLCS 17, TGCS 107 " class="ci_il">Mapping</a> of <a href=/wd/242/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">perennial</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/93/ title=" 6 records, TLCS 33, TGCS 121 " class="ci_il">distribution</a> in <a href=/wd/198/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">maize</a></div><SPAN><a href=/so/51/ title=" 4 records, TLCS 1, TGCS 20 " class="ci_il">ZEITSCHRIFT FUR PFLANZENKRANKHEITEN UND PFLANZENSCHUTZ-JOURNAL OF PLANT DISEASES AND PROTECTION</a></SPAN>. <SPAN class=sc><a href=/py/17/ title=" 5 records, TLCS 3, TGCS 14 " class="ci_il">2004</a></SPAN>;  : 383-389
+<TD>0<TD>0<TD><a href=/citees/87/ class=nu>4</a><TD>17
+<TR valign=top align=right class=odd><TD>89<TD align=left><a TITLE=" Article " href=javascript:opeNod(88)>89</a>  <a href=/au/247/ title=" 1 records, TLCS 1, TGCS 4 " class="ci_il">Thorp KR</a>, <a href=/au/249/ title=" 4 records, TLCS 8, TGCS 22 " class="ci_il">Tian LF</a><div class=ci_title><a href=/wd/243/ title=" 2 records, TLCS 1, TGCS 6 " class="ci_il">Performance</a> study of <a href=/wd/376/ title=" 3 records, TLCS 1, TGCS 7 " class="ci_il">variable</a>-<a href=/wd/268/ title=" 4 records, TLCS 1, TGCS 7 " class="ci_il">rate</a> <a href=/wd/144/ title=" 15 records, TLCS 91, TGCS 214 " class="ci_il">herbicide</a> <a href=/wd/11/ title=" 6 records, TLCS 4, TGCS 21 " class="ci_il">applications</a> <a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> on <a href=/wd/276/ title=" 5 records, TLCS 15, TGCS 94 " class="ci_il">remote</a> <a href=/wd/306/ title=" 7 records, TLCS 19, TGCS 117 " class="ci_il">sensing</a> <a href=/wd/162/ title=" 2 records, TLCS 1, TGCS 4 " class="ci_il">imagery</a></div><SPAN><a href=/so/8/ title=" 2 records, TLCS 3, TGCS 19 " class="ci_il">BIOSYSTEMS ENGINEERING</a></SPAN>. <SPAN class=sc><a href=/py/17/ title=" 5 records, TLCS 3, TGCS 14 " class="ci_il">2004</a> MAY</SPAN>;  88 (1): 35-47
+<TD><a href=/citers/88/ class=nu>1</a><TD>4<TD><a href=/citees/88/ class=nu>6</a><TD>18
+<TR valign=top align=right class=evn><TD>90<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(89)>90</a>  <a href=/au/268/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Wilkerson JB</a>, <a href=/au/94/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Hancock JH</a>, <a href=/au/165/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Moody FH</a>, <a href=/au/177/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Newman MA</a><div class=ci_title><a href=/wd/77/ title=" 2 records, TLCS 7, TGCS 27 " class="ci_il">Design</a> of a <a href=/wd/296/ title=" 2 records, TLCS 0, TGCS 3 " class="ci_il">seed</a>-<a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/10/ title=" 16 records, TLCS 101, TGCS 177 " class="ci_il">application</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a> for in-<a href=/wd/131/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">furrow</a> <a href=/wd/44/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">chemicals</a></div><SPAN><a href=/so/47/ title=" 25 records, TLCS 236, TGCS 634 " class="ci_il">TRANSACTIONS OF THE ASAE</a></SPAN>. <SPAN class=sc><a href=/py/17/ title=" 5 records, TLCS 3, TGCS 14 " class="ci_il">2004</a> MAY-JUN</SPAN>;  47 (3): 637-645
+<TD>0<TD>1<TD><a href=/citees/89/ class=nu>2</a><TD>26
+<TR bgcolor=#e1e9e1><TD align=right>#<TH><SPAN class=sc><a href="index-tl.html?rev=1">Date</a></SPAN> / <a href="index-au1.html">Author</a> / <a href="index-so.html">Journal</a><TH><a href="index-lcs.html" TITLE=" Local Citation Score ">LCS</a><TH><a href="index-tc.html" TITLE=" Global Citation Score ">GCS</a><TH><a href="index-lcr.html" TITLE=" Local Cited References ">LCR</a><TH><a href="index-ncr.html" TITLE=" Cited References ">CR</a>
+<TR valign=top align=right class=odd><TD>91<TD align=left><a TITLE=" Article " href=javascript:opeNod(90)>91</a>  <a href=/au/86/ title=" 1 records, TLCS 2, TGCS 9 " class="ci_il">Gibson KD</a>, <a href=/au/59/ title=" 1 records, TLCS 2, TGCS 9 " class="ci_il">Dirks R</a>, <a href=/au/156/ title=" 3 records, TLCS 14, TGCS 62 " class="ci_il">Medlin CR</a>, <a href=/au/115/ title=" 1 records, TLCS 2, TGCS 9 " class="ci_il">Johnston L</a><div class=ci_title><a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">Detection</a> of <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> in <a href=/wd/317/ title=" 4 records, TLCS 6, TGCS 44 " class="ci_il">soybean</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/218/ title=" 3 records, TLCS 3, TGCS 13 " class="ci_il">multispectral</a> <a href=/wd/84/ title=" 5 records, TLCS 9, TGCS 35 " class="ci_il">digital</a> <a href=/wd/163/ title=" 3 records, TLCS 13, TGCS 60 " class="ci_il">images</a></div><SPAN><a href=/so/50/ title=" 3 records, TLCS 8, TGCS 38 " class="ci_il">WEED TECHNOLOGY</a></SPAN>. <SPAN class=sc><a href=/py/17/ title=" 5 records, TLCS 3, TGCS 14 " class="ci_il">2004</a> JUL-SEP</SPAN>;  18 (3): 742-749
+<TD><a href=/citers/90/ class=nu>2</a><TD>9<TD><a href=/citees/90/ class=nu>6</a><TD>45
+<TR><TD colspan=6 align=center class=yr>2005
+<TR valign=top align=right class=evn><TD>92<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(91)>92</a>  <a href=/au/224/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Shiratsuchi LS</a>, <a href=/au/11/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Antoniol FJR</a>, <a href=/au/212/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">Rocha SR</a><div class=ci_title><a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">Weed</a> <a href=/wd/297/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">seedbank</a> <a href=/wd/112/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">evaluating</a> <a href=/wd/209/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">method</a> to <a href=/wd/135/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">generate</a> <a href=/wd/319/ title=" 9 records, TLCS 41, TGCS 227 " class="ci_il">spatial</a> <a href=/wd/93/ title=" 6 records, TLCS 33, TGCS 121 " class="ci_il">distribution</a> <a href=/wd/202/ title=" 4 records, TLCS 15, TGCS 112 " class="ci_il">maps</a></div><SPAN><a href=/so/26/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">JOURNAL OF ENVIRONMENTAL SCIENCE AND HEALTH PART B-PESTICIDES FOOD CONTAMINANTS AND AGRICULTURAL WASTES</a></SPAN>. <SPAN class=sc><a href=/py/18/ title=" 4 records, TLCS 10, TGCS 44 " class="ci_il">2005</a></SPAN>;  40 (1): 191-194
+<TD>0<TD>0<TD><a href=/citees/91/ class=nu>3</a><TD>9
+<TR valign=top align=right class=odd><TD>93<TD align=left><a TITLE=" Article " href=javascript:opeNod(92)>93</a>  <a href=/au/88/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">Girma K</a>, <a href=/au/168/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">Mosali J</a>, <a href=/au/203/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">Raun WR</a>, <a href=/au/75/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">Freeman KW</a>, <a href=/au/152/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">Martin KL</a>, et al.<div class=ci_title><a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">Identification</a> of <a href=/wd/232/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">optical</a> <a href=/wd/324/ title=" 6 records, TLCS 12, TGCS 73 " class="ci_il">spectral</a> <a href=/wd/309/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">signatures</a> for <a href=/wd/79/ title=" 4 records, TLCS 8, TGCS 52 " class="ci_il">detecting</a> <a href=/wd/42/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">cheat</a> and <a href=/wd/290/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">Ryegrass</a> in <a href=/wd/393/ title=" 2 records, TLCS 8, TGCS 46 " class="ci_il">winter</a> <a href=/wd/390/ title=" 6 records, TLCS 28, TGCS 98 " class="ci_il">wheat</a></div><SPAN><a href=/so/15/ title=" 1 records, TLCS 4, TGCS 8 " class="ci_il">CROP SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/18/ title=" 4 records, TLCS 10, TGCS 44 " class="ci_il">2005</a> MAR-APR</SPAN>;  45 (2): 477-485
+<TD><a href=/citers/92/ class=nu>4</a><TD>8<TD><a href=/citees/92/ class=nu>8</a><TD>47
+<TR valign=top align=right class=evn><TD>94<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(93)>94</a>  <a href=/au/33/ title=" 2 records, TLCS 7, TGCS 64 " class="ci_il">Brown RB</a>, <a href=/au/180/ title=" 1 records, TLCS 4, TGCS 21 " class="ci_il">Noble SD</a><div class=ci_title><a href=/wd/313/ title=" 9 records, TLCS 33, TGCS 190 " class="ci_il">Site</a>-<a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">specific</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/199/ title=" 8 records, TLCS 27, TGCS 150 " class="ci_il">management</a>: <a href=/wd/306/ title=" 7 records, TLCS 19, TGCS 117 " class="ci_il">sensing</a> <a href=/wd/278/ title=" 2 records, TLCS 5, TGCS 39 " class="ci_il">requirements</a> - what do we <a href=/wd/220/ title=" 1 records, TLCS 4, TGCS 21 " class="ci_il">need</a> to <a href=/wd/295/ title=" 1 records, TLCS 4, TGCS 21 " class="ci_il">see</a>?</div><SPAN><a href=/so/49/ title=" 8 records, TLCS 29, TGCS 187 " class="ci_il">WEED SCIENCE</a></SPAN>. <SPAN class=sc><a href=/py/18/ title=" 4 records, TLCS 10, TGCS 44 " class="ci_il">2005</a> MAR-APR</SPAN>;  53 (2): 252-258
+<TD><a href=/citers/93/ class=nu>4</a><TD>21<TD><a href=/citees/93/ class=nu>12</a><TD>57
+<TR valign=top align=right class=odd><TD>95<TD align=left><a TITLE=" Article " href=javascript:opeNod(94)>95</a>  <a href=/au/36/ title=" 4 records, TLCS 15, TGCS 69 " class="ci_il">Burks TF</a>, <a href=/au/222/ title=" 5 records, TLCS 34, TGCS 88 " class="ci_il">Shearer SA</a>, <a href=/au/99/ title=" 2 records, TLCS 4, TGCS 23 " class="ci_il">Heath JR</a>, <a href=/au/61/ title=" 2 records, TLCS 9, TGCS 41 " class="ci_il">Donohue KD</a><div class=ci_title><a href=/wd/113/ title=" 4 records, TLCS 10, TGCS 50 " class="ci_il">Evaluation</a> of <a href=/wd/223/ title=" 9 records, TLCS 10, TGCS 64 " class="ci_il">neural</a>-<a href=/wd/221/ title=" 7 records, TLCS 9, TGCS 61 " class="ci_il">network</a> <a href=/wd/50/ title=" 1 records, TLCS 2, TGCS 15 " class="ci_il">classifiers</a> for <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/89/ title=" 7 records, TLCS 16, TGCS 134 " class="ci_il">discrimination</a></div><SPAN><a href=/so/8/ title=" 2 records, TLCS 3, TGCS 19 " class="ci_il">BIOSYSTEMS ENGINEERING</a></SPAN>. <SPAN class=sc><a href=/py/18/ title=" 4 records, TLCS 10, TGCS 44 " class="ci_il">2005</a> JUL</SPAN>;  91 (3): 293-304
+<TD><a href=/citers/94/ class=nu>2</a><TD>15<TD><a href=/citees/94/ class=nu>4</a><TD>14
+<TR><TD colspan=6 align=center class=yr>2006
+<TR valign=top align=right class=evn><TD>96<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(95)>96</a>  <a href=/au/66/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">Eddy PR</a>, <a href=/au/227/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">Smith AM</a>, <a href=/au/102/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">Hill BD</a>, <a href=/au/190/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">Peddle DR</a>, <a href=/au/49/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">Coburn CA</a>, et al.<div class=ci_title><a href=/wd/56/ title=" 2 records, TLCS 3, TGCS 17 " class="ci_il">Comparison</a> of <a href=/wd/223/ title=" 9 records, TLCS 10, TGCS 64 " class="ci_il">neural</a> <a href=/wd/221/ title=" 7 records, TLCS 9, TGCS 61 " class="ci_il">network</a> and <a href=/wd/206/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">maximum</a> <a href=/wd/191/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">likelihood</a> <a href=/wd/146/ title=" 3 records, TLCS 0, TGCS 1 " class="ci_il">high</a> <a href=/wd/280/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">resolution</a> <a href=/wd/161/ title=" 15 records, TLCS 133, TGCS 326 " class="ci_il">image</a> <a href=/wd/48/ title=" 12 records, TLCS 7, TGCS 42 " class="ci_il">classification</a> for <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">weed</a> <a href=/wd/80/ title=" 14 records, TLCS 65, TGCS 152 " class="ci_il">detection</a> in <a href=/wd/68/ title=" 7 records, TLCS 11, TGCS 145 " class="ci_il">crops</a>: <a href=/wd/11/ title=" 6 records, TLCS 4, TGCS 21 " class="ci_il">Applications</a> in <a href=/wd/258/ title=" 9 records, TLCS 21, TGCS 237 " class="ci_il">precision</a> <a href=/wd/5/ title=" 8 records, TLCS 4, TGCS 118 " class="ci_il">agriculture</a></div><SPAN><a href=/so/1/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">2006 IEEE INTERNATIONAL GEOSCIENCE AND REMOTE SENSING SYMPOSIUM, VOLS 1-8</a></SPAN>. <SPAN class=sc><a href=/py/19/ title=" 6 records, TLCS 4, TGCS 40 " class="ci_il">2006</a></SPAN>;  : 116-119
+<TD>0<TD>1<TD><a href=/citees/95/ class=nu>2</a><TD>13
+<TR valign=top align=right class=odd><TD>97<TD align=left><a TITLE=" Proceedings Paper " href=javascript:opeNod(96)>97</a>  <a href=/au/2/ title=" 6 records, TLCS 0, TGCS 0 " class="ci_il">Ahmad I</a>, <a href=/au/171/ title=" 6 records, TLCS 0, TGCS 0 " class="ci_il">Naeem AM</a>, <a href=/au/108/ title=" 6 records, TLCS 0, TGCS 0 " class="ci_il">Islam M</a><div class=ci_title><a href=/wd/269/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">Real</a>-<a href=/wd/356/ title=" 9 records, TLCS 8, TGCS 23 " class="ci_il">Time</a> <a href=/wd/322/ title=" 10 records, TLCS 33, TGCS 190 " class="ci_il">Specific</a> <a href=/wd/388/ title=" 57 records, TLCS 241, TGCS 1072 " class="ci_il">Weed</a> <a href=/wd/270/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">Recognition</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">System</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">Using</a> <a href=/wd/148/ title=" 2 records, TLCS 0, TGCS 0 " class="ci_il">Histogram</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">Analysis</a></div><SPAN><a href=/so/40/ title=" 1 records, TLCS 0, TGCS 0 " class="ci_il">PROCEEDINGS OF WORLD ACADEMY OF SCIENCE, ENGINEERING AND TECHNOLOGY, VOL 16</a></SPAN>. <SPAN class=sc><a href=/py/19/ title=" 6 records, TLCS 4, TGCS 40 " class="ci_il">2006</a></SPAN>;  16: 145-148
+<TD>0<TD>0<TD><a href=/citees/96/ class=nu>3</a><TD>9
+<TR valign=top align=right class=evn><TD>98<TD align=left><a TITLE=" Article " href=javascript:opeNod(97)>98</a>  <a href=/au/175/ title=" 1 records, TLCS 0, TGCS 17 " class="ci_il">Neto JC</a>, <a href=/au/159/ title=" 6 records, TLCS 56, TGCS 216 " class="ci_il">Meyer GE</a>, <a href=/au/116/ title=" 2 records, TLCS 0, TGCS 17 " class="ci_il">Jones DD</a>, <a href=/au/217/ title=" 1 records, TLCS 0, TGCS 17 " class="ci_il">Samal AK</a><div class=ci_title><a href=/wd/251/ title=" 10 records, TLCS 94, TGCS 179 " class="ci_il">Plant</a> <a href=/wd/321/ title=" 13 records, TLCS 27, TGCS 139 " class="ci_il">species</a> <a href=/wd/156/ title=" 14 records, TLCS 150, TGCS 323 " class="ci_il">identification</a> <a href=/wd/373/ title=" 30 records, TLCS 123, TGCS 454 " class="ci_il">using</a> <a href=/wd/104/ title=" 1 records, TLCS 0, TGCS 17 " class="ci_il">Elliptic</a> <a href=/wd/127/ title=" 3 records, TLCS 7, TGCS 46 " class="ci_il">Fourier</a> <a href=/wd/185/ title=" 9 records, TLCS 26, TGCS 152 " class="ci_il">leaf</a> <a href=/wd/308/ title=" 9 records, TLCS 64, TGCS 241 " class="ci_il">shape</a> <a href=/wd/7/ title=" 16 records, TLCS 77, TGCS 334 " class="ci_il">analysis</a></div><SPAN><a href=/so/12/ title=" 9 records, TLCS 11, TGCS 167 " class="ci_il">COMPUTERS AND ELECTRONICS IN AGRICULTURE</a></SPAN>. <SPAN class=sc><a href=/py/19/ title=" 6 records, TLCS 4, TGCS 40 " class="ci_il">2006</a> FEB</SPAN>;  50 (2): 121-134
+<TD>0<TD>17<TD><a href=/citees/97/ class=nu>5</a><TD>22
+<TR valign=top align=right class=odd><TD>99<TD align=left><a TITLE=" Article " href=javascript:opeNod(98)>99</a>  <a href=/au/160/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Miao ZJ</a>, <a href=/au/78/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Gandelin MH</a>, <a href=/au/280/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">Yuan BZ</a><div class=ci_title>An <a href=/wd/230/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">OOPR</a>-<a href=/wd/26/ title=" 14 records, TLCS 21, TGCS 89 " class="ci_il">based</a> <a href=/wd/287/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">rose</a> <a href=/wd/378/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">variety</a> <a href=/wd/270/ title=" 2 records, TLCS 0, TGCS 1 " class="ci_il">recognition</a> <a href=/wd/343/ title=" 12 records, TLCS 1, TGCS 37 " class="ci_il">system</a></div><SPAN><a href=/so/16/ title=" 1 records, TLCS 0, TGCS 1 " class="ci_il">ENGINEERING APPLICATIONS OF ARTIFICIAL INTELLIGENCE</a></SPAN>. <SPAN class=sc><a href=/py/19/ title=" 6 records, TLCS 4, TGCS 40 " class="ci_il">2006</a> FEB</SPAN>;  19 (1): 79-101
+<TD>0<TD>1<TD><a href=/citees/98/ class=nu>2</a><TD>39
+<TR valign=top align=right class=evn><TD>100<TD align=left><a TITLE=" Article " href=javascript:opeNod(99)>100</a>  <a href=/au/191/ title=" 4 records, TLCS 5, TGCS 24 " class="ci_il">Pena-Barragan JM</a>, <a href=/au/144/ title=" 5 records, TLCS 8, TGCS 47 " class="ci_il">Lopez-Granados F</a>, <a href=/au/118/ title=" 1 records, TLCS 2, TGCS 12 " class="ci_il">Jurado-Expoosito M</a>, <a href=/au/80/ title=" 4 records, TLCS 7, TGCS 44 " class="ci_il">Garcia-Torres L</a><div class=ci_title><a href=/wd/324/ title=" 6 records, TLCS 12, TGCS 73 " class="ci_il">Spectral</a> <a href=/wd/89/ title=" 7 records, TLCS 16, TGCS 134 " class="ci_il">discrimination</a> of <a href=/wd/283/ title=" 1 records, TLCS 2, TGCS 12 " class="ci_il">Ridolfia</a> <a href=/wd/300/ title=" 1 records, TLCS 2, TGCS 12 " class="ci_il">segetum</a> and <a href=/wd/342/ title=" 2 records, TLCS 5, TGCS 35 " class="ci_il">sunflower</a> as <a href=/wd/4/ title=" 1 records, TLCS 2, TGCS 12 " class="ci_il">affected</a> by <a href=/wd/246/ title=" 1 records, TLCS 2, TGCS 12 " class="ci_il">phenological</a> <a href=/wd/334/ title=" 2 records, TLCS 7, TGCS 51 " class="ci_il">stage</a></div><SPAN><a href=/so/48/ title=" 8 records, TLCS 47, TGCS 258 " class="ci_il">WEED RESEARCH</a></SPAN>. <SPAN class=sc><a href=/py/19/ title=" 6 records, TLCS 4, TGCS 40 " class="ci_il">2006</a> FEB</SPAN>;  46 (1): 10-21
+<TD><a href=/citers/99/ class=nu>2</a><TD>12<TD><a href=/citees/99/ class=nu>5</a><TD>48
+</TABLE>
+<style>b.ind {font-size: .8em;}</style><div class=nonprn style="margin:4px 0;font:12px Verdana;">&nbsp;|&lt; &nbsp; &lt;&lt; &nbsp; &lt; &nbsp; &nbsp;<a href='?advance=next&item=10#bot' class=navbtn title=' Next 10 items '> &gt; </a>&nbsp;<a href='?advance=next&item=100' class=navbtn title=' Next 100 items '> &gt;&gt; </a>&nbsp;<a href='?advance=next&item=21#bot' class=navbtn title=' Last item '> &gt;|&nbsp;</a></div><name id=bot></FORM><p><SCRIPT>
+var n = document.t.node;
+if(!n || !n.length) {
+	var cl = document.getElementById('cl');
+	var ci = document.getElementById('ci');
+	if(cl) {
+		cl.style.display = 'none';
+		ci.style.display = 'none';
+	}
+}
+function clear_checks () {
+	for(var i=0; i<n.length; i++) {
+		n[i].checked = false;
+	}
+}
+function reverse_checks () {
+	for(var i=0; i<n.length; i++) {
+		n[i].checked = !n[i].checked;
+	}
+}
+</SCRIPT>
+</BODY> 

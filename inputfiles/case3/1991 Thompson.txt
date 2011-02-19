@@ -1,0 +1,71 @@
+FN ISI Export Format
+VR 1.0
+PT J
+AU THOMPSON, JF
+   STAFFORD, JV
+   MILLER, PCH
+TI POTENTIAL FOR AUTOMATIC WEED DETECTION AND SELECTIVE HERBICIDE
+   APPLICATION
+SO CROP PROTECTION
+LA English
+DT Review
+DE CEREALS; HERBICIDE; SPATIAL VARIABILITY; IMAGE ANALYSIS; WEEDS; FIELD
+   MAP; SPRAY APPLICATION
+ID SPECTRAL DIFFERENCES; CANOPIES
+AB Weeds are frequently distributed non-uniformly within fields. 
+   Herbicide use could be reduced either by applying it only to
+   weed-infested areas or by applying a low dose rate to the whole field
+   and normal dose rate to weed patches.  A necessary prerequisite is an
+   effective method of weed detection.  Tractor-mounted detectors do not
+   appear to be feasible.  Thus real-time weed detection and sprayer
+   control are not currently possible.  It is shown, however, that
+   spatially variable herbicide application using a sprayer location
+   system and a field map of weed location has potential.  The data map
+   would be constructed from a number of weed-location techniques based on
+   image analysis, such as tractor-mounted video cameras, aerial
+   photographs and manual field observation.
+C1 AFRC,INST ENGN RES,WREST PK,SILSOE MK45 4HS,BEDS,ENGLAND.
+CR 1989, ADAS GROSS MARGIN BO
+   BROWN RB, 1990, 901061 AM SOC AGR EN
+   CURRAN PJ, 1985, APPL GEOGR, V5, P347
+   DENT JB, 1989, 1989 P BRIT CROP PRO, P917
+   ELACHI C, 1987, INTRO PHYSICS TECHNI
+   FENTON R, 1989, CHEM IND-LONDON, P167
+   FITZGERALD E, 1977, MULTISPECTRAL SCANNI
+   FRANZ E, 1990, 907044 AM SOC AGR EN
+   GUYER DE, 1986, T ASAE, V29, P1500
+   HAGGAR RJ, 1983, J AGR ENG RES, V28, P349
+   HAGGAR RJ, 1984, WEED RES, V24, P59
+   MARSHALL EJP, 1988, WEED RES, V28, P191
+   PETRY W, 1989, J AGRON CROP SCI, V163, P345
+   RICHARDSON AJ, 1985, PHOTOGRAMM ENG REM S, V51, P1785
+   SEARCY SW, 1990, COMPUTERS ELECTRONIC, V4, P209
+   SHROPSHIRE GJ, 1989, 897522 AM SOC AGR EN
+   THOMPSON JF, 1990, 901629 AM SOC AGR EN
+   THONKE KE, 1988, ASPECTS APPL BIOL, V18, P327
+   THURLING DJ, 1985, 1985 P BRIT CROP PRO, P357
+   WHITEHEAD R, 1989, 1989 BRIGHT CROP PRO, P107
+   WILSON BJ, 1982, 1982 P BRIT CROP PRO, P619
+   WILSON BJ, 1989, UNPUB PREDICTING CER
+   WILSON BJ, 1990, P EUROPEAN WEED RES, P45
+NR 23
+TC 56
+PU BUTTERWORTH-HEINEMANN LTD
+PI OXFORD
+PA THE BOULEVARD, LANGFORD LANE, KIDLINGTON, OXFORD, OXON, ENGLAND OX5 1GB
+SN 0261-2194
+J9 CROP PROT
+JI Crop Prot.
+PD AUG
+PY 1991
+VL 10
+IS 4
+BP 254
+EP 259
+PG 6
+SC Agronomy
+GA FZ738
+UT ISI:A1991FZ73800002
+ER
+
+EF

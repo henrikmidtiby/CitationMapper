@@ -1,0 +1,43 @@
+FN ISI Export Format
+VR 1.0
+PT J
+AU SHEARER, SA
+   JONES, PT
+TI SELECTIVE APPLICATION OF POSTEMERGENCE HERBICIDES USING PHOTOELECTRICS
+SO TRANSACTIONS OF THE ASAE
+LA English
+DT Article
+DE HERBICIDES; PESTICIDES; ROW SPACING; SPRAYERS; WEEDS
+ID SPECTRAL DIFFERENCES; CANOPIES
+AB A selective applicator for post-emergence herbicides in row crops was
+   developed and tested.  Weed competition is sensed using a modulated,
+   NIR light source and phototransistor receiver.  A logic circuit for
+   activating a solenoid valve at the spray nozzle was also constructed. 
+   Preliminary results indicate herbicide savings of 15% with no adverse
+   effect on weed control.
+RP SHEARER, SA, UNIV KENTUCKY,DEPT AGR ENGN,LEXINGTON,KY 40506.
+CR GUYER DE, 1986, T ASAE, V29, P1500
+   HAGGAR RJ, 1983, J AGR ENG RES, V28, P349
+   HAGGAR RJ, 1984, WEED RES, V24, P59
+   SHROPSHIRE GJ, 1990, P SOC PHOTO-OPT INS, V1379, P222
+NR 4
+TC 19
+PU AMER SOC AGRICULTURAL ENGINEERS
+PI ST JOSEPH
+PA 2950 NILES RD, ST JOSEPH, MI 49085-9659
+SN 0001-2351
+J9 TRANS ASAE
+JI Trans. ASAE
+PD JUL-AUG
+PY 1991
+VL 34
+IS 4
+BP 1661
+EP 1666
+PG 6
+SC Agricultural Engineering
+GA GX298
+UT ISI:A1991GX29800035
+ER
+
+EF
