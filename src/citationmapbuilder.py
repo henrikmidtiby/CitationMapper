@@ -116,11 +116,11 @@ class citationmapbuilder:
 				yearElements = "%s \"%s\"" % (yearElements, element)
 			stream.write("{rank=same; y%s %s}\n" % (year, yearElements))
 
-	def outputNodeInformation(stream):
+	def outputNodeInformation(self, stream):
 		for key in self.graph.nodes():
-			stream.write('"%s" [URL="", height="%f", label="%s", fontsize="%f"]\n' % (key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
+			stream.write('"%s" [URL="Testing", height="%f", label="%s", fontsize="%f"]\n' % (key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
 
-	def outputEdges(stream):
+	def outputEdges(self, stream):
 		for edge in self.graph.edges():
 			stream.write("\"%s\" -> \"%s\"\n" % edge)
 
