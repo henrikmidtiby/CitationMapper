@@ -1,0 +1,89 @@
+digraph test {
+	ranksep=0.2;
+	nodesep=0.1;
+	size="11.0729166666667,5.26041666666667";
+	ratio="fill";
+	node [fixedsize="true", fontsize="9", shape="circle"];
+	edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];
+	y1986 [fontsize="10", height="0.1668", label="1986", margin="0", rank="1986", shape="plaintext", width="0.398147893333333"];
+	y1991 [fontsize="10", height="0.1668", label="1991", margin="0", rank="1991", shape="plaintext", width="0.398147893333333"];
+	y1993 [fontsize="10", height="0.1668", label="1993", margin="0", rank="1993", shape="plaintext", width="0.398147893333333"];
+	y1995 [fontsize="10", height="0.1668", label="1995", margin="0", rank="1995", shape="plaintext", width="0.398147893333333"];
+	y1996 [fontsize="10", height="0.1668", label="1996", margin="0", rank="1996", shape="plaintext", width="0.398147893333333"];
+	y1997 [fontsize="10", height="0.1668", label="1997", margin="0", rank="1997", shape="plaintext", width="0.398147893333333"];
+	y1998 [fontsize="10", height="0.1668", label="1998", margin="0", rank="1998", shape="plaintext", width="0.398147893333333"];
+	y1999 [fontsize="10", height="0.1668", label="1999", margin="0", rank="1999", shape="plaintext", width="0.398147893333333"];
+	y2000 [fontsize="10", height="0.1668", label="2000", margin="0", rank="2000", shape="plaintext", width="0.398147893333333"];
+	n7 [URL="7", height="0.342326598440729", label="8", rank="1993", style="", width="0.342326598440729"];
+	n15 [URL="15", height="0.21650635094611", label="16", rank="1996", style="", width="0.21650635094611"];
+	n23 [URL="23", height="0.197642353760524", label="24", rank="1998", style="", width="0.197642353760524"];
+	n24 [URL="24", height="0.21650635094611", label="25", rank="1998", style="", width="0.21650635094611"];
+	n16 [URL="16", height="0.176776695296637", label="17", rank="1996", style="", width="0.176776695296637"];
+	n20 [URL="20", height="0.176776695296637", label="21", rank="1997", style="", width="0.176776695296637"];
+	n34 [URL="34", height="0.197642353760524", label="35", rank="1999", style="", width="0.197642353760524"];
+	n10 [URL="10", height="0.279508497187474", label="11", rank="1995", style="", width="0.279508497187474"];
+	n11 [URL="11", height="0.450693909432999", label="12", rank="1995", style="", width="0.450693909432999"];
+	n39 [URL="39", height="0.176776695296637", label="40", rank="2000", style="", width="0.176776695296637"];
+	n19 [URL="19", height="0.176776695296637", label="20", rank="1997", style="", width="0.176776695296637"];
+	n0 [URL="0", height="0.75", label="1", rank="1986", style="", width="0.75"];
+	n4 [URL="4", height="0.25", label="5", rank="1991", style="", width="0.25"];
+	n5 [URL="5", height="0.342326598440729", label="6", rank="1991", style="", width="0.342326598440729"];
+	n8 [URL="8", height="0.176776695296637", label="9", rank="1993", style="", width="0.176776695296637"];
+	n9 [URL="9", height="0.197642353760524", label="10", rank="1993", style="", width="0.197642353760524"];
+	n13 [URL="13", height="0.318688719599549", label="14", rank="1995", style="", width="0.318688719599549"];
+	n0 -> n10;
+	n0 -> n11;
+	n0 -> n13;
+	n0 -> n15;
+	n0 -> n16;
+	n0 -> n19;
+	n0 -> n20;
+	n0 -> n23;
+	n0 -> n24;
+	n0 -> n34;
+	n0 -> n39;
+	n0 -> n4;
+	n0 -> n5;
+	n0 -> n7;
+	n0 -> n8;
+	n0 -> n9;
+	n10 -> n24;
+	n11 -> n24;
+	n11 -> n39;
+	n13 -> n20;
+	n13 -> n34;
+	n15 -> n24;
+	n20 -> n34;
+	n24 -> n34;
+	n4 -> n13;
+	n4 -> n34;
+	n4 -> n9;
+	n5 -> n11;
+	n5 -> n16;
+	n5 -> n19;
+	n5 -> n23;
+	n5 -> n34;
+	n5 -> n9;
+	n7 -> n15;
+	n7 -> n23;
+	n7 -> n24;
+	n8 -> n15;
+	n9 -> n19;
+	y1986 -> y1991 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1991 -> y1993 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1993 -> y1995 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1995 -> y1996 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1996 -> y1997 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1997 -> y1998 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1998 -> y1999 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	y1999 -> y2000 [arrowhead="normal", arrowtail="none", color="white", style="invis"];
+	{rank=same; y1991; n4; n5}
+	{rank=same; y2000; n39}
+	{rank=same; y1996; n15; n16}
+	{rank=same; y1999; n34}
+	{rank=same; y1995; n10; n11; n13}
+	{rank=same; y1993; n7; n8; n9}
+	{rank=same; y1997; n20; n19}
+	{rank=same; y1998; n23; n24}
+	{rank=same; y1986; n0}
+}
