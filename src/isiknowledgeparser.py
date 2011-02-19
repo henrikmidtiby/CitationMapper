@@ -3,11 +3,9 @@ import sys
 import networkx as nx
 import math
 
-# TODO
-# * Remove items only cited one time
 
 class citationMapBuilder:
-	def init(self):
+	def __init__(self):
 		self.elements = []
 		self.outputtext = ""
 		self.graph = nx.DiGraph()
@@ -67,28 +65,6 @@ class citationMapBuilder:
 		except:
 			return "Conversion error: %s %s %s" % (values["PT"], values["AU"], values["PY"])
 
-	def groupByYear(self):
-		years = {}
-		citationPattern = re.compile("^(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
-		for elem in self.elements:
-			res = citationPattern.match(elem)
-			if(res):
-				curYear = res.group(2)
-				if not curYear in years.keys():
-					years[curYear] = []
-				years[curYear].append(elem)
-
-		yeartags = years.keys()
-		yeartags.sort()
-		for index in range(len(yeartags) - 1):
-			print("%s -> %s" % (yeartags[index], yeartags[index + 1]))
-
-		for year in years.keys():
-			yearElements = ""
-			for element in years[year]:
-				yearElements = "%s \"%s\"" % (yearElements, element)
-			print("{rank=same; %s %s}" % (year, yearElements))
-	
 	def analyzeGraph(self):
 		# Extract node parameters
 		self.outdegrees = self.graph.out_degree()
@@ -140,12 +116,9 @@ class citationMapBuilder:
 
 
 
-
-
 if __name__ == '__main__':
 
 	cmb = citationMapBuilder()
-	cmb.init()
 	print("digraph citations {")
 	print("ranksep=0.2;")
 	print("nodesep=0.1;")
@@ -160,7 +133,6 @@ if __name__ == '__main__':
 		cmb.analyzeGraph()
 		cmb.cleanUpGraph()
 		cmb.outputGraph()
-		#cmb.groupByYear()
 		#print(cmb.outputtext)
 	print("}")
 
