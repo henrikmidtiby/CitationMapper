@@ -96,6 +96,12 @@ class citationMapBuilder:
 
 	def outputGraph(self, stream):
 		self.outputPreamble(stream)
+		self.outputYearNodesAndMarkObjectsWithTheSameRank(stream)
+		self.outputNodeInformation(stream)
+		self.outputEdges(stream)
+		self.outputPostamble(stream)
+
+	def outputYearNodesAndMarkObjectsWithTheSameRank(self, stream)
 		years = self.getYearsAndArticles()
 		yeartags = years.keys()
 		yeartags.sort()
@@ -110,13 +116,13 @@ class citationMapBuilder:
 				yearElements = "%s \"%s\"" % (yearElements, element)
 			stream.write("{rank=same; y%s %s}\n" % (year, yearElements))
 
+	def outputNodeInformation(stream)
 		for key in self.graph.nodes():
 			stream.write('"%s" [URL="", height="%f", label="%s", fontsize="%f"]\n' % (key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
 
+	def outputEdges(stream)
 		for edge in self.graph.edges():
 			stream.write("\"%s\" -> \"%s\"\n" % edge)
-
-		self.outputPostamble(stream)
 
 	def outputPreamble(self, stream):
 		stream.write("digraph citations {\n")
@@ -126,9 +132,10 @@ class citationMapBuilder:
 		stream.write("ratio=\"fill\"\n")
 		stream.write("node [fixedsize=\"true\", fontsize=\"9\", shape=\"circle\"];\n")
 		stream.write('edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];\n')
-	
+
 	def outputPostamble(self, stream):
 		stream.write("}")
+
 
 
 if __name__ == '__main__':
