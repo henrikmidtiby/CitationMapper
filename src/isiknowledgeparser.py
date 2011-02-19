@@ -2,6 +2,7 @@ import re
 import sys
 import networkx as nx
 import math
+import StringIO
 
 
 class citationMapBuilder:
@@ -93,45 +94,46 @@ class citationMapBuilder:
 				years[curYear].append(elem)
 		return years
 
-	def outputGraph(self):
-		self.outputPreamble()
+	def outputGraph(self, stream):
+		self.outputPreamble(stream)
 		years = self.getYearsAndArticles()
 		yeartags = years.keys()
 		yeartags.sort()
 		for year in yeartags:
-			print('y%s [fontsize="10", height="0.1668", label="%s", margin="0", rank="%s", shape="plaintext", width="0.398147893333333"]' % (year, year, year))
+			stream.write('y%s [fontsize="10", height="0.1668", label="%s", margin="0", rank="%s", shape="plaintext", width="0.398147893333333"]\n' % (year, year, year))
 		for index in range(len(yeartags) - 1):
-			print("y%s -> y%s [arrowhead=\"normal\", arrowtail=\"none\", color=\"white\", style=\"invis\"];" % (yeartags[index], yeartags[index + 1]))
+			stream.write("y%s -> y%s [arrowhead=\"normal\", arrowtail=\"none\", color=\"white\", style=\"invis\"];\n" % (yeartags[index], yeartags[index + 1]))
 
 		for year in yeartags:
 			yearElements = ""
 			for element in years[year]:
 				yearElements = "%s \"%s\"" % (yearElements, element)
-			print("{rank=same; y%s %s}" % (year, yearElements))
+			stream.write("{rank=same; y%s %s}\n" % (year, yearElements))
 
 		for key in self.graph.nodes():
-			print('"%s" [URL="", height="%f", label="%s", fontsize="%f"]' % (key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
+			stream.write('"%s" [URL="", height="%f", label="%s", fontsize="%f"]\n' % (key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
 
 		for edge in self.graph.edges():
-			print("\"%s\" -> \"%s\"" % edge)
+			stream.write("\"%s\" -> \"%s\"\n" % edge)
 
-		self.outputPostamble()
+		self.outputPostamble(stream)
 
-	def outputPreamble(self):
-		print("digraph citations {")
-		print("ranksep=0.2;")
-		print("nodesep=0.1;")
-		print('size="11.0729166666667,5.26041666666667";')
-		print("ratio=\"fill\"")
-		print("node [fixedsize=\"true\", fontsize=\"9\", shape=\"circle\"];")
-		print('edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];')
+	def outputPreamble(self, stream):
+		stream.write("digraph citations {\n")
+		stream.write("ranksep=0.2;\n")
+		stream.write("nodesep=0.1;\n")
+		stream.write('size="11.0729166666667,5.26041666666667";\n')
+		stream.write("ratio=\"fill\"\n")
+		stream.write("node [fixedsize=\"true\", fontsize=\"9\", shape=\"circle\"];\n")
+		stream.write('edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];\n')
 	
-	def outputPostamble(self):
-		print("}")
+	def outputPostamble(self, stream):
+		stream.write("}")
 
 
 if __name__ == '__main__':
 
+	output = StringIO.StringIO()
 	cmb = citationMapBuilder()
 
 	if(len(sys.argv) > 1):
@@ -139,7 +141,11 @@ if __name__ == '__main__':
 			cmb.parsefile(str(arg))
 		cmb.analyzeGraph()
 		cmb.cleanUpGraph()
-		cmb.outputGraph()
+		cmb.outputGraph(output)
+
+		temp = output.getvalue()
+
+		print(temp)
 
 
 
