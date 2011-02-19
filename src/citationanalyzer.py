@@ -10,11 +10,28 @@ import re
 import xdot
 
 class MyDotWindow(xdot.DotWindow):
+	ui = '''
+	<ui>
+		<toolbar name="ToolBar">
+			<toolitem action="Open"/>
+			<toolitem action="Reload"/>
+			<separator/>
+			<toolitem action="ZoomIn"/>
+			<toolitem action="ZoomOut"/>
+			<toolitem action="ZoomFit"/>
+			<toolitem action="Zoom100"/>
+		</toolbar>
+	</ui>
+	'''
+
 
 	def __init__(self):
 		xdot.DotWindow.__init__(self)
 		self.widget.connect('clicked', self.on_url_clicked)
 		self.citationmap = citationmapbuilder.citationmapbuilder()
+
+	def print_hello_world(self, widget):
+		print "Hello World"
 
 	def on_url_clicked(self, widget, url, event):
 		dialog = gtk.MessageDialog(
@@ -26,7 +43,7 @@ class MyDotWindow(xdot.DotWindow):
 		return True
 
 	def on_open(self, action):
-		chooser = gtk.FileChooserDialog(title="Open dot File",
+		chooser = gtk.FileChooserDialog(title="Open directory with bibliography",
 										action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
 										buttons=(gtk.STOCK_CANCEL,
 												 gtk.RESPONSE_CANCEL,
@@ -36,9 +53,19 @@ class MyDotWindow(xdot.DotWindow):
 		if chooser.run() == gtk.RESPONSE_OK:
 			filename = chooser.get_filename()
 			chooser.destroy()
+			self.openfilename = filename
 			self.open_directory(filename)
 		else:
 			chooser.destroy()
+
+
+	def reload(self):
+		if self.openfilename is not None:
+			try:
+				self.open_directory(self.openfilename)
+			except IOError:
+				pass
+
 
 	def open_directory(self, directory):
 		self.citationmap.__init__()
@@ -47,12 +74,6 @@ class MyDotWindow(xdot.DotWindow):
 		for file in files:
 			res = patterntxtfile.match(file)
 			if(res):
-				dialog = gtk.MessageDialog(
-						parent = self, 
-						buttons = gtk.BUTTONS_OK,
-						message_format="%s" % os.path.join(directory, file))
-				dialog.connect('response', lambda dialog, response: dialog.destroy())
-				dialog.run()
 				self.citationmap.parsefile(os.path.join(directory, file))
 
 		output = StringIO.StringIO()
