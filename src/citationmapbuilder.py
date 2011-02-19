@@ -5,7 +5,7 @@ import math
 import StringIO
 
 
-class citationMapBuilder:
+class citationmapbuilder:
 	def __init__(self):
 		self.elements = []
 		self.outputtext = ""
@@ -141,7 +141,7 @@ class citationMapBuilder:
 if __name__ == '__main__':
 
 	output = StringIO.StringIO()
-	cmb = citationMapBuilder()
+	cmb = citationmapbuilder()
 
 	if(len(sys.argv) > 1):
 		for arg in sys.argv:
