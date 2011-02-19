@@ -9,6 +9,7 @@ class citationmapbuilder:
 	def __init__(self):
 		self.elements = []
 		self.graph = networkx.DiGraph()
+		self.articles = {}
 
 	def parsefile(self, filename):
 		fh = open(filename)
@@ -33,11 +34,12 @@ class citationmapbuilder:
 
 			res = erPattern.match(line)
 			if(res):
-				identifier = self.formatIdentifier(values)
+				identifier = self.newIdentifierInspiredByWos2Pajek(self.formatIdentifier(values))
 				self.elements.append(identifier)
 				for line in crlines:
 					self.elements.append(line)
-					self.graph.add_edge(self.newIdentifierInspiredByWos2Pajek(line), self.newIdentifierInspiredByWos2Pajek(identifier))
+					self.graph.add_edge(self.newIdentifierInspiredByWos2Pajek(line), identifier)
+				self.articles[identifier] = values
 				crlines = []
 				values = {}
 
@@ -115,7 +117,7 @@ class citationmapbuilder:
 
 	def outputNodeInformation(self, stream):
 		for key in self.graph.nodes():
-			stream.write('"%s" [URL="Testing", height="%f", label="%s", fontsize="%f"]\n' % (key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
+			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
 
 	def outputEdges(self, stream):
 		for edge in self.graph.edges():
