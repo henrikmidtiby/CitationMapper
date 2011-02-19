@@ -94,6 +94,7 @@ class citationMapBuilder:
 		return years
 
 	def outputGraph(self):
+		self.outputPreamble()
 		years = self.getYearsAndArticles()
 		yeartags = years.keys()
 		yeartags.sort()
@@ -114,18 +115,24 @@ class citationMapBuilder:
 		for edge in self.graph.edges():
 			print("\"%s\" -> \"%s\"" % edge)
 
+		self.outputPostamble()
+
+	def outputPreamble(self):
+		print("digraph citations {")
+		print("ranksep=0.2;")
+		print("nodesep=0.1;")
+		print('size="11.0729166666667,5.26041666666667";')
+		print("ratio=\"fill\"")
+		print("node [fixedsize=\"true\", fontsize=\"9\", shape=\"circle\"];")
+		print('edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];')
+	
+	def outputPostamble(self):
+		print("}")
 
 
 if __name__ == '__main__':
 
 	cmb = citationMapBuilder()
-	print("digraph citations {")
-	print("ranksep=0.2;")
-	print("nodesep=0.1;")
-	print('size="11.0729166666667,5.26041666666667";')
-	print("ratio=\"fill\"")
-	print("node [fixedsize=\"true\", fontsize=\"9\", shape=\"circle\"];")
-	print('edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];')
 
 	if(len(sys.argv) > 1):
 		for arg in sys.argv:
@@ -133,8 +140,7 @@ if __name__ == '__main__':
 		cmb.analyzeGraph()
 		cmb.cleanUpGraph()
 		cmb.outputGraph()
-		#print(cmb.outputtext)
-	print("}")
+
 
 
 
