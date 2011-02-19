@@ -1,6 +1,6 @@
 import re
 import sys
-import networkx as nx
+import networkx
 import math
 import StringIO
 
@@ -9,7 +9,7 @@ class citationMapBuilder:
 	def __init__(self):
 		self.elements = []
 		self.outputtext = ""
-		self.graph = nx.DiGraph()
+		self.graph = networkx.DiGraph()
 
 	def parsefile(self, filename):
 		fh = open(filename)
