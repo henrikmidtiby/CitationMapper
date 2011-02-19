@@ -21,6 +21,14 @@ class MyDotWindow(xdot.DotWindow):
 		dialog.run()
 		return True
 
+	def on_open(self, action):
+		dialog = gtk.MessageDialog(
+				parent = self, 
+				buttons = gtk.BUTTONS_OK,
+				message_format="You tried to open something")
+		dialog.connect('response', lambda dialog, response: dialog.destroy())
+		dialog.run()
+		return True
 
 
 dotcode = """
