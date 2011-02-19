@@ -8,7 +8,6 @@ import StringIO
 class citationmapbuilder:
 	def __init__(self):
 		self.elements = []
-		self.outputtext = ""
 		self.graph = networkx.DiGraph()
 
 	def parsefile(self, filename):
@@ -38,8 +37,6 @@ class citationmapbuilder:
 				self.elements.append(identifier)
 				for line in crlines:
 					self.elements.append(line)
-					relation = "\"%s\" -> \"%s\";" % (identifier, line)
-					self.outputtext = self.outputtext + relation + "\n"
 					self.graph.add_edge(self.newIdentifierInspiredByWos2Pajek(line), self.newIdentifierInspiredByWos2Pajek(identifier))
 				crlines = []
 				values = {}
