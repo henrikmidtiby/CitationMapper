@@ -10,6 +10,9 @@ import re
 import xdot
 
 class MyDotWindow(xdot.DotWindow):
+	minNumberOfReferences = 1
+	minNumberOfCitations = 3
+
 	ui = '''
 	<ui>
 		<toolbar name="ToolBar">
@@ -39,17 +42,29 @@ class MyDotWindow(xdot.DotWindow):
 		dialog.run()
 		return True
 
+	def updateMinNumberOfReferences(self, adj):
+		self.minNumberOfReferences = adj.value
+
+	def updateMinNumberOfCitations(self, adj):
+		self.minNumberOfCitations = adj.value
 
 	def showOptionsWindow(self):
 		tempwindow = gtk.Window()
 		vbox = gtk.VBox(False, 0)
 		tempwindow.add(vbox)
+		adjustment = gtk.Adjustment(value=self.minNumberOfCitations, lower=0, upper=20, step_incr=1, page_incr=5, page_size=0)
+		adjustment.connect("value_changed", self.updateMinNumberOfCitations)
+		hscrollbar = gtk.HScale(adjustment)
+		hscrollbar.set_digits(0)
+		hscrollbar.set_value_pos(gtk.POS_LEFT)
 		tempbutton = gtk.Button("Show graph")
-		templabel = gtk.Label("Testing")
+		templabel = gtk.Label("Number of citations")
 		tempbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
 		tempbutton.show()
 		templabel.show()
+		hscrollbar.show()
 		vbox.pack_start(templabel, True, True, 0)
+		vbox.pack_start(hscrollbar, True, True, 0)
 		vbox.pack_start(tempbutton, True, True, 0)
 		vbox.show()
 		tempwindow.show()
@@ -94,7 +109,7 @@ class MyDotWindow(xdot.DotWindow):
 		output = StringIO.StringIO()
 		origNetwork = self.citationmap.graph.copy()
 		self.citationmap.analyzeGraph()
-		self.citationmap.cleanUpGraph()
+		self.citationmap.cleanUpGraph(self.minNumberOfReferences, self.minNumberOfCitations)
 		self.citationmap.outputGraph(output)
 		dotcode = output.getvalue()
 		self.set_dotcode(dotcode)
