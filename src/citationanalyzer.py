@@ -30,9 +30,6 @@ class MyDotWindow(xdot.DotWindow):
 		self.widget.connect('clicked', self.on_url_clicked)
 		self.citationmap = citationmapbuilder.citationmapbuilder()
 
-	def print_hello_world(self, widget):
-		print "Hello World"
-
 	def on_url_clicked(self, widget, url, event):
 		dialog = gtk.MessageDialog(
 				parent = self, 
@@ -41,6 +38,21 @@ class MyDotWindow(xdot.DotWindow):
 		dialog.connect('response', lambda dialog, response: dialog.destroy())
 		dialog.run()
 		return True
+
+
+	def showOptionsWindow(self):
+		tempwindow = gtk.Window()
+		vbox = gtk.VBox(False, 0)
+		tempwindow.add(vbox)
+		tempbutton = gtk.Button("Show graph")
+		templabel = gtk.Label("Testing")
+		tempbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
+		tempbutton.show()
+		templabel.show()
+		vbox.pack_start(templabel, True, True, 0)
+		vbox.pack_start(tempbutton, True, True, 0)
+		vbox.show()
+		tempwindow.show()
 
 	def on_open(self, action):
 		chooser = gtk.FileChooserDialog(title="Open directory with bibliography",
@@ -57,6 +69,8 @@ class MyDotWindow(xdot.DotWindow):
 			self.open_directory(filename)
 		else:
 			chooser.destroy()
+
+		self.showOptionsWindow()
 
 
 	def reload(self):
@@ -76,14 +90,17 @@ class MyDotWindow(xdot.DotWindow):
 			if(res):
 				self.citationmap.parsefile(os.path.join(directory, file))
 
+	def filterAndShowCurrentCitationMap(self, action, data):
 		output = StringIO.StringIO()
+		origNetwork = self.citationmap.graph.copy()
 		self.citationmap.analyzeGraph()
 		self.citationmap.cleanUpGraph()
 		self.citationmap.outputGraph(output)
 		dotcode = output.getvalue()
 		self.set_dotcode(dotcode)
+		self.citationmap.graph = origNetwork
 
-		return True
+		return False
 
 
 dotcode = """
@@ -98,6 +115,7 @@ def main():
 	window = MyDotWindow()
 	window.set_dotcode(dotcode)
 	window.connect('destroy', gtk.main_quit)
+	window.showOptionsWindow()
 	gtk.main()
 
 if __name__ == '__main__':
