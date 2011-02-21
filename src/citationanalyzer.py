@@ -34,12 +34,22 @@ class MyDotWindow(xdot.DotWindow):
 		self.citationmap = citationmapbuilder.citationmapbuilder()
 
 	def on_url_clicked(self, widget, url, event):
-		dialog = gtk.MessageDialog(
-				parent = self, 
-				buttons = gtk.BUTTONS_OK,
-				message_format="%s clicked" % url)
-		dialog.connect('response', lambda dialog, response: dialog.destroy())
-		dialog.run()
+		tempwindow = gtk.Window()
+		text = gtk.TextView()
+		tempwindow.add(text)
+		text.show()
+		tempwindow.show()
+
+		try:
+			author = self.citationmap.articles[url]["AU"]
+			year = self.citationmap.articles[url]["PY"]
+			title = self.citationmap.articles[url]["TI"]
+			text.get_buffer().insert_at_cursor('%s\n' % author)
+			text.get_buffer().insert_at_cursor('%s\n' % year)
+			text.get_buffer().insert_at_cursor('%s\n' % title)
+		except:
+			text.get_buffer().insert_at_cursor('%s\n' % url)
+
 		return True
 
 	def updateMinNumberOfReferences(self, adj):
