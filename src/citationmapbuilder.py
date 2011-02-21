@@ -9,6 +9,7 @@ class citationmapbuilder:
 	def __init__(self):
 		self.elements = []
 		self.graph = networkx.DiGraph()
+		self.graphForAnalysis = self.graph.copy()
 		self.articles = {}
 
 	def parsefile(self, filename):
@@ -66,25 +67,26 @@ class citationmapbuilder:
 			return "Conversion error: %s %s %s" % (values["PT"], values["AU"], values["PY"])
 
 	def analyzeGraph(self):
+		self.graphForAnalysis = self.graph.copy()
 		# Extract node parameters
-		self.outdegrees = self.graph.out_degree()
-		self.indegrees = self.graph.in_degree()
+		self.outdegrees = self.graphForAnalysis.out_degree()
+		self.indegrees = self.graphForAnalysis.in_degree()
 
 	def cleanUpGraph(self, minNumberOfReferences = 1, minNumberOfCitations = 3):
 		# Only keep articles that cite others (ie we have full information about them)
 		for key in self.outdegrees:
 			if self.outdegrees[key] < minNumberOfCitations:
-				self.graph.remove_node(key)
+				self.graphForAnalysis.remove_node(key)
 
 		# Only keep articles that are cited by others
 		for key in self.indegrees:
-			if self.graph.has_node(key) and self.indegrees[key] < minNumberOfReferences:
-				self.graph.remove_node(key)
+			if self.graphForAnalysis.has_node(key) and self.indegrees[key] < minNumberOfReferences:
+				self.graphForAnalysis.remove_node(key)
 		
 	def getYearsAndArticles(self):
 		years = {}
 		citationPattern = re.compile("^(.*?),(\d{4}),(V\d+),(P\d+)")
-		for elem in self.graph.nodes():
+		for elem in self.graphForAnalysis.nodes():
 			res = citationPattern.match(elem)
 			if(res):
 				curYear = res.group(2)
@@ -116,11 +118,23 @@ class citationmapbuilder:
 			stream.write("{rank=same; y%s %s}\n" % (year, yearElements))
 
 	def outputNodeInformation(self, stream):
-		for key in self.graph.nodes():
-			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2))
+		for key in self.graphForAnalysis.nodes():
+			color = "#0000ff"
+			try:
+				ncites = int(self.articles[key]["TC"])
+				ncitesingraph = self.graph.out_degree(key)
+				print(ncites)
+				print(ncitesingraph)
+				if ncites == ncitesingraph:
+					color = "#00ff00"
+				else:
+					color = "#ff0000"
+			except:
+				pass
+			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2, color))
 
 	def outputEdges(self, stream):
-		for edge in self.graph.edges():
+		for edge in self.graphForAnalysis.edges():
 			stream.write("\"%s\" -> \"%s\"\n" % edge)
 
 	def outputPreamble(self, stream):
