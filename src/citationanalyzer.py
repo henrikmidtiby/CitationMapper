@@ -67,6 +67,7 @@ class MyDotWindow(xdot.DotWindow):
 
 	def showOptionsWindow(self):
 		tempwindow = gtk.Window()
+		tempwindow.set_border_width(10)
 		vbox = gtk.VBox(False, 0)
 		tempwindow.add(vbox)
 		adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=20, step_incr=1, page_incr=5, page_size=0)
