@@ -45,9 +45,13 @@ class MyDotWindow(xdot.DotWindow):
 			author = self.citationmap.articles[url]["AU"]
 			year = self.citationmap.articles[url]["PY"]
 			title = self.citationmap.articles[url]["TI"]
+			nreferences = self.citationmap.articles[url]["NR"]
+			ncitations = self.citationmap.articles[url]["TC"]
 			text.get_buffer().insert_at_cursor('%s\n' % author)
 			text.get_buffer().insert_at_cursor('%s\n' % year)
 			text.get_buffer().insert_at_cursor('%s\n' % title)
+			text.get_buffer().insert_at_cursor('Number of references: %s\n' % nreferences)
+			text.get_buffer().insert_at_cursor('Times cited: %s\n' % ncitations)
 		except:
 			text.get_buffer().insert_at_cursor('%s\n' % url)
 
