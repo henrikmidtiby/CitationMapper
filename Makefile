@@ -1,2 +1,2 @@
 run:
-	python src/citationanalyzer.py
+	python src/citationanalyzer.py data/

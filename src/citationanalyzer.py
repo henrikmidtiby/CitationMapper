@@ -6,6 +6,7 @@ import citationmapbuilder
 import os
 import StringIO
 import re
+import sys
 
 import xdot
 
@@ -151,6 +152,9 @@ def main():
 	window.set_dotcode(dotcode)
 	window.connect('destroy', gtk.main_quit)
 	window.showOptionsWindow()
+	if(len(sys.argv) > 1):
+		window.open_directory(sys.argv[1])
+
 	gtk.main()
 
 if __name__ == '__main__':
