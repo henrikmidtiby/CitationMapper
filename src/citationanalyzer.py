@@ -49,6 +49,7 @@ class MyDotWindow(xdot.DotWindow):
 			nreferencesInGraph = self.citationmap.graph.in_degree(url)
 			ncitations = self.citationmap.articles[url]["TC"]
 			ncitationsInGraph = self.citationmap.graph.out_degree(url)
+			text.get_buffer().insert_at_cursor('%s\n' % url)
 			text.get_buffer().insert_at_cursor('%s\n' % author)
 			text.get_buffer().insert_at_cursor('%s\n' % year)
 			text.get_buffer().insert_at_cursor('%s\n' % title)
