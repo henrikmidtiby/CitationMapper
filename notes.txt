@@ -3,3 +3,4 @@ Todos:
 * More general colouring options.
 * Show additional information about articles.
 * Locate missing matches in the downloaded citations.
+* Generate list of nodes shown in the current graph.
