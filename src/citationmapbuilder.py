@@ -123,8 +123,6 @@ class citationmapbuilder:
 			try:
 				ncites = int(self.articles[key]["TC"])
 				ncitesingraph = self.graph.out_degree(key)
-				print(ncites)
-				print(ncitesingraph)
 				if ncites == ncitesingraph:
 					color = "#00ff00"
 				else:
