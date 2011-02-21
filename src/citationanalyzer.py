@@ -105,7 +105,6 @@ class MyDotWindow(xdot.DotWindow):
 		if chooser.run() == gtk.RESPONSE_OK:
 			filename = chooser.get_filename()
 			chooser.destroy()
-			self.openfilename = filename
 			self.open_directory(filename)
 		else:
 			chooser.destroy()
@@ -113,7 +112,8 @@ class MyDotWindow(xdot.DotWindow):
 		self.showOptionsWindow()
 
 
-	def reload(self):
+	def on_reload(self, action):
+		print("Reload pressed")
 		if self.openfilename is not None:
 			try:
 				self.open_directory(self.openfilename)
@@ -122,6 +122,7 @@ class MyDotWindow(xdot.DotWindow):
 
 
 	def open_directory(self, directory):
+		self.openfilename = directory
 		self.citationmap.__init__()
 		files = os.listdir(directory)
 		patterntxtfile = re.compile('.*\.txt')
