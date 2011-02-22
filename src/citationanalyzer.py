@@ -35,11 +35,11 @@ class MyDotWindow(xdot.DotWindow):
 		self.citationmap = citationmapbuilder.citationmapbuilder()
 
 	def on_url_clicked(self, widget, url, event):
-		tempwindow = gtk.Window()
+		nodeinformationwindow = gtk.Window()
 		text = gtk.TextView()
-		tempwindow.add(text)
+		nodeinformationwindow.add(text)
 		text.show()
-		tempwindow.show()
+		nodeinformationwindow.show()
 
 		try:
 			author = self.citationmap.articles[url]["AU"]
