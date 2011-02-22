@@ -142,15 +142,18 @@ class MyDotWindow(xdot.DotWindow):
 			res = patterntxtfile.match(file)
 			#if(res):
 			self.citationmap.parsefile(os.path.join(directory, file))
+		self.origNetwork = self.citationmap.graph.copy()
 
-	def filterAndExportCurrentCitationMap(self):
-		output = StringIO.StringIO()
-		origNetwork = self.citationmap.graph.copy()
+	def filterCurrentCitationMap(self):
+		self.citationmap.graph = self.origNetwork.copy()
 		self.citationmap.analyzeGraph()
 		self.citationmap.cleanUpGraph(self.minNumberOfReferences, self.minNumberOfCitations)
+
+	def filterAndExportCurrentCitationMap(self):
+		self.filterCurrentCitationMap()
+		output = StringIO.StringIO()
 		self.citationmap.outputGraph(output)
 		dotcode = output.getvalue()
-		self.citationmap.graph = origNetwork
 		return dotcode
 
 	def filterAndShowCurrentCitationMap(self, action, data):
