@@ -198,8 +198,10 @@ class MyDotWindow(xdot.DotWindow):
 			except:
 				pass
 
+		tmsort = gtk.TreeModelSort(nodesTreestore) # produce a sortable treemodel
+
 		# create the TreeView using treestore
-		nodesTreeview = gtk.TreeView(nodesTreestore)
+		nodesTreeview = gtk.TreeView(tmsort)
 
 		# create the TreeViewColumn to display the data
 		columnOne = gtk.TreeViewColumn('ID')
@@ -234,6 +236,9 @@ class MyDotWindow(xdot.DotWindow):
 
 		# Allow sorting on the column
 		columnOne.set_sort_column_id(0)
+		columnOne.set_sort_column_id(1)
+		columnOne.set_sort_column_id(2)
+		columnOne.set_sort_column_id(3)
 
 		# Allow drag and drop reordering of rows
 		nodesTreeview.set_reorderable(True)
