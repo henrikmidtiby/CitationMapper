@@ -159,7 +159,7 @@ class MyDotWindow(xdot.DotWindow):
 
 	def exportFilteredCitationMap(self, action, data):
 		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
-						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 		if chooser.run() == gtk.RESPONSE_OK:
 			filename = chooser.get_filename()
 			chooser.destroy()
