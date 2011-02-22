@@ -67,10 +67,10 @@ class MyDotWindow(xdot.DotWindow):
 		self.minNumberOfCitations = adj.value
 
 	def showOptionsWindow(self):
-		tempwindow = gtk.Window()
-		tempwindow.set_border_width(10)
+		searchoptionswindow = gtk.Window()
+		searchoptionswindow.set_border_width(10)
 		vbox = gtk.VBox(False, 0)
-		tempwindow.add(vbox)
+		searchoptionswindow.add(vbox)
 		adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=50, step_incr=1, page_incr=5, page_size=0)
 		adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
 		hscrollbarReferences = gtk.HScale(adjMinNumberOfReferences)
@@ -96,7 +96,7 @@ class MyDotWindow(xdot.DotWindow):
 		vbox.pack_start(hscrollbarCitations, True, True, 0)
 		vbox.pack_start(showgraphbutton, True, True, 0)
 		vbox.show()
-		tempwindow.show()
+		searchoptionswindow.show()
 
 	def on_open(self, action):
 		chooser = gtk.FileChooserDialog(title="Open directory with bibliography",
