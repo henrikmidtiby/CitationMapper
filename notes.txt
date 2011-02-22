@@ -1,3 +1,7 @@
+Requirements:
+* Recent version of networkx. 0.99 does not work while 1.4 does.
+sudo easy_install networkx
+
 Todos:
 * Implement export of graph to .dot files.
 * More general colouring options.
