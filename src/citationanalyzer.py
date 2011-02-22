@@ -181,25 +181,37 @@ class MyDotWindow(xdot.DotWindow):
 
 		nodewindow.set_title("Basic TreeView Example")
 
-		nodewindow.set_size_request(200, 200)
+		nodewindow.set_size_request(500, 500)
 
 		# create a TreeStore with one string column to use as the model
-		nodesTreestore = gtk.TreeStore(str, str)
+		nodesTreestore = gtk.TreeStore(str, int, int, int)
 
 		# we'll add some data now - 4 rows with 3 child rows each
-		for parent in range(4):
-			piter = nodesTreestore.append(None, ['parent %i' % parent, 'test'])
+		self.filterCurrentCitationMap()
+		for key in self.citationmap.graphForAnalysis.nodes():
+			try:
+				article = self.citationmap.articles[key]
+				year = int(article['PY'])
+				TC = int(article['TC'])
+				NR = int(article['NR'])
+				piter = nodesTreestore.append(None, [key, year, TC, NR])
+			except:
+				pass
 
 		# create the TreeView using treestore
 		nodesTreeview = gtk.TreeView(nodesTreestore)
 
 		# create the TreeViewColumn to display the data
-		columnOne = gtk.TreeViewColumn('Column 0')
-		columnTwo = gtk.TreeViewColumn('Column 2')
+		columnOne = gtk.TreeViewColumn('ID')
+		columnTwo = gtk.TreeViewColumn('Year')
+		columnThree = gtk.TreeViewColumn('Citations')
+		columnFour = gtk.TreeViewColumn('References')
 
 		# add tvcolumn to treeview
 		nodesTreeview.append_column(columnOne)
 		nodesTreeview.append_column(columnTwo)
+		nodesTreeview.append_column(columnThree)
+		nodesTreeview.append_column(columnFour)
 
 		# create a CellRendererText to render the data
 		cellRenderer = gtk.CellRendererText()
@@ -207,11 +219,15 @@ class MyDotWindow(xdot.DotWindow):
 		# add the cell to the tvcolumn and allow it to expand
 		columnOne.pack_start(cellRenderer, True)
 		columnTwo.pack_start(cellRenderer, True)
+		columnThree.pack_start(cellRenderer, True)
+		columnFour.pack_start(cellRenderer, True)
 
 		# set the cell "text" attribute to column 0 - retrieve text
 		# from that column in treestore
 		columnOne.add_attribute(cellRenderer, 'text', 0)
 		columnTwo.add_attribute(cellRenderer, 'text', 1)
+		columnThree.add_attribute(cellRenderer, 'text', 2)
+		columnFour.add_attribute(cellRenderer, 'text', 3)
 
 		# make it searchable
 		nodesTreeview.set_search_column(0)
@@ -222,8 +238,12 @@ class MyDotWindow(xdot.DotWindow):
 		# Allow drag and drop reordering of rows
 		nodesTreeview.set_reorderable(True)
 
-		nodewindow.add(nodesTreeview)
+		nodescrolledwindow = gtk.ScrolledWindow()
 
+		nodewindow.add(nodescrolledwindow)
+		nodescrolledwindow.add(nodesTreeview)
+
+		nodescrolledwindow.show_all()
 		nodewindow.show_all()
 
 		return False
