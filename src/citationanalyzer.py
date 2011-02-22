@@ -82,10 +82,13 @@ class MyDotWindow(xdot.DotWindow):
 		hscrollbarCitations.set_digits(0)
 		hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
 		showgraphbutton = gtk.Button("Show graph")
+		exportgraphbutton = gtk.Button("Export graph")
 		labelReferences = gtk.Label("Number of references")
 		labelCitations = gtk.Label("Number of citations")
 		showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
+		exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
 		showgraphbutton.show()
+		exportgraphbutton.show()
 		labelReferences.show()
 		labelCitations.show()
 		hscrollbarReferences.show()
@@ -95,6 +98,7 @@ class MyDotWindow(xdot.DotWindow):
 		vbox.pack_start(labelCitations, True, True, 0)
 		vbox.pack_start(hscrollbarCitations, True, True, 0)
 		vbox.pack_start(showgraphbutton, True, True, 0)
+		vbox.pack_start(exportgraphbutton, True, True, 0)
 		vbox.show()
 		searchoptionswindow.show()
 
@@ -135,16 +139,21 @@ class MyDotWindow(xdot.DotWindow):
 			#if(res):
 			self.citationmap.parsefile(os.path.join(directory, file))
 
-	def filterAndShowCurrentCitationMap(self, action, data):
+	def filterAndExportCurrentCitationMap(self):
 		output = StringIO.StringIO()
 		origNetwork = self.citationmap.graph.copy()
 		self.citationmap.analyzeGraph()
 		self.citationmap.cleanUpGraph(self.minNumberOfReferences, self.minNumberOfCitations)
 		self.citationmap.outputGraph(output)
 		dotcode = output.getvalue()
-		self.set_dotcode(dotcode)
 		self.citationmap.graph = origNetwork
+		return dotcode
 
+	def filterAndShowCurrentCitationMap(self, action, data):
+		dotcode = self.filterAndExportCurrentCitationMap()
+		self.set_dotcode(dotcode)
+
+	def exportFilteredCitationMap(self, action, data):
 		return False
 
 
