@@ -83,12 +83,15 @@ class MyDotWindow(xdot.DotWindow):
 		hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
 		showgraphbutton = gtk.Button("Show graph")
 		exportgraphbutton = gtk.Button("Export graph")
+		listofnodesbutton = gtk.Button("Get list of nodes")
 		labelReferences = gtk.Label("Number of references")
 		labelCitations = gtk.Label("Number of citations")
 		showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
 		exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
+		listofnodesbutton.connect("clicked", self.getListOfNodes, None)
 		showgraphbutton.show()
 		exportgraphbutton.show()
+		listofnodesbutton.show()
 		labelReferences.show()
 		labelCitations.show()
 		hscrollbarReferences.show()
@@ -99,6 +102,7 @@ class MyDotWindow(xdot.DotWindow):
 		vbox.pack_start(hscrollbarCitations, True, True, 0)
 		vbox.pack_start(showgraphbutton, True, True, 0)
 		vbox.pack_start(exportgraphbutton, True, True, 0)
+		vbox.pack_start(listofnodesbutton, True, True, 0)
 		vbox.show()
 		searchoptionswindow.show()
 
@@ -167,6 +171,58 @@ class MyDotWindow(xdot.DotWindow):
 
 		else:
 			chooser.destroy()
+		return False
+
+	def getListOfNodes(self, action, data):
+		nodewindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+
+		nodewindow.set_title("Basic TreeView Example")
+
+		nodewindow.set_size_request(200, 200)
+
+		# create a TreeStore with one string column to use as the model
+		nodesTreestore = gtk.TreeStore(str, str)
+
+		# we'll add some data now - 4 rows with 3 child rows each
+		for parent in range(4):
+			piter = nodesTreestore.append(None, ['parent %i' % parent, 'test'])
+
+		# create the TreeView using treestore
+		nodesTreeview = gtk.TreeView(nodesTreestore)
+
+		# create the TreeViewColumn to display the data
+		columnOne = gtk.TreeViewColumn('Column 0')
+		columnTwo = gtk.TreeViewColumn('Column 2')
+
+		# add tvcolumn to treeview
+		nodesTreeview.append_column(columnOne)
+		nodesTreeview.append_column(columnTwo)
+
+		# create a CellRendererText to render the data
+		cellRenderer = gtk.CellRendererText()
+
+		# add the cell to the tvcolumn and allow it to expand
+		columnOne.pack_start(cellRenderer, True)
+		columnTwo.pack_start(cellRenderer, True)
+
+		# set the cell "text" attribute to column 0 - retrieve text
+		# from that column in treestore
+		columnOne.add_attribute(cellRenderer, 'text', 0)
+		columnTwo.add_attribute(cellRenderer, 'text', 1)
+
+		# make it searchable
+		nodesTreeview.set_search_column(0)
+
+		# Allow sorting on the column
+		columnOne.set_sort_column_id(0)
+
+		# Allow drag and drop reordering of rows
+		nodesTreeview.set_reorderable(True)
+
+		nodewindow.add(nodesTreeview)
+
+		nodewindow.show_all()
+
 		return False
 
 
