@@ -3,7 +3,6 @@ Requirements:
 sudo easy_install networkx
 
 Todos:
-* Implement export of graph to .dot files.
 * More general colouring options.
 * Show additional information about articles.
 * Locate missing matches in the downloaded citations.
