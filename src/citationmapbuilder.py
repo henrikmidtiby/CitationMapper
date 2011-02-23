@@ -7,7 +7,6 @@ import StringIO
 
 class citationmapbuilder:
 	def __init__(self):
-		self.elements = []
 		self.graph = networkx.DiGraph()
 		self.graphForAnalysis = self.graph.copy()
 		self.articles = {}
@@ -35,11 +34,11 @@ class citationmapbuilder:
 
 			res = erPattern.match(line)
 			if(res):
-				identifier = self.newIdentifierInspiredByWos2Pajek(self.formatIdentifier(values))
-				self.elements.append(identifier)
+				rawIdentifier = self.formatIdentifier(values)
+				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 				for line in crlines:
-					self.elements.append(line)
 					self.graph.add_edge(self.newIdentifierInspiredByWos2Pajek(line), identifier)
+
 				self.articles[identifier] = values
 				crlines = []
 				values = {}
