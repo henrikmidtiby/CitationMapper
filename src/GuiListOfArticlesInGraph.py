@@ -9,7 +9,13 @@ class GuiListOfArticlesInGraph:
 		self.generateNodesTreeStore()
 		self.generateNodesTreeView()
 		self.generateNodeScrolledWindow()
-		self.nodewindow.add(self.nodescrolledwindow)
+		vbox = gtk.VBox(False, 0)
+		self.nodewindow.add(vbox)
+		exportlistofnodesbutton = gtk.Button("Export list of nodes")
+		exportlistofnodesbutton.connect("clicked", self.exportListOfNodes, None)
+		exportlistofnodesbutton.show()
+		vbox.pack_start(self.nodescrolledwindow, True, True, 0)
+		vbox.pack_start(exportlistofnodesbutton, False, False, 0)
 		self.nodescrolledwindow.show_all()
 		self.nodewindow.show_all()
 
@@ -39,7 +45,6 @@ class GuiListOfArticlesInGraph:
 
 		self.tvcolumn = [None] * len(column_names)
 		for n in range(0, len(column_names)):
-			print(column_names[n])
 			cell = gtk.CellRendererText()
 			self.tvcolumn[n] = gtk.TreeViewColumn(column_names[n])
 			self.tvcolumn[n].pack_start(cell, True)
@@ -59,6 +64,9 @@ class GuiListOfArticlesInGraph:
 		model = widget.get_model()
 		text = "%s %d %d %d" % (model[row][0], model[row][1], model[row][2], model[row][3])
 		print(text)
+
+	def exportListOfNodes(self, temp = None, temp2 = None):
+		pass
 
 def main():
 	loaig = GuiListOfArticlesInGraph()
