@@ -62,17 +62,19 @@ class CitationAnalyzerMainWindow():
 
 		# Add test label
 		self.labelReferences = gtk.Label("Number of references")
+		self.labelReferences.show()
 		self.vbox.pack_start(self.labelReferences, False, True, 0)
 
 		# Add graph widget
 		self.graphwidget = xdot.DotWidget()
 		self.graphwidget.connect('clicked', self.emptyFunction)
 		self.graphwidget.set_dotcode(self.dotcode)
+		self.graphwidget.show()
 		self.vbox.pack_start(self.graphwidget, True, True, 0)
 
 		self.window.add(self.vbox)
 		self.graphwidget.zoom_to_fit()
-		self.vbox.show_all()
+		self.vbox.show()
 		self.window.show()
 
 
