@@ -7,6 +7,7 @@ import os
 import StringIO
 import re
 import sys
+import GuiListOfArticlesInGraph
 
 import xdot
 
@@ -177,81 +178,18 @@ class MyDotWindow(xdot.DotWindow):
 		return False
 
 	def getListOfNodes(self, action, data):
-		nodewindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-
-		nodewindow.set_title("Basic TreeView Example")
-
-		nodewindow.set_size_request(500, 500)
-
-		# create a TreeStore with one string column to use as the model
-		nodesTreestore = gtk.TreeStore(str, int, int, int)
-
-		# we'll add some data now - 4 rows with 3 child rows each
+		listOfNodes = GuiListOfArticlesInGraph.GuiListOfArticlesInGraph()
 		self.filterCurrentCitationMap()
+		listOfNodes.nodesTreestore.clear()
 		for key in self.citationmap.graphForAnalysis.nodes():
 			try:
 				article = self.citationmap.articles[key]
 				year = int(article['PY'])
 				TC = int(article['TC'])
 				NR = int(article['NR'])
-				piter = nodesTreestore.append(None, [key, year, TC, NR])
+				piter = listOfNodes.nodesTreestore.append(None, [key, year, TC, NR])
 			except:
 				pass
-
-		tmsort = gtk.TreeModelSort(nodesTreestore) # produce a sortable treemodel
-
-		# create the TreeView using treestore
-		nodesTreeview = gtk.TreeView(tmsort)
-
-		# create the TreeViewColumn to display the data
-		columnOne = gtk.TreeViewColumn('ID')
-		columnTwo = gtk.TreeViewColumn('Year')
-		columnThree = gtk.TreeViewColumn('Citations')
-		columnFour = gtk.TreeViewColumn('References')
-
-		# add tvcolumn to treeview
-		nodesTreeview.append_column(columnOne)
-		nodesTreeview.append_column(columnTwo)
-		nodesTreeview.append_column(columnThree)
-		nodesTreeview.append_column(columnFour)
-
-		# create a CellRendererText to render the data
-		cellRenderer = gtk.CellRendererText()
-
-		# add the cell to the tvcolumn and allow it to expand
-		columnOne.pack_start(cellRenderer, True)
-		columnTwo.pack_start(cellRenderer, True)
-		columnThree.pack_start(cellRenderer, True)
-		columnFour.pack_start(cellRenderer, True)
-
-		# set the cell "text" attribute to column 0 - retrieve text
-		# from that column in treestore
-		columnOne.add_attribute(cellRenderer, 'text', 0)
-		columnTwo.add_attribute(cellRenderer, 'text', 1)
-		columnThree.add_attribute(cellRenderer, 'text', 2)
-		columnFour.add_attribute(cellRenderer, 'text', 3)
-
-		# make it searchable
-		nodesTreeview.set_search_column(0)
-
-		# Allow sorting on the column
-		columnOne.set_sort_column_id(0)
-		columnOne.set_sort_column_id(1)
-		columnOne.set_sort_column_id(2)
-		columnOne.set_sort_column_id(3)
-
-		# Allow drag and drop reordering of rows
-		nodesTreeview.set_reorderable(True)
-
-		nodescrolledwindow = gtk.ScrolledWindow()
-
-		nodewindow.add(nodescrolledwindow)
-		nodescrolledwindow.add(nodesTreeview)
-
-		nodescrolledwindow.show_all()
-		nodewindow.show_all()
-
-		return False
 
 
 dotcode = """
