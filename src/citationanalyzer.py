@@ -8,6 +8,7 @@ import StringIO
 import re
 import sys
 import GuiListOfArticlesInGraph
+import GuiOptionsWindow
 
 import xdot
 
@@ -68,44 +69,12 @@ class MyDotWindow(xdot.DotWindow):
 		self.minNumberOfCitations = adj.value
 
 	def showOptionsWindow(self):
-		searchoptionswindow = gtk.Window()
-		searchoptionswindow.set_border_width(10)
-		vbox = gtk.VBox(False, 0)
-		searchoptionswindow.add(vbox)
-		adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=50, step_incr=1, page_incr=5, page_size=0)
-		adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
-		hscrollbarReferences = gtk.HScale(adjMinNumberOfReferences)
-		hscrollbarReferences.set_digits(0)
-		hscrollbarReferences.set_value_pos(gtk.POS_LEFT)
-		adjMinNumberOfCitations = gtk.Adjustment(value=self.minNumberOfCitations, lower=0, upper=50, step_incr=1, page_incr=5, page_size=0)
-		adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
-		hscrollbarCitations = gtk.HScale(adjMinNumberOfCitations)
-		hscrollbarCitations.set_digits(0)
-		hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
-		showgraphbutton = gtk.Button("Show graph")
-		exportgraphbutton = gtk.Button("Export graph")
-		listofnodesbutton = gtk.Button("Get list of nodes")
-		labelReferences = gtk.Label("Number of references")
-		labelCitations = gtk.Label("Number of citations")
-		showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
-		exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
-		listofnodesbutton.connect("clicked", self.getListOfNodes, None)
-		showgraphbutton.show()
-		exportgraphbutton.show()
-		listofnodesbutton.show()
-		labelReferences.show()
-		labelCitations.show()
-		hscrollbarReferences.show()
-		hscrollbarCitations.show()
-		vbox.pack_start(labelReferences, True, True, 0)
-		vbox.pack_start(hscrollbarReferences, True, True, 0)
-		vbox.pack_start(labelCitations, True, True, 0)
-		vbox.pack_start(hscrollbarCitations, True, True, 0)
-		vbox.pack_start(showgraphbutton, True, True, 0)
-		vbox.pack_start(exportgraphbutton, True, True, 0)
-		vbox.pack_start(listofnodesbutton, True, True, 0)
-		vbox.show()
-		searchoptionswindow.show()
+		self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow()
+		self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
+		self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
+		self.optionsWindow.showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
+		self.optionsWindow.exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
+		self.optionsWindow.listofnodesbutton.connect("clicked", self.getListOfNodes, None)
 
 	def on_open(self, action):
 		chooser = gtk.FileChooserDialog(title="Open directory with bibliography",
