@@ -38,11 +38,11 @@ class citationmapbuilder:
 					newres = crPattern.match(line)
 					if(newres):
 						crlines.append(res.group(1))
-				else:
-					tempkey = lastSeenCode
-					if(not tempkey in values):
-						values[tempkey] = []
-					values[tempkey].append(res.group(1))
+
+				tempkey = lastSeenCode
+				if(not tempkey in values):
+					values[tempkey] = []
+				values[tempkey].append(res.group(1))
 
 			res = erPattern.match(line)
 			if(res):
