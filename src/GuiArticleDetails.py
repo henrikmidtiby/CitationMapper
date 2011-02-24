@@ -20,7 +20,7 @@ class GuiArticleDetails:
 	def updateArticleInformation(self, url, article = None, graph = None):
 
 		try:
-			author = article["AU"]
+			author = self.getListOfAuthors(article["AU"])
 			year = article["PY"]
 			title = article["TI"]
 			page = article["BP"]
@@ -44,6 +44,14 @@ class GuiArticleDetails:
 			self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
 		except:
 			pass
+	def getListOfAuthors(self, authors):
+		if(len(authors) == 1):
+			return authors[0]
+		else:
+			outstring = authors[0]
+			for author in authors[1:]:
+				outstring = outstring + " and " + author
+			return outstring
 
 
 
