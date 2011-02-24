@@ -1,6 +1,7 @@
 import gtk
 import pprint
 import StringIO
+import string
 
 class GuiArticleDetails:
 	def __init__(self):
@@ -26,22 +27,22 @@ class GuiArticleDetails:
 		pp.pprint(article)
 		fullInfoAsText = allKnowledgeAboutArticle.getvalue()
 
-		self.text.get_buffer().insert_at_cursor('%s\n' % url)
 		try:
-			author = self.getListOfAuthors(article["AU"])
-			year = article["PY"]
-			title = article["TI"]
-			page = article["BP"]
-			journal = article["SO"]
-			nreferences = article["NR"]
+			author = string.join(article["AU"], ' and ')
+			year = article["PY"][0]
+			title = string.join(article["TI"], " ")
+			page = article["BP"][0]
+			journal = article["SO"][0]
+			nreferences = article["NR"][0]
 			nreferencesInGraph = graph.in_degree(url)
-			ncitations = article["TC"]
+			ncitations = article["TC"][0]
 			ncitationsInGraph = graph.out_degree(url)
-			self.text.get_buffer().insert_at_cursor('%s\n' % author)
-			self.text.get_buffer().insert_at_cursor('%s\n' % year)
-			self.text.get_buffer().insert_at_cursor('%s\n' % journal)
-			self.text.get_buffer().insert_at_cursor('%s\n' % page)
+			self.text.get_buffer().insert_at_cursor('%s\n' % url)
+			self.text.get_buffer().insert_at_cursor('\n')
 			self.text.get_buffer().insert_at_cursor('%s\n' % title)
+			self.text.get_buffer().insert_at_cursor('%s\n' % author)
+			self.text.get_buffer().insert_at_cursor('%s\n' % journal)
+			self.text.get_buffer().insert_at_cursor('\n')
 			self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
 			self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
 		except:
@@ -50,18 +51,7 @@ class GuiArticleDetails:
 			except:
 				pass
 		
-		self.text.get_buffer().insert_at_cursor('\n\nAll available information:\n%s' % fullInfoAsText)
-
-	def getListOfAuthors(self, authors):
-		if(len(authors) == 1):
-			return authors[0]
-		else:
-			outstring = authors[0]
-			for author in authors[1:]:
-				outstring = outstring + " and " + author
-			return outstring
-
-
+		self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
 
 def main():
 	gad = GuiArticleDetails()
