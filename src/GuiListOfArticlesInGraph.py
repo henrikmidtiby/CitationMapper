@@ -1,5 +1,6 @@
 import gtk
 import networkx
+import StringIO
 
 class GuiListOfArticlesInGraph:
 	def __init__(self):
@@ -65,8 +66,38 @@ class GuiListOfArticlesInGraph:
 		text = "%s %d %d %d" % (model[row][0], model[row][1], model[row][2], model[row][3])
 		print(text)
 
-	def exportListOfNodes(self, temp = None, temp2 = None):
-		pass
+	def exportListOfNodes(self, widget, temp2 = None):
+		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
+						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		if chooser.run() == gtk.RESPONSE_OK:
+			filename = chooser.get_filename()
+			chooser.destroy()
+
+			exportfile = open(filename, 'w')
+			htmlcode = self.encodeCurrentListAsHTML()
+			exportfile.write(htmlcode)
+			exportfile.close()
+
+		else:
+			chooser.destroy()
+		return False
+
+
+	def encodeCurrentListAsHTML(self):
+		output = StringIO.StringIO()
+
+		output.write("<html><body><table>")
+		values = self.nodesTreeview.get_model()
+		for row in values:
+			output.write("<tr>\n")
+			for elem in row:
+				output.write("<td>" + str(elem) + "</td>")
+			output.write("</tr>\n")
+		output.write("</table>\n")
+		output.write("</body>\n")
+		output.write("</html>\n")
+
+		return output.getvalue()
 
 def main():
 	loaig = GuiListOfArticlesInGraph()
