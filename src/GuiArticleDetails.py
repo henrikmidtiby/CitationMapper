@@ -3,6 +3,7 @@ import gtk
 class GuiArticleDetails:
 	def __init__(self):
 		self.nodeinformationwindow = gtk.Window()
+		self.nodeinformationwindow.set_size_request(200, 200)
 		self.text = gtk.TextView()
 		self.nodeinformationwindow.add(self.text)
 		self.text.show()
@@ -25,6 +26,11 @@ class GuiArticleDetails:
 			self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
 		except:
 			self.text.get_buffer().insert_at_cursor('%s\n' % url)
+			
+		try:
+			self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
+		except:
+			pass
 
 
 
