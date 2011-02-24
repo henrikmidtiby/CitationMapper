@@ -14,23 +14,35 @@ class citationmapbuilder:
 	def parsefile(self, filename):
 		fh = open(filename)
 		pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
+		repeatedPattern = re.compile("^   (.*)")
 		crPattern = re.compile("^.. (.*?, \d{4}, .*?, V\d+, P\d+)")
 		erPattern = re.compile("^ER")
 		state = 0	# Are we currently looking for cross references?
 		crlines = []
+		lastSeenCode = "XX"
 		values = {}
+		# Parse file line by line
 		for line in fh:
 			res = pattern.match(line)
 			if(res):
-				values[res.group(1)] = res.group(2)
+				lastSeenCode = res.group(1)
+				values[res.group(1)] = [res.group(2)]
 				if(res.group(1) == "CR"):
 					state = 1
 				else:
 					state = 0
-			if(state == 1):
-				res = crPattern.match(line)
-				if(res):
-					crlines.append(res.group(1))
+
+			res = repeatedPattern.match(line)
+			if(res):
+				if(state == 1):
+					newres = crPattern.match(line)
+					if(newres):
+						crlines.append(res.group(1))
+				else:
+					tempkey = lastSeenCode
+					if(not tempkey in values):
+						values[tempkey] = []
+					values[tempkey].append(res.group(1))
 
 			res = erPattern.match(line)
 			if(res):
@@ -67,12 +79,12 @@ class citationmapbuilder:
 		
 	def formatIdentifier(self, values):
 		try:
-			author = values["AU"].replace(",", "").upper()
-			if(values["PT"] == "J"):
-				return "%s, %s, %s, V%s, P%s" % (author, values["PY"], values["J9"], values["VL"], values["BP"])
-			return "%s, %s, %s, P%s" % (author, values["PY"], values["J9"], values["BP"])
+			author = values["AU"][0].replace(",", "").upper()
+			if(values["PT"][0] == "J"):
+				return "%s, %s, %s, V%s, P%s" % (author, values["PY"][0], values["J9"][0], values["VL"][0], values["BP"][0])
+			return "%s, %s, %s, P%s" % (author, values["PY"][0], values["J9"][0], values["BP"][0])
 		except:
-			return "Conversion error: %s %s %s" % (values["PT"], values["AU"], values["PY"])
+			return "Conversion error: %s %s %s" % (values["PT"][0], values["AU"][0], values["PY"][0])
 
 	def analyzeGraph(self):
 		self.graphForAnalysis = self.graph.copy()
@@ -129,7 +141,7 @@ class citationmapbuilder:
 		for key in self.graphForAnalysis.nodes():
 			color = "#0000ff"
 			try:
-				ncites = int(self.articles[key]["TC"])
+				ncites = int(self.articles[key]["TC"][0])
 				ncitesingraph = self.graph.out_degree(key)
 				if ncites == ncitesingraph:
 					color = "#00ff00"
