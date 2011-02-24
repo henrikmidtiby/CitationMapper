@@ -45,10 +45,12 @@ class citationmapbuilder:
 
 
 	def newIdentifierInspiredByWos2Pajek(self, ident):
+		# Match journal entries
 		crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
 		res = crPattern.match(ident)
 		if(res):
 			return "%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4), res.group(5))
+		# Match book entries
 		crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
 		res = crPattern2.match(ident)
 		if(res):
