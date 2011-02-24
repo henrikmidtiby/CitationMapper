@@ -3,13 +3,22 @@ import gtk
 class GuiArticleDetails:
 	def __init__(self):
 		self.nodeinformationwindow = gtk.Window()
-		self.nodeinformationwindow.set_size_request(200, 200)
+		self.nodeinformationwindow.set_title("Article details")
+		self.nodeinformationwindow.set_size_request(500, 200)
 		self.text = gtk.TextView()
-		self.nodeinformationwindow.add(self.text)
-		self.text.show()
+		self.generateNodeScrolledWindow()
+		self.nodescrolledwindow.show_all()
+		self.nodeinformationwindow.add(self.nodescrolledwindow)
 		self.nodeinformationwindow.show()
+
+	def generateNodeScrolledWindow(self):
+		self.nodescrolledwindow = gtk.ScrolledWindow()
+		self.nodescrolledwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+		self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		self.nodescrolledwindow.add(self.text)
 	
 	def updateArticleInformation(self, url, article = None, graph = None):
+
 		try:
 			author = article["AU"]
 			year = article["PY"]
