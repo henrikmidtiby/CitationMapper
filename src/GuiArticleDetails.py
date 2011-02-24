@@ -1,4 +1,6 @@
 import gtk
+import pprint
+import StringIO
 
 class GuiArticleDetails:
 	def __init__(self):
@@ -19,6 +21,12 @@ class GuiArticleDetails:
 	
 	def updateArticleInformation(self, url, article = None, graph = None):
 
+		allKnowledgeAboutArticle = StringIO.StringIO()
+		pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
+		pp.pprint(article)
+		fullInfoAsText = allKnowledgeAboutArticle.getvalue()
+
+		self.text.get_buffer().insert_at_cursor('%s\n' % url)
 		try:
 			author = self.getListOfAuthors(article["AU"])
 			year = article["PY"]
@@ -29,7 +37,6 @@ class GuiArticleDetails:
 			nreferencesInGraph = graph.in_degree(url)
 			ncitations = article["TC"]
 			ncitationsInGraph = graph.out_degree(url)
-			self.text.get_buffer().insert_at_cursor('%s\n' % url)
 			self.text.get_buffer().insert_at_cursor('%s\n' % author)
 			self.text.get_buffer().insert_at_cursor('%s\n' % year)
 			self.text.get_buffer().insert_at_cursor('%s\n' % journal)
@@ -38,12 +45,13 @@ class GuiArticleDetails:
 			self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
 			self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
 		except:
-			self.text.get_buffer().insert_at_cursor('%s\n' % url)
-			
-		try:
-			self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
-		except:
-			pass
+			try:
+				self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
+			except:
+				pass
+		
+		self.text.get_buffer().insert_at_cursor('\n\nAll available information:\n%s' % fullInfoAsText)
+
 	def getListOfAuthors(self, authors):
 		if(len(authors) == 1):
 			return authors[0]
