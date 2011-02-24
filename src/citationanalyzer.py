@@ -138,9 +138,9 @@ class MyDotWindow(xdot.DotWindow):
 		for key in self.citationmap.graphForAnalysis.nodes():
 			try:
 				article = self.citationmap.articles[key]
-				year = int(article['PY'])
-				TC = int(article['TC'])
-				NR = int(article['NR'])
+				year = int(article['PY'][0])
+				TC = int(article['TC'][0])
+				NR = int(article['NR'][0])
 				piter = listOfNodes.nodesTreestore.append(None, [key, year, TC, NR])
 			except:
 				pass
