@@ -37,8 +37,13 @@ class citationmapbuilder:
 				rawIdentifier = self.formatIdentifier(values)
 				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 				for line in crlines:
-					self.graph.add_edge(self.newIdentifierInspiredByWos2Pajek(line), identifier)
-
+					crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
+					self.graph.add_edge(crIdentifier, identifier)
+					if(crIdentifier not in self.articles.keys()):
+						tempvalue = {}
+						tempvalue["Journal"] = line
+						self.articles[crIdentifier] = tempvalue
+					
 				self.articles[identifier] = values
 				crlines = []
 				values = {}
