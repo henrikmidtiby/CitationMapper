@@ -14,6 +14,8 @@ class GuiArticleDetails:
 			author = article["AU"]
 			year = article["PY"]
 			title = article["TI"]
+			page = article["BP"]
+			journal = article["SO"]
 			nreferences = article["NR"]
 			nreferencesInGraph = graph.in_degree(url)
 			ncitations = article["TC"]
@@ -21,6 +23,8 @@ class GuiArticleDetails:
 			self.text.get_buffer().insert_at_cursor('%s\n' % url)
 			self.text.get_buffer().insert_at_cursor('%s\n' % author)
 			self.text.get_buffer().insert_at_cursor('%s\n' % year)
+			self.text.get_buffer().insert_at_cursor('%s\n' % journal)
+			self.text.get_buffer().insert_at_cursor('%s\n' % page)
 			self.text.get_buffer().insert_at_cursor('%s\n' % title)
 			self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
 			self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
