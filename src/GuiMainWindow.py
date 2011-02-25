@@ -188,7 +188,7 @@ class GuiMainWindow:
 	def filterAndShowCurrentCitationMap(self, action, data):
 		dotcode = self.filterAndExportCurrentCitationMap()
 		self.mapview.set_dotcode(dotcode)
-		self.mapview.on_zoom_fit()
+		self.mapview.zoom_to_fit()
 
 	def exportFilteredCitationMap(self, action, data):
 		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
