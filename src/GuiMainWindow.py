@@ -121,12 +121,19 @@ class GuiMainWindow:
 		except:
 			self.articleDetailsWindow.updateArticleInformation(url)
 
-
 	def updateMinNumberOfReferences(self, adj):
 		self.minNumberOfReferences = adj.value
+		self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
 	def updateMinNumberOfCitations(self, adj):
 		self.minNumberOfCitations = adj.value
+		self.calculateNewGraphSizeAndUpdateOptionsWindow()
+
+	def calculateNewGraphSizeAndUpdateOptionsWindow(self):
+		self.filterCurrentCitationMap()
+		nNodes = self.citationmap.graphForAnalysis.number_of_nodes()
+		nEdges = self.citationmap.graphForAnalysis.number_of_edges()
+		self.optionsWindow.labelGraphSize.set_text("Graph size: %d / %d" % (nNodes, nEdges))
 
 	def showOptionsWindow(self):
 		self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow()
@@ -135,6 +142,7 @@ class GuiMainWindow:
 		self.optionsWindow.showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
 		self.optionsWindow.exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
 		self.optionsWindow.listofnodesbutton.connect("clicked", self.getListOfNodes, None)
+		self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
 	def on_open(self, action):
 		chooser = gtk.FileChooserDialog(title="Open directory with bibliography",
