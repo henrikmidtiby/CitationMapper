@@ -21,6 +21,7 @@ import citationmapbuilder
 import GuiArticleDetails
 import GuiListOfArticlesInGraph
 import GuiOptionsWindow
+import GuiArticleContextMenu
 
 class GuiMainWindow:
 	dotcode = """
@@ -106,8 +107,15 @@ class GuiMainWindow:
 		self.mapview.set_dotcode(self.dotcode)
 
 	def setupConnections(self):
-		self.mapview.connect('clicked', self.on_url_clicked)
+		self.mapview.connect('clicked', self.articleClicked)
 		self.citationmapperwindow.connect('destroy', gtk.main_quit)
+
+	def articleClicked(self, widget, data, event):
+		if(event.button == 1):
+			self.on_url_clicked(widget, data, event)
+		else:
+			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu()
+			articleContextMenu.showContextMenu(widget, data, event)
 
 	def __init__old(self):
 		xdot.DotWindow.__init__(self)
