@@ -14,6 +14,7 @@ import os
 import re
 import gtk
 import StringIO
+import pprint
 
 import xdot
 import citationmapbuilder
@@ -106,16 +107,50 @@ class GuiMainWindow:
 
 		self.mapview.set_dotcode(self.dotcode)
 
+	def printNodeInformation(self):
+		return
+		temp = self.mapview.graph
+		pp = pprint.PrettyPrinter()
+		#for shape in temp.shapes:
+		#	pp.pprint(shape)
+		#for edge in temp.edges:
+		#	pp.pprint(edge)
+		for node in temp.nodes:
+			for shape in node.shapes:
+				if(isinstance(shape, xdot.TextShape)):
+					print(shape.t)
+				if(isinstance(shape, xdot.EllipseShape)):
+					shape.pen.fillcolor = (1, 0, 1, 1)
+					shape.pen.color = (1, 0, 1, 1)
+
+	def changeColorOfNode(self, url, newcolor):
+		temp = self.mapview.graph
+		for node in temp.nodes:
+			if(len(node.shapes) == 2):
+				if(isinstance(node.shapes[1], xdot.TextShape)
+						and node.shapes[1].t == url):
+					node.shapes[0].pen.color = newcolor
+					node.shapes[0].pen.fillcolor = newcolor
+			if(len(node.shapes) == 3):
+				if(isinstance(node.shapes[2], xdot.TextShape)
+						and node.shapes[2].t == url):
+					node.shapes[0].pen.color = newcolor
+					node.shapes[0].pen.fillcolor = newcolor
+		self.mapview.queue_draw()
+
 	def setupConnections(self):
 		self.mapview.connect('clicked', self.articleClicked)
 		self.citationmapperwindow.connect('destroy', gtk.main_quit)
 
 	def articleClicked(self, widget, data, event):
 		if(event.button == 1):
+			print(data)
 			self.on_url_clicked(widget, data, event)
+			self.changeColorOfNode(data, (1, 0.5, 0.5, 1))
 		else:
 			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu()
 			articleContextMenu.showContextMenu(widget, data, event)
+			self.printNodeInformation()
 
 	def __init__old(self):
 		xdot.DotWindow.__init__(self)

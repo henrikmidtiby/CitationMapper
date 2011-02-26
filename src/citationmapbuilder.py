@@ -149,7 +149,7 @@ class citationmapbuilder:
 					color = "#ff0000"
 			except:
 				pass
-			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), key[0:11], math.sqrt(self.outdegrees[key])*2, color))
+			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), key, math.sqrt(self.outdegrees[key])*2, color))
 
 	def outputEdges(self, stream):
 		for edge in self.graphForAnalysis.edges():
