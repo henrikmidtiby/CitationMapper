@@ -1,11 +1,11 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
+# Name:        GuiMainWindow
+# Purpose:     Main window for the citation mapper program
 #
-# Author:      hemi
+# Author:      Henrik Skov Midtiby
 #
-# Created:     25-02-2011
-# Copyright:   (c) hemi 2011
+# Created:     2011-02-25
+# Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
