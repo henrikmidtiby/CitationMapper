@@ -35,6 +35,11 @@ class GuiMainWindow:
 
 	ui = '''
 	<ui>
+		<menubar name="MenuBar">
+			<menu action="File">
+				<menuitem action="Quit"/>
+			</menu>
+		</menubar>
 		<toolbar name="ToolBar">
 			<toolitem action="Open"/>
 			<toolitem action="Reload"/>
@@ -89,11 +94,26 @@ class GuiMainWindow:
 			('Zoom100', gtk.STOCK_ZOOM_100, None, None, None, self.mapview.on_zoom_100),
 		))
 
+
+		actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, '_Quit me!', None,
+			'Quit the Program', gtk.main_quit),
+			('File', None, '_File')])
+
 		# Add the actiongroup to the uimanager
 		uimanager.insert_action_group(actiongroup, 0)
 
+		# Add the accelerator group to the toplevel window
+		accelgroup = uimanager.get_accel_group()
+		self.citationmapperwindow.add_accel_group(accelgroup)
+
+
+
 		# Add a UI descrption
 		uimanager.add_ui_from_string(self.ui)
+
+		# Create a menu
+		menuline = uimanager.get_widget('/MenuBar')
+		vbox.pack_start(menuline, False)
 
 		# Create a Toolbar
 		toolbar = uimanager.get_widget('/ToolBar')
