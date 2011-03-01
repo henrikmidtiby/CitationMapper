@@ -1,3 +1,15 @@
+#-------------------------------------------------------------------------------
+# Name:        GuiListOfArticlesInGraph
+# Purpose:     List of articles in graph for the citation mapper program
+#
+# Author:      Henrik Skov Midtiby
+#
+# Created:     2011-02-25
+# Copyright:   (c) Henrik Skov Midtiby 2011
+# Licence:     <your licence>
+#-------------------------------------------------------------------------------
+#!/usr/bin/env python
+
 import gtk
 import networkx
 import StringIO
