@@ -221,10 +221,10 @@ class GuiMainWindow:
 			filename = chooser.get_filename()
 			chooser.destroy()
 			self.open_directory(filename)
+			self.showOptionsWindow()
 		else:
 			chooser.destroy()
 
-		self.showOptionsWindow()
 
 
 	def on_reload(self, action):
