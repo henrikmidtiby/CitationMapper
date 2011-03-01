@@ -37,6 +37,8 @@ class GuiMainWindow:
 	<ui>
 		<menubar name="MenuBar">
 			<menu action="File">
+				<menuitem action="Open"/>
+				<menuitem action="Reload"/>
 				<menuitem action="Quit"/>
 			</menu>
 		</menubar>
@@ -95,8 +97,8 @@ class GuiMainWindow:
 		))
 
 
-		actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, '_Quit me!', None,
-			'Quit the Program', gtk.main_quit),
+		actiongroup.add_actions([
+			('Quit', gtk.STOCK_QUIT, '_Quit me!', None, 'Quit the program', gtk.main_quit),
 			('File', None, '_File')])
 
 		# Add the actiongroup to the uimanager
