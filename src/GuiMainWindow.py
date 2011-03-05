@@ -157,16 +157,13 @@ class GuiMainWindow:
 	def changeColorOfNode(self, url, newcolor):
 		temp = self.mapview.graph
 		for node in temp.nodes:
-			if(len(node.shapes) == 2):
-				if(isinstance(node.shapes[1], xdot.TextShape)
-						and node.shapes[1].t == url):
-					node.shapes[0].pen.color = newcolor
-					node.shapes[0].pen.fillcolor = newcolor
-			if(len(node.shapes) == 3):
-				if(isinstance(node.shapes[2], xdot.TextShape)
-						and node.shapes[2].t == url):
-					node.shapes[0].pen.color = newcolor
-					node.shapes[0].pen.fillcolor = newcolor
+			if(isinstance(node, xdot.Node) and node.url == url):
+				for shape in node.shapes:
+					if(isinstance(shape, xdot.TextShape)):
+						print(shape.t)
+					if(isinstance(shape, xdot.EllipseShape)):
+						shape.pen.fillcolor = newcolor
+						shape.pen.color = newcolor
 		self.mapview.queue_draw()
 
 	def setupConnections(self):
@@ -175,7 +172,6 @@ class GuiMainWindow:
 
 	def articleClicked(self, widget, data, event):
 		if(event.button == 1):
-			print(data)
 			self.on_url_clicked(widget, data, event)
 			self.changeColorOfNode(data, (1, 0.5, 0.5, 1))
 		else:
