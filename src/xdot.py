@@ -109,56 +109,17 @@ class TextShape(Shape):
         self.t = t
 
     def draw(self, cr, highlight=False):
-        return 
 
-        try:
-            layout = self.layout
-        except AttributeError:
-            layout = cr.create_layout()
-
-            # set font options
-            # see http://lists.freedesktop.org/archives/cairo/2007-February/009688.html
-            context = layout.get_context()
-            fo = cairo.FontOptions()
-            fo.set_antialias(cairo.ANTIALIAS_DEFAULT)
-            fo.set_hint_style(cairo.HINT_STYLE_NONE)
-            fo.set_hint_metrics(cairo.HINT_METRICS_OFF)
-            try:
-                pangocairo.context_set_font_options(context, fo)
-            except TypeError:
-                # XXX: Some broken pangocairo bindings show the error
-                # 'TypeError: font_options must be a cairo.FontOptions or None'
-                pass
-
-            # set font
-            font = pango.FontDescription()
-            font.set_family(self.pen.fontname)
-            font.set_absolute_size(self.pen.fontsize*pango.SCALE)
-            layout.set_font_description(font)
-
-            # set text
-            layout.set_text(self.t)
-
-            # cache it
-            self.layout = layout
-        else:
-            cr.update_layout(layout)
+        cr.select_font_face("Arial", cairo.FONT_SLANT_NORMAL, 
+            cairo.FONT_WEIGHT_NORMAL)
+        cr.set_font_size(self.pen.fontsize)
 
         descent = 2 # XXX get descender from font metrics
 
-        width, height = layout.get_size()
-        width = float(width)/pango.SCALE
-        height = float(height)/pango.SCALE
-        # we know the width that dot thinks this text should have
-        # we do not necessarily have a font with the same metrics
-        # scale it so that the text fits inside its box
-        if width > self.w:
-            f = self.w / width
-            width = self.w # equivalent to width *= f
-            height *= f
-            descent *= f
-        else:
-            f = 1.0
+
+        xbearing, ybearing, width, height, xadvance, yadvance = (
+                    cr.text_extents(self.t))
+
 
         if self.j == self.LEFT:
             x = self.x
@@ -169,29 +130,16 @@ class TextShape(Shape):
         else:
             assert 0
 
-        y = self.y - height + descent
+        f = 1
+        y = self.y + descent
 
         cr.move_to(x, y)
 
         cr.save()
         cr.scale(f, f)
-        cr.set_source_rgba(*self.select_pen(highlight).color)
-        cr.show_layout(layout)
+        cr.set_source_rgba(*self.select_pen(highlight).color)   
+        cr.show_text(self.t)
         cr.restore()
-
-        if 0: # DEBUG
-            # show where dot thinks the text should appear
-            cr.set_source_rgba(1, 0, 0, .9)
-            if self.j == self.LEFT:
-                x = self.x
-            elif self.j == self.CENTER:
-                x = self.x - 0.5*self.w
-            elif self.j == self.RIGHT:
-                x = self.x - self.w
-            cr.move_to(x, self.y)
-            cr.line_to(x+self.w, self.y)
-            cr.stroke()
-
 
 class ImageShape(Shape):
 
