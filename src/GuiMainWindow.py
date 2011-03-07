@@ -23,6 +23,7 @@ import GuiArticleDetails
 import GuiListOfArticlesInGraph
 import GuiOptionsWindow
 import GuiArticleContextMenu
+import GuiAboutDialog
 
 class GuiMainWindow:
 	dotcode = """
@@ -299,8 +300,7 @@ class GuiMainWindow:
 				pass
 
 	def showAboutDialog(self, action):
-		print("Hejsa")
-		pass
+		gad = GuiAboutDialog.GuiAboutDialog()
 
 def main():
 	gmw = GuiMainWindow()
