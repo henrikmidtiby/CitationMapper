@@ -244,10 +244,7 @@ class GuiMainWindow:
 		self.openfilename = directory
 		self.citationmap.__init__()
 		files = os.listdir(directory)
-		patterntxtfile = re.compile('.*\.txt')
 		for file in files:
-			res = patterntxtfile.match(file)
-			#if(res):
 			self.citationmap.parsefile(os.path.join(directory, file))
 		self.origNetwork = self.citationmap.graph.copy()
 
