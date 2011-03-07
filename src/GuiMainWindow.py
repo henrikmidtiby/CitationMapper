@@ -105,7 +105,7 @@ class GuiMainWindow:
 
 		actiongroup.add_actions([
 			('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
-			('ExportToPDF', None, '_Export to pdf', None, None, self.exportToPDF),
+			('ExportToPDF', None, '_Export to pdf', 'E', None, self.exportToPDF),
 			('About', None, '_About', None, None, self.showAboutDialog),
 			('File', None, '_File'),
 			('Help', None, '_Help')])
@@ -302,6 +302,7 @@ class GuiMainWindow:
 		gad = GuiAboutDialog.GuiAboutDialog()
 
 	def exportToPDF(self, action):
+		self.mapview.exportToPDF("filename.pdf")
 		print("Export to pdf")
 
 def main():

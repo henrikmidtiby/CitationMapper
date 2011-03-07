@@ -109,6 +109,7 @@ class TextShape(Shape):
         self.t = t
 
     def draw(self, cr, highlight=False):
+        return 
 
         try:
             layout = self.layout
@@ -1415,6 +1416,8 @@ class DotWidget(gtk.DrawingArea):
 
     filter = 'dot'
 
+    lastExposeEvent = None
+
     def __init__(self):
         gtk.DrawingArea.__init__(self)
 
@@ -1493,6 +1496,27 @@ class DotWidget(gtk.DrawingArea):
             except IOError:
                 pass
 
+    def exportToPDF(self, filename):
+        surface = cairo.PDFSurface(filename, self.lastExposeEvent.area.width, 
+                self.lastExposeEvent.area.height)
+        #surface = cairo.PDFSurface(filename, 1000, 1000)
+        cr = cairo.Context (surface)
+
+        cr.set_source_rgba(1.0, 1.0, 1.0, 1.0)
+        cr.paint()
+
+        cr.save()
+        rect = self.get_allocation()
+        cr.translate(0.5*rect.width, 0.5*rect.height)
+        cr.scale(self.zoom_ratio, self.zoom_ratio)
+        cr.translate(-self.x, -self.y)
+
+        self.graph.draw(cr, highlight_items=self.highlight)
+
+        cr.restore()
+
+        return False
+
     def do_expose_event(self, event):
         cr = self.window.cairo_create()
 
@@ -1501,7 +1525,10 @@ class DotWidget(gtk.DrawingArea):
             event.area.x, event.area.y,
             event.area.width, event.area.height
         )
+        self.lastExposeEvent = event
         cr.clip()
+
+        print("%d  %d  %d  %d" % (event.area.x, event.area.y, event.area.width, event.area.height))
 
         cr.set_source_rgba(1.0, 1.0, 1.0, 1.0)
         cr.paint()
