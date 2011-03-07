@@ -15,6 +15,7 @@ import re
 import gtk
 import StringIO
 import pprint
+import sys
 
 import xdot
 import citationmapbuilder
@@ -304,6 +305,11 @@ class GuiMainWindow:
 
 def main():
 	gmw = GuiMainWindow()
+
+	if(len(sys.argv) > 1):
+		gmw.open_directory(sys.argv[1])
+		gmw.showOptionsWindow()
+
 	gtk.main()
 
 if __name__ == '__main__':
