@@ -173,7 +173,7 @@ class GuiMainWindow:
 	def articleClicked(self, widget, data, event):
 		if(event.button == 1):
 			self.on_url_clicked(widget, data, event)
-			self.changeColorOfNode(data, (1, 0.5, 0.5, 1))
+			self.changeColorOfNode(data, (1, 0.75, 0.75, 1))
 		else:
 			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu()
 			articleContextMenu.showContextMenu(widget, data, event)
