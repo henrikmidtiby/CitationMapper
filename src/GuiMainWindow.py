@@ -303,7 +303,6 @@ class GuiMainWindow:
 
 	def exportToPDF(self, action):
 		self.mapview.exportToPDF("filename.pdf")
-		print("Export to pdf")
 
 def main():
 	gmw = GuiMainWindow()

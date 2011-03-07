@@ -1476,8 +1476,6 @@ class DotWidget(gtk.DrawingArea):
         self.lastExposeEvent = event
         cr.clip()
 
-        print("%d  %d  %d  %d" % (event.area.x, event.area.y, event.area.width, event.area.height))
-
         cr.set_source_rgba(1.0, 1.0, 1.0, 1.0)
         cr.paint()
 
