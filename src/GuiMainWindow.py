@@ -41,6 +41,9 @@ class GuiMainWindow:
 				<menuitem action="Reload"/>
 				<menuitem action="Quit"/>
 			</menu>
+			<menu action="Help">
+			<menuitem action="About"/>
+			</menu>
 		</menubar>
 		<toolbar name="ToolBar">
 			<toolitem action="Open"/>
@@ -98,8 +101,10 @@ class GuiMainWindow:
 
 
 		actiongroup.add_actions([
-			('Quit', gtk.STOCK_QUIT, '_Quit me!', None, 'Quit the program', gtk.main_quit),
-			('File', None, '_File')])
+			('Quit', gtk.STOCK_QUIT, '_Quit', None, 'Quit the program', gtk.main_quit),
+			('About', None, '_About', None, None, self.showAboutDialog),
+			('File', None, '_File'),
+			('Help', None, '_Help')])
 
 		# Add the actiongroup to the uimanager
 		uimanager.insert_action_group(actiongroup, 0)
@@ -292,6 +297,10 @@ class GuiMainWindow:
 				piter = listOfNodes.nodesTreestore.append(None, [key, year, TC, NR])
 			except:
 				pass
+
+	def showAboutDialog(self, action):
+		print("Hejsa")
+		pass
 
 def main():
 	gmw = GuiMainWindow()
