@@ -41,6 +41,7 @@ class GuiMainWindow:
 			<menu action="File">
 				<menuitem action="Open"/>
 				<menuitem action="Reload"/>
+				<menuitem action="ExportToPDF"/>
 				<menuitem action="Quit"/>
 			</menu>
 			<menu action="Help">
@@ -103,7 +104,8 @@ class GuiMainWindow:
 
 
 		actiongroup.add_actions([
-			('Quit', gtk.STOCK_QUIT, '_Quit', None, 'Quit the program', gtk.main_quit),
+			('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
+			('ExportToPDF', None, '_Export to pdf', None, None, self.exportToPDF),
 			('About', None, '_About', None, None, self.showAboutDialog),
 			('File', None, '_File'),
 			('Help', None, '_Help')])
@@ -303,6 +305,9 @@ class GuiMainWindow:
 	def showAboutDialog(self, action):
 		gad = GuiAboutDialog.GuiAboutDialog()
 
+	def exportToPDF(self, action):
+		print("Export to pdf")
+
 def main():
 	gmw = GuiMainWindow()
 
@@ -314,3 +319,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
