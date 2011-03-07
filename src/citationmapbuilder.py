@@ -140,6 +140,7 @@ class citationmapbuilder:
 	def outputNodeInformation(self, stream):
 		for key in self.graphForAnalysis.nodes():
 			color = "#0000ff"
+			firstauthor = key
 			try:
 				ncites = int(self.articles[key]["TC"][0])
 				ncitesingraph = self.graph.out_degree(key)
@@ -147,9 +148,10 @@ class citationmapbuilder:
 					color = "#00ff00"
 				else:
 					color = "#ff0000"
+				firstauthor = self.articles[key]["AU"][0]
 			except:
 				pass
-			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), key, math.sqrt(self.outdegrees[key])*2, color))
+			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, math.sqrt(self.outdegrees[key] / 75.), firstauthor, math.sqrt(self.outdegrees[key])*2, color))
 
 	def outputEdges(self, stream):
 		for edge in self.graphForAnalysis.edges():
