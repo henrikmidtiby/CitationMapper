@@ -53,9 +53,9 @@ class citationmapbuilder:
 				for line in crlines:
 					crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
 					self.graph.add_edge(crIdentifier, identifier)
-					if(crIdentifier in self.articles.keys()):
+					try:
 						self.articles[crIdentifier]["Journal"] = line
-					else:
+					except KeyError:
 						tempvalue = {}
 						tempvalue["Journal"] = line
 						self.articles[crIdentifier] = tempvalue
