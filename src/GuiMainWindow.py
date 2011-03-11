@@ -197,10 +197,13 @@ class GuiMainWindow:
 		self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
 	def calculateNewGraphSizeAndUpdateOptionsWindow(self):
-		self.filterCurrentCitationMap()
-		nNodes = self.citationmap.graphForAnalysis.number_of_nodes()
-		nEdges = self.citationmap.graphForAnalysis.number_of_edges()
-		self.optionsWindow.labelGraphSize.set_text("Graph size: %d / %d" % (nNodes, nEdges))
+		# Count the number of articles with the required number of references and citations.
+		nNodes = 0
+		for index in range(0, len(self.origNetworkCitations)):
+			if(self.origNetworkCitations[index] >= self.minNumberOfCitations
+					and self.origNetworkReferences[index] >= self.minNumberOfReferences):
+				nNodes = nNodes + 1
+		self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
 	def showOptionsWindow(self):
 		self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow()
@@ -244,6 +247,8 @@ class GuiMainWindow:
 		for file in files:
 			self.citationmap.parsefile(os.path.join(directory, file))
 		self.origNetwork = self.citationmap.graph.copy()
+		self.origNetworkCitations = self.origNetwork.out_degree().values()
+		self.origNetworkReferences = self.origNetwork.in_degree().values()
 
 	def filterCurrentCitationMap(self):
 		self.citationmap.graph = self.origNetwork.copy()
