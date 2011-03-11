@@ -179,9 +179,6 @@ class GuiMainWindow:
 			articleContextMenu.showContextMenu(widget, data, event)
 			self.printNodeInformation()
 
-	def __init__old(self):
-		xdot.DotWindow.__init__(self)
-
 	def on_url_clicked(self, widget, url, event):
 		self.articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
 		try:
