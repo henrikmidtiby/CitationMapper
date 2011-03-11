@@ -12,6 +12,7 @@ class citationmapbuilder:
 		self.articles = {}
 
 	def parsefile(self, filename):
+		print("<parsing alt=%s>" % filename)
 		fh = open(filename)
 		pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
 		repeatedPattern = re.compile("^   (.*)")
@@ -46,6 +47,7 @@ class citationmapbuilder:
 
 			res = erPattern.match(line)
 			if(res):
+				print("<nodes count=%d>" % len(self.graph.nodes()))
 				rawIdentifier = self.formatIdentifier(values)
 				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 				for line in crlines:
@@ -57,10 +59,11 @@ class citationmapbuilder:
 						tempvalue = {}
 						tempvalue["Journal"] = line
 						self.articles[crIdentifier] = tempvalue
-					
+
 				self.articles[identifier] = values
 				crlines = []
 				values = {}
+		print("</parsing>")
 
 
 	def newIdentifierInspiredByWos2Pajek(self, ident):
@@ -76,7 +79,7 @@ class citationmapbuilder:
 			return "%s,%s,%s" % (res.group(1), res.group(2), res.group(4))
 		return "ErrorInMatching %s" % ident
 
-		
+
 	def formatIdentifier(self, values):
 		try:
 			author = values["AU"][0].replace(",", "").upper()
@@ -102,7 +105,7 @@ class citationmapbuilder:
 		for key in self.indegrees:
 			if self.graphForAnalysis.has_node(key) and self.indegrees[key] < minNumberOfReferences:
 				self.graphForAnalysis.remove_node(key)
-		
+
 	def getYearsAndArticles(self):
 		years = {}
 		citationPattern = re.compile("^(.*?),(\d{4}),(V\d+),(P\d+)")
