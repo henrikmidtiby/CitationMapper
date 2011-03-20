@@ -206,7 +206,7 @@ class GuiMainWindow:
 		self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
 	def showOptionsWindow(self):
-		self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow()
+		self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow(self.maxCitations, self.maxReferences)
 		self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
 		self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
 		self.optionsWindow.showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
@@ -246,9 +246,14 @@ class GuiMainWindow:
 		files = os.listdir(directory)
 		for file in files:
 			self.citationmap.parsefile(os.path.join(directory, file))
+		self.updateOrigNetwork()
+	
+	def updateOrigNetwork(self):
 		self.origNetwork = self.citationmap.graph.copy()
 		self.origNetworkCitations = self.origNetwork.out_degree().values()
 		self.origNetworkReferences = self.origNetwork.in_degree().values()
+		self.maxCitations = max(self.origNetworkCitations)
+		self.maxReferences = max(self.origNetworkReferences)
 
 	def filterCurrentCitationMap(self):
 		self.citationmap.graph = self.origNetwork.copy()

@@ -16,16 +16,16 @@ class GuiOptionsWindow:
 	minNumberOfReferences = 1
 	minNumberOfCitations = 3
 
-	def __init__(self):
+	def __init__(self, maxCitations=50, maxReferences=50):
 		searchoptionswindow = gtk.Window()
 		searchoptionswindow.set_border_width(10)
 		vbox = gtk.VBox(False, 0)
 		searchoptionswindow.add(vbox)
-		self.adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=50, step_incr=1, page_incr=5, page_size=0)
+		self.adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=maxReferences, step_incr=1, page_incr=5, page_size=0)
 		self.hscrollbarReferences = gtk.HScale(self.adjMinNumberOfReferences)
 		self.hscrollbarReferences.set_digits(0)
 		self.hscrollbarReferences.set_value_pos(gtk.POS_LEFT)
-		self.adjMinNumberOfCitations = gtk.Adjustment(value=self.minNumberOfCitations, lower=0, upper=50, step_incr=1, page_incr=5, page_size=0)
+		self.adjMinNumberOfCitations = gtk.Adjustment(value=self.minNumberOfCitations, lower=0, upper=maxCitations, step_incr=1, page_incr=5, page_size=0)
 		self.hscrollbarCitations = gtk.HScale(self.adjMinNumberOfCitations)
 		self.hscrollbarCitations.set_digits(0)
 		self.hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
