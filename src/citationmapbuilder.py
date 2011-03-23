@@ -12,7 +12,7 @@ class citationmapbuilder:
 		self.articles = {}
 
 	def parsefile(self, filename):
-		print("<parsing alt=%s>" % filename)
+		#print("<parsing alt=%s>" % filename)
 		fh = open(filename)
 		pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
 		repeatedPattern = re.compile("^   (.*)")
@@ -47,7 +47,7 @@ class citationmapbuilder:
 
 			res = erPattern.match(line)
 			if(res):
-				print("<nodes count=%d>" % len(self.graph.nodes()))
+				#print("<nodes count=%d>" % len(self.graph.nodes()))
 				rawIdentifier = self.formatIdentifier(values)
 				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 				for line in crlines:
@@ -63,7 +63,7 @@ class citationmapbuilder:
 				self.articles[identifier] = values
 				crlines = []
 				values = {}
-		print("</parsing>")
+		#print("</parsing>")
 
 
 	def newIdentifierInspiredByWos2Pajek(self, ident):
