@@ -1398,14 +1398,17 @@ class DotWidget(gtk.DrawingArea):
     def set_dotcode(self, dotcode, filename='<stdin>'):
         if isinstance(dotcode, unicode):
             dotcode = dotcode.encode('utf8')
-        p = subprocess.Popen(
-            [self.filter, '-Txdot'],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=False,
-            universal_newlines=True
-        )
+        try:
+            p = subprocess.Popen(
+                [self.filter, '-Txdot'],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                shell=False,
+                universal_newlines=True
+            )
+        except:
+            raise Exception("Could not call dot executable from graphviz. Is graphviz installed?")
         xdotcode, error = p.communicate(dotcode)
         if p.returncode != 0:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
