@@ -63,6 +63,8 @@ class GuiListOfArticlesInGraph:
 			self.tvcolumn[n].pack_start(cell, True)
 			self.tvcolumn[n].add_attribute(cell, 'text', n)
 			self.tvcolumn[n].set_sort_column_id(n)
+			self.tvcolumn[n].set_resizable(True)
+			self.tvcolumn[n].set_reorderable(True)
 			if n == 1:
 				cell.set_property('xalign', 1.0)
 			self.nodesTreeview.append_column(self.tvcolumn[n])
