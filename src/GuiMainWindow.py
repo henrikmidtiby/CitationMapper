@@ -16,6 +16,7 @@ import gtk
 import StringIO
 import pprint
 import sys
+import string
 
 import xdot
 import citationmapbuilder
@@ -296,9 +297,12 @@ class GuiMainWindow:
 			try:
 				article = self.citationmap.articles[key]
 				year = int(article['PY'][0])
+				SO = string.join(article['SO'])
+				Title = string.join(article['TI'])
+				Authors = string.join(article['AU'], ' and ')
 				TC = int(article['TC'][0])
 				NR = int(article['NR'][0])
-				piter = listOfNodes.nodesTreestore.append(None, [key, year, TC, NR])
+				piter = listOfNodes.nodesTreestore.append(None, [key, year, SO, Authors, Title, TC, NR])
 			except:
 				pass
 

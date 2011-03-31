@@ -34,27 +34,15 @@ class GuiListOfArticlesInGraph:
 
 	def generateNodesTreeStore(self):
 		# create a TreeStore with one string column to use as the model
-		self.nodesTreestore = gtk.TreeStore(str, int, int, int)
+		self.nodesTreestore = gtk.TreeStore(str, int, str, str, str, int, int)
 
-		self.nodesTreestore.append(None, ["jeh", 1, 2, 3])
-		self.nodesTreestore.append(None, ["ahej", 4, 22, 113])
-		self.nodesTreestore.append(None, ["uha", 12, 12, 43])
-		self.nodesTreestore.append(None, ["jgh", 11, 12, 3])
-		self.nodesTreestore.append(None, ["hsej", 4, 122, 13])
-		self.nodesTreestore.append(None, ["wha", 2, 12, 433])
-		self.nodesTreestore.append(None, ["jeh", 1, 2, 3])
-		self.nodesTreestore.append(None, ["ahej", 4, 22, 113])
-		self.nodesTreestore.append(None, ["uha", 12, 12, 43])
-		self.nodesTreestore.append(None, ["jgh", 11, 12, 3])
-		self.nodesTreestore.append(None, ["hsej", 4, 122, 13])
-		self.nodesTreestore.append(None, ["wha", 2, 12, 433])
 
 	def generateNodesTreeView(self):
 		tmsort = gtk.TreeModelSort(self.nodesTreestore) # produce a sortable treemodel
 		self.nodesTreeview = gtk.TreeView(tmsort)
 		self.nodesTreeview.connect("row-activated", self.row_clicked)
 
-		column_names = ['ID', 'Year', 'Citations', 'References']
+		column_names = ['ID', 'Year', 'Journal', 'Authors', 'Title', 'Citations', 'References']
 
 		self.tvcolumn = [None] * len(column_names)
 		for n in range(0, len(column_names)):
