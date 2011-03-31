@@ -306,7 +306,16 @@ class GuiMainWindow:
 		gad = GuiAboutDialog.GuiAboutDialog()
 
 	def exportToPDF(self, action):
-		self.mapview.exportToPDF("filename.pdf")
+		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
+						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		if chooser.run() == gtk.RESPONSE_OK:
+			filename = chooser.get_filename()
+			chooser.destroy()
+			self.mapview.exportToPDF(filename)
+		else:
+			chooser.destroy()
+		return False
+
 
 def main():
 	gmw = GuiMainWindow()
