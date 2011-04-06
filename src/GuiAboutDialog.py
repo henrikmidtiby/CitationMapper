@@ -23,6 +23,10 @@ class GuiAboutDialog:
 		self.label.set_line_wrap(True)
 		self.label.show()
 
+		self.label2 = gtk.Label("Version 0.1.1")
+		self.label2.set_line_wrap(True)
+		self.label2.set_alignment(0, 0)
+		self.label2.show()
 
 		self.closebotton = gtk.Button("Close")
 		self.closebotton.show()
@@ -30,6 +34,7 @@ class GuiAboutDialog:
 		vbox = gtk.VBox(False, 0)
 
 		vbox.pack_start(self.label, True, True, 5)
+		vbox.pack_start(self.label2, True, True, 5)
 		vbox.pack_start(self.closebotton, True, False, 5)
 		self.aboutdialog.add(vbox)
 		self.aboutdialog.show_all()
