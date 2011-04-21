@@ -264,7 +264,7 @@ class GuiMainWindow:
 	def filterAndExportCurrentCitationMap(self):
 		self.filterCurrentCitationMap()
 		output = StringIO.StringIO()
-		self.citationmap.outputGraph(output)
+		self.citationmap.outputGraph(output, "BT")
 		dotcode = output.getvalue()
 		return dotcode
 
@@ -331,5 +331,5 @@ def main():
 	gtk.main()
 
 if __name__ == '__main__':
-    main()
+	main()
 

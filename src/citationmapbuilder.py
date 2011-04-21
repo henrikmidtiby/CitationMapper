@@ -118,8 +118,8 @@ class citationmapbuilder:
 				years[curYear].append(elem)
 		return years
 
-	def outputGraph(self, stream):
-		self.outputPreamble(stream)
+	def outputGraph(self, stream, direction = "TD"):
+		self.outputPreamble(stream, direction)
 		self.outputYearNodesAndMarkObjectsWithTheSameRank(stream)
 		self.outputNodeInformation(stream)
 		self.outputEdges(stream)
@@ -160,8 +160,9 @@ class citationmapbuilder:
 		for edge in self.graphForAnalysis.edges():
 			stream.write("\"%s\" -> \"%s\"\n" % edge)
 
-	def outputPreamble(self, stream):
+	def outputPreamble(self, stream, direction = "TD"):
 		stream.write("digraph citations {\n")
+		stream.write("graph [rankdir=%s];\n" % direction)
 		stream.write("ranksep=0.2;\n")
 		stream.write("nodesep=0.1;\n")
 		stream.write('size="11.0729166666667,5.26041666666667";\n')
