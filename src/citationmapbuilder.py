@@ -147,7 +147,7 @@ class citationmapbuilder:
 			try:
 				ncites = int(self.articles[key]["TC"][0])
 				ncitesingraph = self.graph.out_degree(key)
-				if ncites == ncitesingraph:
+				if 0.95 * ncites < ncitesingraph:
 					color = "#00ff00"
 				else:
 					color = "#ff0000"
