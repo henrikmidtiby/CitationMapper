@@ -23,7 +23,7 @@ class GuiAboutDialog:
 		self.label.set_line_wrap(True)
 		self.label.show()
 
-		self.label2 = gtk.Label("Version 0.1.1")
+		self.label2 = gtk.Label("Version 0.1.2")
 		self.label2.set_line_wrap(True)
 		self.label2.set_alignment(0, 0)
 		self.label2.show()
