@@ -154,8 +154,8 @@ class citationmapbuilder:
 				firstauthor = self.articles[key]["AU"][0]
 			except:
 				pass
-			nodesize = math.sqrt((self.outdegrees[key]) / 75.)
-			fontsize = math.sqrt(self.outdegrees[key])*2
+			nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
+			fontsize = math.sqrt(self.outdegrees[key] + 1)*2
 			stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, nodesize, firstauthor, fontsize, color))
 
 	def outputEdges(self, stream):
