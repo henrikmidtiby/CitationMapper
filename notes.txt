@@ -9,7 +9,5 @@ Todos:
 Input from talk with Anita
 * Close all article details windows
 * Insert ccl search string in article details, to locate article in wos
-* Color nodes green if only a few articles is missing (times cited: 73 / 72)
 * On data reload, reset the sliders
 * Warn about generating large graph (eg. more than 400 nodes)
-* Investigate bug seen when nCitations slider is on 0 (white nodes) but not when the slider is on 1 or larger values.
