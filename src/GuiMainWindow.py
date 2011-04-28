@@ -204,6 +204,7 @@ class GuiMainWindow:
 			if(self.origNetworkCitations[index] >= self.minNumberOfCitations
 					and self.origNetworkReferences[index] >= self.minNumberOfReferences):
 				nNodes = nNodes + 1
+		self.optionsWindow.graphSize = nNodes
 		self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
 	def showOptionsWindow(self):
@@ -248,7 +249,7 @@ class GuiMainWindow:
 		for file in files:
 			self.citationmap.parsefile(os.path.join(directory, file))
 		self.updateOrigNetwork()
-	
+
 	def updateOrigNetwork(self):
 		self.origNetwork = self.citationmap.graph.copy()
 		self.origNetworkCitations = self.origNetwork.out_degree().values()
@@ -269,9 +270,50 @@ class GuiMainWindow:
 		return dotcode
 
 	def filterAndShowCurrentCitationMap(self, action, data):
+		if(self.optionsWindow.graphSize > 200):
+			if(not self.dialogShowLargeGraph(self.optionsWindow.graphSize)):
+				return
 		dotcode = self.filterAndExportCurrentCitationMap()
 		self.mapview.set_dotcode(dotcode)
 		self.mapview.zoom_to_fit()
+
+	def dialogShowLargeGraph(self, nNodes):
+		self.quit_dialog = gtk.Dialog()
+
+		# Set it modal and transient for main window.
+		self.quit_dialog.set_modal( True )
+		#self.quit_dialog.set_transient_for( self )
+
+		# Set title
+		self.quit_dialog.set_title( 'Confirmation' )
+
+		# Add buttons.
+		self.quit_dialog.add_button( gtk.STOCK_YES, 1 )
+		self.quit_dialog.add_button( gtk.STOCK_NO,  2 )
+
+		'''
+		# Using non-null parameter list when creating dialog,
+		# the last six calls can be written as:
+		self.quit_dialog = gtk.Dialog( 'Conformation', self,
+									   gtk.DIALOG_MODAL,
+									   ( gtk.STOCK_YES, 1,
+										 gtk.STOCK_NO,  2 ) )
+		'''
+
+		# Create label
+		label = gtk.Label( 'Will you really visualize this huge graph? (# nodes = %d)' % nNodes )
+
+		self.quit_dialog.vbox.pack_start( label )
+
+		# Show dialog
+		self.quit_dialog.show_all()
+
+		# Run dialog
+		response = self.quit_dialog.run()
+		self.quit_dialog.hide()
+
+		return(response == 1)
+
 
 	def exportFilteredCitationMap(self, action, data):
 		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
