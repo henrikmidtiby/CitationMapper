@@ -61,9 +61,13 @@ class GuiArticleDetails:
 		except:
 			try:
 				self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
+				nreferencesInGraph = graph.in_degree(url)
+				ncitationsInGraph = graph.out_degree(url)
+				self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
+				self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
 			except:
 				pass
-		
+
 		self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
 
 def main():
