@@ -3,6 +3,7 @@ import sys
 import networkx
 import math
 import StringIO
+import pprint
 
 
 class citationmapbuilder:
@@ -67,26 +68,67 @@ class citationmapbuilder:
 
 
 	def newIdentifierInspiredByWos2Pajek(self, ident):
-		# Match journal entries
+		# Basically ignore the abbreviated journal name
+		# Match journal entries (Volume and page present)
+		# VIENOT TC, 2007, LIB Q, V77, P157
 		crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
 		res = crPattern.match(ident)
 		if(res):
+			# VIENOT TC,2007,V77,P157
 			return "%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4), res.group(5))
+
 		# Match book entries
 		crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
 		res = crPattern2.match(ident)
 		if(res):
 			return "%s,%s,%s" % (res.group(1), res.group(2), res.group(4))
+
+		# Match cases with only volume and not page numbers
+		# OLANDER B, 2007, INFORM RES, V12
+		crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
+		res = crPattern.match(ident)
+		if(res):
+			# OLANDER B,2007,V12
+			return "%s,%s,%s" % (res.group(1), res.group(2), res.group(4))
+
+		# Match book entries
+		# FRION P, 2009, P68
+		crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
+		res = crPattern2.match(ident)
+		if(res):
+			# FRION P,2009,P68
+			return "%s,%s,%s" % (res.group(1), res.group(2), res.group(3))
 		return "ErrorInMatching %s" % ident
 
 
 	def formatIdentifier(self, values):
 		try:
 			author = values["AU"][0].replace(",", "").upper()
-			if(values["PT"][0] == "J"):
-				return "%s, %s, %s, V%s, P%s" % (author, values["PY"][0], values["J9"][0], values["VL"][0], values["BP"][0])
-			return "%s, %s, %s, P%s" % (author, values["PY"][0], values["J9"][0], values["BP"][0])
+			identString = author
+			try:
+				identString = "%s, %s" % (identString, values["PY"][0])
+			except:
+				pass
+			try:
+				identString = "%s, %s" % (identString, values["J9"][0])
+			except:
+				pass
+			try:
+				identString = "%s, V%s" % (identString, values["VL"][0])
+			except:
+				pass
+			try:
+				identString = "%s, P%s" % (identString, values["BP"][0])
+			except:
+				pass
+			return(identString)
 		except:
+			logfile = open('logfile.txt', 'a')
+			allKnowledgeAboutArticle = StringIO.StringIO()
+			pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
+			pp.pprint(values)
+			fullInfoAsText = allKnowledgeAboutArticle.getvalue()
+			logfile.write(fullInfoAsText)
 			return "Conversion error: %s %s %s" % (values["PT"][0], values["AU"][0], values["PY"][0])
 
 	def analyzeGraph(self):
