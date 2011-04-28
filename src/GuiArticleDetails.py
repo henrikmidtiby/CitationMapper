@@ -32,7 +32,7 @@ class GuiArticleDetails:
 		self.nodescrolledwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
 		self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		self.nodescrolledwindow.add(self.text)
-	
+
 	def updateArticleInformation(self, url, article = None, graph = None):
 
 		allKnowledgeAboutArticle = StringIO.StringIO()

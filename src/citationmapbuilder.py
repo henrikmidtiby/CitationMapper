@@ -69,6 +69,7 @@ class citationmapbuilder:
 
 	def newIdentifierInspiredByWos2Pajek(self, ident):
 		# Basically ignore the abbreviated journal name
+
 		# Match journal entries (Volume and page present)
 		# VIENOT TC, 2007, LIB Q, V77, P157
 		crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")

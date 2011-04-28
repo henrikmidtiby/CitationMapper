@@ -34,7 +34,7 @@ class GuiOptionsWindow:
 		self.listofnodesbutton = gtk.Button("Get list of nodes")
 		labelReferences = gtk.Label("Number of references")
 		labelCitations = gtk.Label("Number of citations")
-		self.labelGraphSize = gtk.Label("Graph size: nodes / edges")
+		self.labelGraphSize = gtk.Label("Graph size: nodes")
 		self.showgraphbutton.show()
 		self.exportgraphbutton.show()
 		self.listofnodesbutton.show()
