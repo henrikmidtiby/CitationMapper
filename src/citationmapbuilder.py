@@ -48,7 +48,6 @@ class citationmapbuilder:
 
 			res = erPattern.match(line)
 			if(res):
-				#print("<nodes count=%d>" % len(self.graph.nodes()))
 				rawIdentifier = self.formatIdentifier(values)
 				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 				for line in crlines:
