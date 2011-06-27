@@ -15,17 +15,26 @@ import gtk
 import pprint
 import StringIO
 import string
+import webbrowser
+
+def open_url(widget,url):
+	webbrowser.open(url)
 
 class GuiArticleDetails:
 	def __init__(self):
 		self.nodeinformationwindow = gtk.Window()
 		self.nodeinformationwindow.set_title("Article details")
 		self.nodeinformationwindow.set_size_request(500, 200)
+		self.vbox = gtk.VBox(False, 0)
+		self.linklabel = gtk.LinkButton("http://www.sdu.dk", label="Locate article on Web of Science")
 		self.text = gtk.TextView()
 		self.generateNodeScrolledWindow()
 		self.nodescrolledwindow.show_all()
-		self.nodeinformationwindow.add(self.nodescrolledwindow)
-		self.nodeinformationwindow.show()
+		self.vbox.pack_start(self.linklabel, False, False, 0)
+		self.vbox.pack_start(self.nodescrolledwindow, True, True, 0)
+		self.nodeinformationwindow.add(self.vbox)
+		self.nodeinformationwindow.show_all()
+        gtk.link_button_set_uri_hook(open_url)
 
 	def generateNodeScrolledWindow(self):
 		self.nodescrolledwindow = gtk.ScrolledWindow()
@@ -34,7 +43,6 @@ class GuiArticleDetails:
 		self.nodescrolledwindow.add(self.text)
 
 	def updateArticleInformation(self, url, article = None, graph = None):
-
 		allKnowledgeAboutArticle = StringIO.StringIO()
 		pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
 		pp.pprint(article)
@@ -58,6 +66,14 @@ class GuiArticleDetails:
 			self.text.get_buffer().insert_at_cursor('\n')
 			self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
 			self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
+			self.text.get_buffer().insert_at_cursor('\n')
+
+			baseurl = "http://gateway.isiknowledge.com/gateway/Gateway.cgi?GWVersion=2&SrcApp=SFX&SrcAuth=SFX&DestApp=WOS&DestLinkType=GeneralSearchSummary"
+			titlematch = "&title=%s" % title.replace(" ", "+")
+			yearmatch = "&Period=Year+Selection&years=1985+1986+1987"
+			searchurl = baseurl +  titlematch
+			self.linklabel.set_uri(searchurl)
+
 		except:
 			try:
 				self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
@@ -65,6 +81,7 @@ class GuiArticleDetails:
 				ncitationsInGraph = graph.out_degree(url)
 				self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
 				self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
+
 			except:
 				pass
 
