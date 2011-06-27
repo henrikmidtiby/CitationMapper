@@ -342,6 +342,8 @@ class GuiMainWindow:
 		listOfNodes.nodesTreestore.clear()
 		for key in self.citationmap.graphForAnalysis.nodes():
 			try:
+				networkCitations = self.origNetwork.out_degree(key)
+				networkReferences = self.origNetwork.in_degree(key)
 				article = self.citationmap.articles[key]
 				year = int(article['PY'][0])
 				SO = string.join(article['SO'])
@@ -349,9 +351,9 @@ class GuiMainWindow:
 				Authors = string.join(article['AU'], ' and ')
 				TC = int(article['TC'][0])
 				NR = int(article['NR'][0])
-				piter = listOfNodes.nodesTreestore.append(None, [key, year, SO, Authors, Title, TC, NR])
+				piter = listOfNodes.nodesTreestore.append(None, [key, year, networkCitations, networkReferences, TC, NR, SO, Authors, Title])
 			except:
-				piter = listOfNodes.nodesTreestore.append(None, [key, 0, "", "", "", 0, 0])
+				piter = listOfNodes.nodesTreestore.append(None, [key, 0, networkCitations, networkReferences, 0, 0, "", "", ""])
 				pass
 
 	def showAboutDialog(self, action):

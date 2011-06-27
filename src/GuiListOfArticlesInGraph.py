@@ -34,7 +34,7 @@ class GuiListOfArticlesInGraph:
 
 	def generateNodesTreeStore(self):
 		# create a TreeStore with one string column to use as the model
-		self.nodesTreestore = gtk.TreeStore(str, int, str, str, str, int, int)
+		self.nodesTreestore = gtk.TreeStore(str, int, int, int, int, int, str, str, str)
 
 
 	def generateNodesTreeView(self):
@@ -42,7 +42,7 @@ class GuiListOfArticlesInGraph:
 		self.nodesTreeview = gtk.TreeView(tmsort)
 		self.nodesTreeview.connect("row-activated", self.row_clicked)
 
-		column_names = ['ID', 'Year', 'Journal', 'Authors', 'Title', 'Citations', 'References']
+		column_names = ['ID', 'Year', 'In graph citations', 'In graph references', 'Total citations', 'Total references', 'Journal', 'Authors', 'Title']
 
 		self.tvcolumn = [None] * len(column_names)
 		for n in range(0, len(column_names)):
