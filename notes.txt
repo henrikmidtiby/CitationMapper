@@ -10,4 +10,3 @@ Input from talk with Anita
 * Close all article details windows
 * Insert ccl search string in article details, to locate article in wos
 * On data reload, reset the sliders
-* Warn about generating large graph (eg. more than 400 nodes)
