@@ -351,6 +351,7 @@ class GuiMainWindow:
 				NR = int(article['NR'][0])
 				piter = listOfNodes.nodesTreestore.append(None, [key, year, SO, Authors, Title, TC, NR])
 			except:
+				piter = listOfNodes.nodesTreestore.append(None, [key, 0, "", "", "", 0, 0])
 				pass
 
 	def showAboutDialog(self, action):
