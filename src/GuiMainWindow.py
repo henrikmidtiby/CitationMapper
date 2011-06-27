@@ -254,8 +254,12 @@ class GuiMainWindow:
 		self.origNetwork = self.citationmap.graph.copy()
 		self.origNetworkCitations = self.origNetwork.out_degree().values()
 		self.origNetworkReferences = self.origNetwork.in_degree().values()
-		self.maxCitations = max(self.origNetworkCitations)
-		self.maxReferences = max(self.origNetworkReferences)
+		try:
+			self.maxCitations = max(self.origNetworkCitations)
+			self.maxReferences = max(self.origNetworkReferences)
+		except:
+			self.maxCitations = 20
+			self.maxReferences = 20
 
 	def filterCurrentCitationMap(self):
 		self.citationmap.graph = self.origNetwork.copy()
