@@ -176,7 +176,7 @@ class GuiMainWindow:
 			self.on_url_clicked(widget, data, event)
 			self.changeColorOfNode(data, (1, 0.75, 0.75, 1))
 		else:
-			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu()
+			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(self.openfilename)
 			articleContextMenu.showContextMenu(widget, data, event)
 			self.printNodeInformation()
 
@@ -232,15 +232,12 @@ class GuiMainWindow:
 		else:
 			chooser.destroy()
 
-
-
 	def on_reload(self, action):
 		if self.openfilename is not None:
 			try:
 				self.open_directory(self.openfilename)
 			except IOError:
 				pass
-
 
 	def open_directory(self, directory):
 		self.openfilename = directory

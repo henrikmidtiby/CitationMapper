@@ -13,15 +13,20 @@
 import gtk
 
 class GuiArticleContextMenu:
-	def __init__(self):
+	def __init__(self, directoryName):
+		self.opendirectory = directoryName
 		pass
+
+	def addToBanList(self, widget, data=None):
+		print "AddingToBanList dir: %s  item: %s" % (self.opendirectory, data)
+		return False
 
 	def hello(self, widget, data=None):
 		print "hello"
 		print data
 		return False
 
-	def showContextMenu(self, widget, data, event):
+	def showContextMenuOld(self, widget, data, event):
 		menu = gtk.Menu()
 		one = gtk.MenuItem("One")
 		menu.append(one)
@@ -30,9 +35,18 @@ class GuiArticleContextMenu:
 		two.connect("activate", self.hello)
 		submenu.append(two)
 		one.set_submenu(submenu)
-		three = gtk.MenuItem("Three")
+		three = gtk.MenuItem("Three") 
 		three.connect("activate", self.hello)
 		menu.append(three)
+		menu.show_all()
+		menu.popup(None, None, None, event.button, event.get_time())
+		return True
+
+	def showContextMenu(self, widget, data, event):
+		menu = gtk.Menu()
+		one = gtk.MenuItem("Add to ban list")
+		one.connect("activate", self.addToBanList, data)
+		menu.append(one)
 		menu.show_all()
 		menu.popup(None, None, None, event.button, event.get_time())
 		return True
