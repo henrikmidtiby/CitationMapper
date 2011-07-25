@@ -2,6 +2,8 @@ Requirements:
 * Recent version of networkx. 0.99 does not work while 1.4 does.
 sudo easy_install networkx
 
+* In ubuntu 11.04 is it possible to install the package python-networkx
+
 Todos:
 * More general colouring options.
 * Locate missing matches in the downloaded citations.
