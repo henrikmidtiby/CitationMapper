@@ -1,5 +1,5 @@
 run:
-	python src/CitationMapper.py data/
+	python src/CitationMapper.py inputfiles/case1/
 
 exe: 
 	cd src && /cygdrive/c/Python27/python.exe py2exescript.py py2exe
