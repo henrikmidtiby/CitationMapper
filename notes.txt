@@ -10,4 +10,3 @@ Todos:
 
 Input from talk with Anita
 * Close all article details windows
-* Insert ccl search string in article details, to locate article in wos

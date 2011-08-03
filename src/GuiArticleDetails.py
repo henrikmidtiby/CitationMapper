@@ -11,6 +11,7 @@
 #!/usr/bin/env python
 
 
+import re
 import gtk
 import pprint
 import StringIO
@@ -76,6 +77,16 @@ class GuiArticleDetails:
 
 		except:
 			try:
+				# BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
+				pattern = re.compile(".*DOI (.*)")
+				res = pattern.match(article["Journal"])
+				if(res):
+					print(res.group(1))
+					self.linklabel.set_uri("http://dx.doi.org/%s" % res.group(1))
+					self.linklabel.set_label("Locate by DOI")
+				else:
+					print("Not found")
+
 				self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
 				nreferencesInGraph = graph.in_degree(url)
 				ncitationsInGraph = graph.out_degree(url)
