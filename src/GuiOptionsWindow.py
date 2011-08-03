@@ -29,11 +29,9 @@ class GuiOptionsWindow:
 		self.hscrollbarCitations = gtk.HScale(self.adjMinNumberOfCitations)
 		self.hscrollbarCitations.set_digits(0)
 		self.hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
-		self.showgraphbutton = gtk.Button("Show graph")
 		labelReferences = gtk.Label("Number of references")
 		labelCitations = gtk.Label("Number of citations")
 		self.labelGraphSize = gtk.Label("Graph size: nodes")
-		self.showgraphbutton.show()
 		labelReferences.show()
 		labelCitations.show()
 		self.labelGraphSize.show()
@@ -44,11 +42,16 @@ class GuiOptionsWindow:
 		self.vbox.pack_start(labelCitations, True, True, 0)
 		self.vbox.pack_start(self.hscrollbarCitations, True, True, 0)
 		self.vbox.pack_start(self.labelGraphSize, True, True, 0)
-		self.vbox.pack_start(self.showgraphbutton, True, True, 0)
+		self.addShowGraphButton()
 		self.addExportGraphButton()
 		self.addListOfNodesButton()
 		self.vbox.show()
 		searchoptionswindow.show()
+
+	def addShowGraphButton(self):
+		self.showgraphbutton = gtk.Button("Show graph")
+		self.showgraphbutton.show()
+		self.vbox.pack_start(self.showgraphbutton, True, True, 0)
 
 	def addExportGraphButton(self):
 		self.exportgraphbutton = gtk.Button("Export graph")
