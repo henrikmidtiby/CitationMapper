@@ -17,10 +17,10 @@ class GuiOptionsWindow:
 	minNumberOfCitations = 3
 
 	def __init__(self, maxCitations=50, maxReferences=50):
-		searchoptionswindow = gtk.Window()
-		searchoptionswindow.set_border_width(10)
+		self.searchoptionswindow = gtk.Window()
+		self.searchoptionswindow.set_border_width(10)
 		self.vbox = gtk.VBox(False, 0)
-		searchoptionswindow.add(self.vbox)
+		self.searchoptionswindow.add(self.vbox)
 		self.addLabelReferences()
 		self.addHscrollbarReferences(maxReferences)
 		self.addLabelCitations()
@@ -30,7 +30,7 @@ class GuiOptionsWindow:
 		self.addExportGraphButton()
 		self.addListOfNodesButton()
 		self.vbox.show()
-		searchoptionswindow.show()
+		self.searchoptionswindow.show()
 
 	def addLabelReferences(self):
 		labelReferences = gtk.Label("Number of references")
