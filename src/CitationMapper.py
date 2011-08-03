@@ -257,6 +257,9 @@ class GuiMainWindow:
 
 	def updateOrigNetwork(self):
 		self.origNetwork = self.citationmap.graph.copy()
+		self.calculateNetworkProperties()
+
+	def calculateNetworkProperties(self):
 		self.origNetworkCitations = self.origNetwork.out_degree().values()
 		self.origNetworkReferences = self.origNetwork.in_degree().values()
 		try:
@@ -361,7 +364,19 @@ class GuiMainWindow:
 				pass
 
 	def ignoreArticlesInBanFile(self, action, data):
-		print("Hej")
+		filename = "%s/banlist" % self.openfilename 
+		try:
+			fh = open(filename)
+			for line in fh:
+				articleIdentifier = line[:-1]
+				try:
+					self.origNetwork.remove_node(articleIdentifier)
+				except:
+					pass
+		except:
+			pass
+		self.calculateNetworkProperties()
+		self.showOptionsWindow()
 
 	def showAboutDialog(self, action):
 		gad = GuiAboutDialog.GuiAboutDialog()
