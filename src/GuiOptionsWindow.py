@@ -29,6 +29,7 @@ class GuiOptionsWindow:
 		self.addShowGraphButton()
 		self.addExportGraphButton()
 		self.addListOfNodesButton()
+		self.addIgnoreArticlesButton()
 		self.vbox.show()
 		self.searchoptionswindow.show()
 
@@ -77,6 +78,11 @@ class GuiOptionsWindow:
 		self.listofnodesbutton = gtk.Button("Get list of nodes")
 		self.listofnodesbutton.show()
 		self.vbox.pack_start(self.listofnodesbutton, True, True, 0)
+
+	def addIgnoreArticlesButton(self):
+		self.ignoreArticlesButton = gtk.Button("Ignore articles in ban file")
+		self.ignoreArticlesButton.show()
+		self.vbox.pack_start(self.ignoreArticlesButton, True, True, 0)
 
 def main():
 	guw = GuiOptionsWindow()

@@ -219,6 +219,7 @@ class GuiMainWindow:
 		self.optionsWindow.showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
 		self.optionsWindow.exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
 		self.optionsWindow.listofnodesbutton.connect("clicked", self.getListOfNodes, None)
+		self.optionsWindow.ignoreArticlesButton.connect("clicked", self.ignoreArticlesInBanFile, None)
 		self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
 	def on_open(self, action):
@@ -358,6 +359,9 @@ class GuiMainWindow:
 			except:
 				piter = listOfNodes.nodesTreestore.append(None, [key, 0, networkCitations, networkReferences, 0, 0, "", "", ""])
 				pass
+
+	def ignoreArticlesInBanFile(self, action, data):
+		print("Hej")
 
 	def showAboutDialog(self, action):
 		gad = GuiAboutDialog.GuiAboutDialog()
