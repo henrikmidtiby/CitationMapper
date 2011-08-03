@@ -21,9 +21,7 @@ class GuiOptionsWindow:
 		searchoptionswindow.set_border_width(10)
 		self.vbox = gtk.VBox(False, 0)
 		searchoptionswindow.add(self.vbox)
-		labelReferences = gtk.Label("Number of references")
-		labelReferences.show()
-		self.vbox.pack_start(labelReferences, True, True, 0)
+		self.addLabelReferences()
 		self.addHscrollbarReferences(maxReferences)
 		self.addLabelCitations()
 		self.addHscrollbarCitations(maxCitations)
@@ -33,6 +31,11 @@ class GuiOptionsWindow:
 		self.addListOfNodesButton()
 		self.vbox.show()
 		searchoptionswindow.show()
+
+	def addLabelReferences(self):
+		labelReferences = gtk.Label("Number of references")
+		labelReferences.show()
+		self.vbox.pack_start(labelReferences, True, True, 0)
 
 	def addHscrollbarReferences(self, maxReferences):
 		self.adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=maxReferences, step_incr=1, page_incr=5, page_size=0)
