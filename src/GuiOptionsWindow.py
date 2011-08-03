@@ -26,13 +26,11 @@ class GuiOptionsWindow:
 		self.hscrollbarReferences.set_digits(0)
 		self.hscrollbarReferences.set_value_pos(gtk.POS_LEFT)
 		labelReferences = gtk.Label("Number of references")
-		labelCitations = gtk.Label("Number of citations")
 		labelReferences.show()
-		labelCitations.show()
 		self.hscrollbarReferences.show()
 		self.vbox.pack_start(labelReferences, True, True, 0)
 		self.vbox.pack_start(self.hscrollbarReferences, True, True, 0)
-		self.vbox.pack_start(labelCitations, True, True, 0)
+		self.addLabelCitations()
 		self.addHscrollbarCitations(maxCitations)
 		self.addLabelGraphSize()
 		self.addShowGraphButton()
@@ -40,6 +38,11 @@ class GuiOptionsWindow:
 		self.addListOfNodesButton()
 		self.vbox.show()
 		searchoptionswindow.show()
+
+	def addLabelCitations(self):
+		labelCitations = gtk.Label("Number of citations")
+		labelCitations.show()
+		self.vbox.pack_start(labelCitations, True, True, 0)
 
 	def addHscrollbarCitations(self, maxCitations):
 		self.adjMinNumberOfCitations = gtk.Adjustment(value=self.minNumberOfCitations, lower=0, upper=maxCitations, step_incr=1, page_incr=5, page_size=0)
