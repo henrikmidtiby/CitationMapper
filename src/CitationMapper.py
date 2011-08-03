@@ -208,6 +208,11 @@ class GuiMainWindow:
 		self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
 	def showOptionsWindow(self):
+		try:
+			self.optionsWindow.searchoptionswindow.destroy()
+		except:
+			pass
+
 		self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow(self.maxCitations, self.maxReferences)
 		self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
 		self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
