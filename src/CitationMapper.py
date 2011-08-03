@@ -241,6 +241,7 @@ class GuiMainWindow:
 		if self.openfilename is not None:
 			try:
 				self.open_directory(self.openfilename)
+				self.showOptionsWindow()
 			except IOError:
 				pass
 
