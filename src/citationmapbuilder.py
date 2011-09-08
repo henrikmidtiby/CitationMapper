@@ -11,10 +11,12 @@ class citationmapbuilder:
 		self.graph = networkx.DiGraph()
 		self.graphForAnalysis = self.graph.copy()
 		self.articles = {}
+		self.outdegrees = None
+		self.indegrees = None
 
 	def parsefile(self, filename):
 		#print("<parsing alt=%s>" % filename)
-		fh = open(filename)
+		filehandle = open(filename)
 		pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
 		repeatedPattern = re.compile("^   (.*)")
 		crPattern = re.compile("^.. (.*?, \d{4}, .*?, V\d+, P\d+)")
@@ -24,7 +26,7 @@ class citationmapbuilder:
 		lastSeenCode = "XX"
 		values = {}
 		# Parse file line by line
-		for line in fh:
+		for line in filehandle:
 			res = pattern.match(line)
 			if(res):
 				lastSeenCode = res.group(1)
@@ -107,26 +109,27 @@ class citationmapbuilder:
 			identString = author
 			try:
 				identString = "%s, %s" % (identString, values["PY"][0])
-			except:
+			except KeyError:
 				pass
 			try:
 				identString = "%s, %s" % (identString, values["J9"][0])
-			except:
+			except KeyError:
 				pass
 			try:
 				identString = "%s, V%s" % (identString, values["VL"][0])
-			except:
+			except KeyError:
 				pass
 			try:
 				identString = "%s, P%s" % (identString, values["BP"][0])
-			except:
+			except KeyError:
 				pass
 			return(identString)
 		except:
+			print "Unexpected error:", sys.exc_info()[0]
 			logfile = open('logfile.txt', 'a')
 			allKnowledgeAboutArticle = StringIO.StringIO()
-			pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
-			pp.pprint(values)
+			formattedValues = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
+			formattedValues.pprint(values)
 			fullInfoAsText = allKnowledgeAboutArticle.getvalue()
 			logfile.write(fullInfoAsText)
 			return "Conversion error: %s %s %s" % (values["PT"][0], values["AU"][0], values["PY"][0])
@@ -194,7 +197,7 @@ class citationmapbuilder:
 				else:
 					color = "#ff0000"
 				firstauthor = self.articles[key]["AU"][0]
-			except:
+			except(KeyError):
 				pass
 			nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
 			fontsize = math.sqrt(self.outdegrees[key] + 1)*2
@@ -219,8 +222,7 @@ class citationmapbuilder:
 
 
 
-if __name__ == '__main__':
-
+def main():
 	output = StringIO.StringIO()
 	cmb = citationmapbuilder()
 
@@ -235,6 +237,8 @@ if __name__ == '__main__':
 
 		print(temp)
 
+if __name__ == '__main__':
+	main()
 
 
 
