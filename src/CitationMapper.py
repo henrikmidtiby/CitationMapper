@@ -345,7 +345,7 @@ class GuiMainWindow:
 				listOfNodes.nodesTreestore.append(None, 
 					[key, year, networkCitations, networkReferences, 
 						fieldTC, fieldNR, fieldSO, fieldAuthors, fieldTitle])
-			except:
+			except(KeyError):
 				listOfNodes.nodesTreestore.append(None, 
 					[key, 0, networkCitations, networkReferences, 
 						0, 0, "", "", ""])

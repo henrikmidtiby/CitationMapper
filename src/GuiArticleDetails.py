@@ -17,17 +17,20 @@ import pprint
 import StringIO
 import string
 import webbrowser
+import sys
 
-def open_url(widget,url):
+def open_url(widget, url):
 	webbrowser.open(url)
 
 class GuiArticleDetails:
 	def __init__(self):
+		self.nodescrolledwindow = None
 		self.nodeinformationwindow = gtk.Window()
 		self.nodeinformationwindow.set_title("Article details")
 		self.nodeinformationwindow.set_size_request(500, 200)
 		self.vbox = gtk.VBox(False, 0)
-		self.linklabel = gtk.LinkButton("http://www.sdu.dk", label="Locate article on Web of Science")
+		self.linklabel = gtk.LinkButton("http://www.sdu.dk", 
+			label="Locate article on Web of Science")
 		self.text = gtk.TextView()
 		self.generateNodeScrolledWindow()
 		self.nodescrolledwindow.show_all()
@@ -35,7 +38,7 @@ class GuiArticleDetails:
 		self.vbox.pack_start(self.nodescrolledwindow, True, True, 0)
 		self.nodeinformationwindow.add(self.vbox)
 		self.nodeinformationwindow.show_all()
-        gtk.link_button_set_uri_hook(open_url)
+		gtk.link_button_set_uri_hook(open_url)
 
 	def generateNodeScrolledWindow(self):
 		self.nodescrolledwindow = gtk.ScrolledWindow()
@@ -51,9 +54,7 @@ class GuiArticleDetails:
 
 		try:
 			author = string.join(article["AU"], ' and ')
-			year = article["PY"][0]
 			title = string.join(article["TI"], " ")
-			page = article["BP"][0]
 			journal = article["SO"][0]
 			nreferences = article["NR"][0]
 			nreferencesInGraph = graph.in_degree(url)
@@ -75,7 +76,7 @@ class GuiArticleDetails:
 			searchurl = baseurl +  titlematch
 			self.linklabel.set_uri(searchurl)
 
-		except:
+		except(KeyError):
 			try:
 				# BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
 				pattern = re.compile(".*DOI (.*)")
@@ -94,12 +95,12 @@ class GuiArticleDetails:
 				self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
 
 			except:
-				pass
+				print "Unexpected error:", sys.exc_info()[0]
 
 		self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
 
 def main():
-	gad = GuiArticleDetails()
+	GuiArticleDetails()
 	gtk.main()
 
 if __name__ == "__main__":

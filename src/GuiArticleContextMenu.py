@@ -15,14 +15,16 @@ import gtk
 class GuiArticleContextMenu:
 	def __init__(self, directoryName):
 		self.opendirectory = directoryName
-		pass
 
 	def addToBanList(self, widget, data=None):
 		print "AddingToBanList dir: %s  item: %s" % (self.opendirectory, data)
 		filename = "%s/banlist" % self.opendirectory
-		fh = open(filename, 'a')
-		fh.write("%s\n" % data)
-		fh.close()
+		try:
+			filehandle = open(filename, 'a')
+			filehandle.write("%s\n" % data)
+		except(IOError):
+			pass
+		filehandle.close()
 		return False
 
 	def hello(self, widget, data=None):
