@@ -339,12 +339,11 @@ class GuiMainWindow:
 				fieldAuthors = string.join(article['AU'], ' and ')
 				fieldTC = int(article['TC'][0])
 				fieldNR = int(article['NR'][0])
-				piter = listOfNodes.nodesTreestore.append(None, 
+				listOfNodes.nodesTreestore.append(None, 
 					[key, year, networkCitations, networkReferences, 
 						fieldTC, fieldNR, fieldSO, fieldAuthors, fieldTitle])
 			except:
-				print("Pokkers")
-				piter = listOfNodes.nodesTreestore.append(None, 
+				listOfNodes.nodesTreestore.append(None, 
 					[key, 0, networkCitations, networkReferences, 
 						0, 0, "", "", ""])
 
@@ -364,7 +363,7 @@ class GuiMainWindow:
 		self.showOptionsWindow()
 
 	def showAboutDialog(self, action):
-		gad = GuiAboutDialog.GuiAboutDialog()
+		GuiAboutDialog.GuiAboutDialog()
 
 	def exportToPDF(self, action):
 		chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
