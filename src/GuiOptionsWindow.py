@@ -18,6 +18,16 @@ class GuiOptionsWindow:
 	graphSize = 0
 
 	def __init__(self, maxCitations=50, maxReferences=50):
+		self.ignoreArticlesButton = None
+		self.hscrollbarCitations = None
+		self.hscrollbarReferences = None
+		self.adjMinNumberOfCitations = None
+		self.adjMinNumberOfReferences = None
+		self.exportgraphbutton = None
+		self.labelGraphSize = None
+		self.listofnodesbutton = None
+		self.showgraphbutton = None
+
 		self.searchoptionswindow = gtk.Window()
 		self.searchoptionswindow.set_border_width(10)
 		self.vbox = gtk.VBox(False, 0)
@@ -40,7 +50,9 @@ class GuiOptionsWindow:
 		self.vbox.pack_start(labelReferences, True, True, 0)
 
 	def addHscrollbarReferences(self, maxReferences):
-		self.adjMinNumberOfReferences = gtk.Adjustment(value=self.minNumberOfReferences, lower=0, upper=maxReferences, step_incr=1, page_incr=5, page_size=0)
+		self.adjMinNumberOfReferences = gtk.Adjustment(
+			value=self.minNumberOfReferences, lower=0, upper=maxReferences, 
+			step_incr=1, page_incr=5, page_size=0)
 		self.hscrollbarReferences = gtk.HScale(self.adjMinNumberOfReferences)
 		self.hscrollbarReferences.set_digits(0)
 		self.hscrollbarReferences.set_value_pos(gtk.POS_LEFT)
@@ -53,7 +65,9 @@ class GuiOptionsWindow:
 		self.vbox.pack_start(labelCitations, True, True, 0)
 
 	def addHscrollbarCitations(self, maxCitations):
-		self.adjMinNumberOfCitations = gtk.Adjustment(value=self.minNumberOfCitations, lower=0, upper=maxCitations, step_incr=1, page_incr=5, page_size=0)
+		self.adjMinNumberOfCitations = gtk.Adjustment(
+			value=self.minNumberOfCitations, lower=0, upper=maxCitations, 
+			step_incr=1, page_incr=5, page_size=0)
 		self.hscrollbarCitations = gtk.HScale(self.adjMinNumberOfCitations)
 		self.hscrollbarCitations.set_digits(0)
 		self.hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
@@ -86,7 +100,7 @@ class GuiOptionsWindow:
 		self.vbox.pack_start(self.ignoreArticlesButton, True, True, 0)
 
 def main():
-	guw = GuiOptionsWindow()
+	GuiOptionsWindow()
 	gtk.main()
 
 if __name__ == '__main__':

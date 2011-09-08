@@ -11,11 +11,15 @@
 #!/usr/bin/env python
 
 import gtk
-import networkx
 import StringIO
 
 class GuiListOfArticlesInGraph:
 	def __init__(self):
+		self.tvcolumn = None
+		self.nodesTreestore = None
+		self.nodesTreeview = None
+		self.nodescrolledwindow = None
+
 		self.nodewindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.nodewindow.set_title("List of nodes")
 		self.nodewindow.set_size_request(200, 200)
@@ -69,8 +73,8 @@ class GuiListOfArticlesInGraph:
 		print(text)
 
 	def exportListOfNodes(self, widget, temp2 = None):
-		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
-						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
+						buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 		if chooser.run() == gtk.RESPONSE_OK:
 			filename = chooser.get_filename()
 			chooser.destroy()
