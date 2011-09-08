@@ -65,6 +65,18 @@ class GuiMainWindow:
 
 
 	def __init__(self):
+		self.origNetwork = None
+		self.optionsWindow = None
+		self.actiongroup = None
+		self.maxReferences = None
+		self.articleDetailsWindow = None
+		self.quit_dialog = None
+		self.citationmapperwindow = None
+		self.origNetworkCitations = None
+		self.origNetworkReferences = None
+		self.maxCitations = None
+		self.uimanager = None
+		self.mapview = None
 		self.setupWindowContents()
 		self.setupConnections()
 		self.citationmap = citationmapbuilder.citationmapbuilder()
