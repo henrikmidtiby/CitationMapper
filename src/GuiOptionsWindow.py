@@ -15,6 +15,7 @@ import gtk
 class GuiOptionsWindow:
 	minNumberOfReferences = 1
 	minNumberOfCitations = 3
+	graphSize = 0
 
 	def __init__(self, maxCitations=50, maxReferences=50):
 		self.searchoptionswindow = gtk.Window()
