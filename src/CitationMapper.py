@@ -11,10 +11,8 @@
 #!/usr/bin/env python
 
 import os
-import re
 import gtk
 import StringIO
-import pprint
 import sys
 
 import xdot
