@@ -340,9 +340,13 @@ class GuiMainWindow:
 				Authors = string.join(article['AU'], ' and ')
 				TC = int(article['TC'][0])
 				NR = int(article['NR'][0])
-				piter = listOfNodes.nodesTreestore.append(None, [key, year, networkCitations, networkReferences, TC, NR, SO, Authors, Title])
+				piter = listOfNodes.nodesTreestore.append(None, 
+					[key, year, networkCitations, networkReferences, 
+						TC, NR, SO, Authors, Title])
 			except:
-				piter = listOfNodes.nodesTreestore.append(None, [key, 0, networkCitations, networkReferences, 0, 0, "", "", ""])
+				piter = listOfNodes.nodesTreestore.append(None, 
+					[key, 0, networkCitations, networkReferences, 
+						0, 0, "", "", ""])
 				pass
 
 	def ignoreArticlesInBanFile(self, action, data):
