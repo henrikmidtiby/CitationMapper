@@ -16,7 +16,6 @@ import gtk
 import StringIO
 import pprint
 import sys
-import string
 
 import xdot
 import citationmapbuilder
@@ -139,22 +138,6 @@ class GuiMainWindow:
 
 		self.mapview.set_dotcode(self.dotcode)
 
-	def printNodeInformation(self):
-		return
-		temp = self.mapview.graph
-		pp = pprint.PrettyPrinter()
-		#for shape in temp.shapes:
-		#	pp.pprint(shape)
-		#for edge in temp.edges:
-		#	pp.pprint(edge)
-		for node in temp.nodes:
-			for shape in node.shapes:
-				if(isinstance(shape, xdot.TextShape)):
-					print(shape.t)
-				if(isinstance(shape, xdot.EllipseShape)):
-					shape.pen.fillcolor = (1, 0, 1, 1)
-					shape.pen.color = (1, 0, 1, 1)
-
 	def changeColorOfNode(self, url, newcolor):
 		temp = self.mapview.graph
 		for node in temp.nodes:
@@ -178,7 +161,6 @@ class GuiMainWindow:
 		else:
 			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(self.openfilename)
 			articleContextMenu.showContextMenu(widget, data, event)
-			self.printNodeInformation()
 
 	def on_url_clicked(self, widget, url, event):
 		self.articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
