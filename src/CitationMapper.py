@@ -308,8 +308,8 @@ class GuiMainWindow:
 
 
 	def exportFilteredCitationMap(self, action, data):
-		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
-						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
+						buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 		if chooser.run() == gtk.RESPONSE_OK:
 			filename = chooser.get_filename()
 			chooser.destroy()
@@ -366,8 +366,8 @@ class GuiMainWindow:
 		gad = GuiAboutDialog.GuiAboutDialog()
 
 	def exportToPDF(self, action):
-		chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
-						buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
+						buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 		if chooser.run() == gtk.RESPONSE_OK:
 			filename = chooser.get_filename()
 			chooser.destroy()
