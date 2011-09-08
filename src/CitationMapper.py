@@ -296,15 +296,6 @@ class GuiMainWindow:
 		self.quit_dialog.add_button( gtk.STOCK_YES, 1 )
 		self.quit_dialog.add_button( gtk.STOCK_NO,  2 )
 
-		'''
-		# Using non-null parameter list when creating dialog,
-		# the last six calls can be written as:
-		self.quit_dialog = gtk.Dialog( 'Conformation', self,
-									   gtk.DIALOG_MODAL,
-									   ( gtk.STOCK_YES, 1,
-										 gtk.STOCK_NO,  2 ) )
-		'''
-
 		# Create label
 		label = gtk.Label( 'Will you really visualize this huge graph? (# nodes = %d)' % nNodes )
 
@@ -367,9 +358,9 @@ class GuiMainWindow:
 				articleIdentifier = line[:-1]
 				try:
 					self.origNetwork.remove_node(articleIdentifier)
-				except:
+				except IOError:
 					pass
-		except:
+		except IOError:
 			pass
 		self.calculateNetworkProperties()
 		self.showOptionsWindow()
