@@ -14,6 +14,7 @@ import os
 import gtk
 import StringIO
 import sys
+import string
 
 import xdot
 import citationmapbuilder
@@ -333,19 +334,19 @@ class GuiMainWindow:
 				networkReferences = self.origNetwork.in_degree(key)
 				article = self.citationmap.articles[key]
 				year = int(article['PY'][0])
-				SO = string.join(article['SO'])
-				Title = string.join(article['TI'])
-				Authors = string.join(article['AU'], ' and ')
-				TC = int(article['TC'][0])
-				NR = int(article['NR'][0])
+				fieldSO = string.join(article['SO'])
+				fieldTitle = string.join(article['TI'])
+				fieldAuthors = string.join(article['AU'], ' and ')
+				fieldTC = int(article['TC'][0])
+				fieldNR = int(article['NR'][0])
 				piter = listOfNodes.nodesTreestore.append(None, 
 					[key, year, networkCitations, networkReferences, 
-						TC, NR, SO, Authors, Title])
+						fieldTC, fieldNR, fieldSO, fieldAuthors, fieldTitle])
 			except:
+				print("Pokkers")
 				piter = listOfNodes.nodesTreestore.append(None, 
 					[key, 0, networkCitations, networkReferences, 
 						0, 0, "", "", ""])
-				pass
 
 	def ignoreArticlesInBanFile(self, action, data):
 		filename = "%s/banlist" % self.openfilename 
