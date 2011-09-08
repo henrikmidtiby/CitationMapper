@@ -7,6 +7,7 @@ sudo easy_install networkx
 Todos:
 * More general colouring options.
 * Locate missing matches in the downloaded citations.
+* Apply pylint to the code base.
 
 Input from talk with Anita
 * Close all article details windows
