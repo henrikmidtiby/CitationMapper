@@ -362,8 +362,8 @@ class GuiMainWindow:
 	def ignoreArticlesInBanFile(self, action, data):
 		filename = "%s/banlist" % self.openfilename 
 		try:
-			fh = open(filename)
-			for line in fh:
+			filehandle = open(filename)
+			for line in filehandle:
 				articleIdentifier = line[:-1]
 				try:
 					self.origNetwork.remove_node(articleIdentifier)
