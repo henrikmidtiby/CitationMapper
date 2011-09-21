@@ -51,9 +51,9 @@ class citationmapbuilder:
 			res = erPattern.match(line)
 			if(res):
 				rawIdentifier = self.formatIdentifier(values)
-				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
+				identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier).upper()
 				for line in crlines:
-					crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
+					crIdentifier = self.newIdentifierInspiredByWos2Pajek(line).upper()
 					self.graph.add_edge(crIdentifier, identifier)
 					try:
 						self.articles[crIdentifier]["Journal"] = line
