@@ -36,6 +36,7 @@ import xdot
 import citationmapbuilder
 
 import GuiArticleDetails
+import GuiArticleDetailsWindowHandler
 import GuiListOfArticlesInGraph
 import GuiOptionsWindow
 import GuiArticleContextMenu
@@ -56,6 +57,7 @@ class GuiMainWindow:
 			<menu action="File">
 				<menuitem action="Open"/>
 				<menuitem action="Reload"/>
+				<menuitem action="CloseArticleDetailsWindows"/>
 				<menuitem action="ExportToPDF"/>
 				<menuitem action="Quit"/>
 			</menu>
@@ -93,6 +95,7 @@ class GuiMainWindow:
 		self.maxCitations = None
 		self.uimanager = None
 		self.mapview = None
+		self.articleDetailsWindows = GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler();
 		self.setupWindowContents()
 		self.setupConnections()
 		self.citationmap = citationmapbuilder.citationmapbuilder()
@@ -132,6 +135,7 @@ class GuiMainWindow:
 
 		actiongroup.add_actions([
 			('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
+			('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C', None, self.articleDetailsWindows.closeAll),
 			('ExportToPDF', None, '_Export to pdf', 'E', None, self.exportToPDF),
 			('About', None, '_About', None, None, self.showAboutDialog),
 			('File', None, '_File'),
@@ -183,20 +187,11 @@ class GuiMainWindow:
 
 	def articleClicked(self, widget, data, event):
 		if(event.button == 1):
-			self.on_url_clicked(widget, data, event)
+			self.articleDetailsWindows.openNewArticleDetailsWindow(data, self.citationmap)
 			self.changeColorOfNode(data, (1, 0.75, 0.75, 1))
 		else:
 			articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(self.openfilename)
 			articleContextMenu.showContextMenu(widget, data, event)
-
-	def on_url_clicked(self, widget, url, event):
-		self.articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
-		try:
-			article = self.citationmap.articles[url]
-			graph = self.citationmap.graph
-			self.articleDetailsWindow.updateArticleInformation(url, article, graph)
-		except:
-			self.articleDetailsWindow.updateArticleInformation(url)
 
 	def updateMinNumberOfReferences(self, adj):
 		self.minNumberOfReferences = adj.value
