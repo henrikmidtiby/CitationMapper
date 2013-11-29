@@ -4,6 +4,10 @@ sudo easy_install networkx
 
 * In ubuntu 11.04 is it possible to install the package python-networkx
 
+Ubuntu install actions:
+* sudo apt-get install python-setuptools graphviz
+* sudo easy_install networkx
+
 Todos:
 * More general colouring options.
 * Locate missing matches in the downloaded citations.
