@@ -29,27 +29,27 @@
 import GuiArticleDetails
 
 class GuiArticleDetailsWindowHandler:
-	def __init__(self):
-		self.listOfWindows = [];
+    def __init__(self):
+        self.listOfWindows = [];
 
-	def openNewArticleDetailsWindow(self, url, citationmap):
-		articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
-		try:
-			article = citationmap.articles[url]
-			graph = citationmap.graph
-			articleDetailsWindow.updateArticleInformation(url, article, graph)
-		except:
-			articleDetailsWindow.updateArticleInformation(url)
-		self.listOfWindows.append(articleDetailsWindow)
+    def openNewArticleDetailsWindow(self, url, citationmap):
+        articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
+        try:
+            article = citationmap.articles[url]
+            graph = citationmap.graph
+            articleDetailsWindow.updateArticleInformation(url, article, graph)
+        except:
+            articleDetailsWindow.updateArticleInformation(url)
+        self.listOfWindows.append(articleDetailsWindow)
 
-	def closeAll(self, action):
-		for window in self.listOfWindows:
-			window.nodeinformationwindow.destroy()
-		self.listOfWindows = []
+    def closeAll(self, action):
+        for window in self.listOfWindows:
+            window.nodeinformationwindow.destroy()
+        self.listOfWindows = []
 
 def main():
-	pass
+    pass
 
 if __name__ == '__main__':
-	main()
+    main()
 
