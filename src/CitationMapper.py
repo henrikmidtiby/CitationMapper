@@ -83,6 +83,7 @@ class GuiMainWindow:
 
 
     def __init__(self):
+        self.origNetworkPreFiltered = None
         self.origNetwork = None
         self.optionsWindow = None
         self.actiongroup = None
@@ -260,7 +261,8 @@ class GuiMainWindow:
         self.updateOrigNetwork()
 
     def updateOrigNetwork(self):
-        self.origNetwork = self.citationmap.graph.copy()
+        self.origNetworkPreFiltered = self.citationmap.graph.copy()
+        self.origNetwork = self.origNetworkPreFiltered.copy()
         self.calculateNetworkProperties()
 
     def calculateNetworkProperties(self):
@@ -362,17 +364,30 @@ class GuiMainWindow:
                         0, 0, "", "", ""])
 
     def ignoreArticlesInBanFile(self, action, data):
+        self.origNetwork = self.origNetworkPreFiltered.copy()
         filename = "%s/banlist" % self.openfilename 
         try:
             filehandle = open(filename)
             for line in filehandle:
                 articleIdentifier = line[:-1]
                 try:
-                    #print(self.origNetwork.out_edges([articleIdentifier]))
+                    # Remove things that are only mentioned by the node
+                    thingsReferenced = self.origNetwork.in_edges([articleIdentifier])
+                    for edge in thingsReferenced:
+                        referencedArticle = edge[0]
+                        numberOfCitations = self.origNetwork.out_degree(referencedArticle)
+                        if(numberOfCitations == 1):
+                            print referencedArticle
+                            self.origNetwork.remove_node(referencedArticle)
+
+                    # Remove node                        
+                    print articleIdentifier
                     self.origNetwork.remove_node(articleIdentifier)
-                    # Todo: Remove references from this node.
                 except IOError:
                     pass
+                except:
+                    print "Unknown error detected"
+                
         except IOError:
             pass
         self.calculateNetworkProperties()
