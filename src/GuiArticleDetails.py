@@ -35,27 +35,49 @@ import StringIO
 import string
 import webbrowser
 import sys
+import DoiLookup
 
 def open_url(widget, url):
     webbrowser.open(url)
 
 class GuiArticleDetails:
     def __init__(self):
+        self.doi = None
         self.nodescrolledwindow = None
         self.nodeinformationwindow = gtk.Window()
         self.nodeinformationwindow.set_title("Article details")
         self.nodeinformationwindow.set_size_request(500, 200)
         self.vbox = gtk.VBox(False, 0)
-        self.linklabel = gtk.LinkButton("http://www.sdu.dk", 
-            label="Locate article on Web of Science")
-        self.text = gtk.TextView()
+        self.addLinkButton()
+        self.addTextArea()
         self.generateNodeScrolledWindow()
         self.nodescrolledwindow.show_all()
-        self.vbox.pack_start(self.linklabel, False, False, 0)
+        self.addRequestDOIInformationButton()
         self.vbox.pack_start(self.nodescrolledwindow, True, True, 0)
         self.nodeinformationwindow.add(self.vbox)
         self.nodeinformationwindow.show_all()
         gtk.link_button_set_uri_hook(open_url)
+
+    def addLinkButton(self):
+        self.linklabel = gtk.LinkButton("http://www.sdu.dk",
+            label="Locate article on Web of Science")
+        self.vbox.pack_start(self.linklabel, False, False, 0)
+
+    def addTextArea(self):
+        self.text = gtk.TextView()
+
+    def addRequestDOIInformationButton(self):
+        self.requestDOIInformation = gtk.Button("Look up DOI")
+        self.requestDOIInformation.show()
+        self.vbox.pack_start(self.requestDOIInformation, False, False, 5)
+        self.requestDOIInformation.connect("clicked", self.requestDOIInformationCallback, None)
+
+    def requestDOIInformationCallback(self, p1, p2):
+        text = DoiLookup.DoiLookup.getDOIInformation(self.doi)
+        self.text.get_buffer().insert_at_cursor('\nDOI Information: \n')
+
+        for k,v in text.items():
+            self.text.get_buffer().insert_at_cursor('%s:\t%s\n' % (k, v))
 
     def generateNodeScrolledWindow(self):
         self.nodescrolledwindow = gtk.ScrolledWindow()
@@ -102,6 +124,7 @@ class GuiArticleDetails:
                     print(res.group(1))
                     self.linklabel.set_uri("http://dx.doi.org/%s" % res.group(1))
                     self.linklabel.set_label("Locate by DOI")
+                    self.doi = res.group(1)
                 else:
                     print("Not found")
 
