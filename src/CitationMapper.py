@@ -35,7 +35,6 @@ import string
 import xdot
 import citationmapbuilder
 
-import GuiArticleDetails
 import GuiArticleDetailsWindowHandler
 import GuiListOfArticlesInGraph
 import GuiOptionsWindow
@@ -111,9 +110,6 @@ class GuiMainWindow:
 
         # Outer vertical box
         vbox = gtk.VBox(False, 0)
-
-        # Label
-        labelReferences = gtk.Label("Number of references")
 
         # Network window
         self.mapview = xdot.DotWidget()
