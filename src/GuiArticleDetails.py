@@ -129,10 +129,9 @@ class GuiArticleDetails:
                 pattern = re.compile(".*DOI (.*)")
                 res = pattern.match(article["Journal"])
                 if(res):
-                    print(res.group(1))
                     self.updateDOIInformation(res.group(1))
                 else:
-                    print("Not found")
+                    pass
 
                 self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
                 nreferencesInGraph = graph.in_degree(url)

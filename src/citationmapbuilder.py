@@ -42,6 +42,8 @@ class citationmapbuilder:
         self.articles = {}
         self.outdegrees = None
         self.indegrees = None
+        self.idsAndYears = {}
+        self.idsAndCRLines = {}
 
     def parsefile(self, filename):
         #print("<parsing alt=%s>" % filename)
@@ -80,9 +82,13 @@ class citationmapbuilder:
             res = erPattern.match(line)
             if(res):
                 rawIdentifier = self.formatIdentifier(values)
-                identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier).upper()
+                identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
                 for line in crlines:
-                    crIdentifier = self.newIdentifierInspiredByWos2Pajek(line).upper()
+                    year = self.getYearFromIdentity(line)
+                    crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
+                    self.idsAndYears[crIdentifier] = year
+                    self.idsAndCRLines[crIdentifier] = line
+                    #print("%d - %s - %s" % (year, crIdentifier, line))
                     self.graph.add_edge(crIdentifier, identifier)
                     try:
                         self.articles[crIdentifier]["Journal"] = line
@@ -90,6 +96,17 @@ class citationmapbuilder:
                         tempvalue = {}
                         tempvalue["Journal"] = line
                         self.articles[crIdentifier] = tempvalue
+                        
+                try:
+                    tempID = values["DI"][0]
+                    self.idsAndYears[tempID] = values["PY"]
+                except KeyError:
+                    print("KeyError - Either is 'DI' or 'PY' missing    :")
+                    print(values)
+                except:
+                    print("Unknown error:")
+                    print(values)
+                    quit
 
                 self.articles[identifier] = values
                 crlines = []
@@ -99,6 +116,7 @@ class citationmapbuilder:
 
     def newIdentifierInspiredByWos2Pajek(self, ident):
         # Basically ignore the abbreviated journal name
+        self.getYearFromIdentity(ident)
 
         pattern = re.compile(".*DOI (.*)")
         res = pattern.match(ident)
@@ -111,13 +129,13 @@ class citationmapbuilder:
         res = crPattern.match(ident)
         if(res):
             # VIENOT TC,2007,V77,P157
-            return "%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4), res.group(5))
+            return ("%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4), res.group(5))).upper()
 
         # Match book entries
         crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
         res = crPattern2.match(ident)
         if(res):
-            return "%s,%s,%s" % (res.group(1), res.group(2), res.group(4))
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(4))).upper()
 
         # Match cases with only volume and not page numbers
         # OLANDER B, 2007, INFORM RES, V12
@@ -125,7 +143,7 @@ class citationmapbuilder:
         res = crPattern.match(ident)
         if(res):
             # OLANDER B,2007,V12
-            return "%s,%s,%s" % (res.group(1), res.group(2), res.group(4))
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(4))).upper()
 
         # Match book entries
         # FRION P, 2009, P68
@@ -133,8 +151,45 @@ class citationmapbuilder:
         res = crPattern2.match(ident)
         if(res):
             # FRION P,2009,P68
-            return "%s,%s,%s" % (res.group(1), res.group(2), res.group(3))
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
         return "ErrorInMatching %s" % ident
+
+    def getYearFromIdentity(self, ident):            
+        # Match journal entries (Volume and page present)
+        # VIENOT TC, 2007, LIB Q, V77, P157
+        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
+        res = crPattern.match(ident)
+        if(res):
+            # VIENOT TC,2007,V77,P157
+            return int(res.group(2))
+
+        # Match book entries
+        crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
+        res = crPattern2.match(ident)
+        if(res):
+            return int(res.group(2))
+
+        # Match cases with only volume and not page numbers
+        # OLANDER B, 2007, INFORM RES, V12
+        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
+        res = crPattern.match(ident)
+        if(res):
+            # OLANDER B,2007,V12
+            return int(res.group(2))
+
+        # Match book entries
+        # FRION P, 2009, P68
+        crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
+        res = crPattern2.match(ident)
+        if(res):
+            # FRION P,2009,P68
+            return int(res.group(2))
+
+        try:
+            return self.idsAndYears[ident]
+        except KeyError:
+            print("Could not determine year from %s" % ident)
+            return -1
 
 
     def formatIdentifier(self, values):
@@ -195,10 +250,18 @@ class citationmapbuilder:
         for elem in self.graphForAnalysis.nodes():
             res = citationPattern.match(elem)
             if(res):
-                curYear = res.group(2)
+                curYear = int(res.group(2))
                 if not curYear in years.keys():
                     years[curYear] = []
                 years[curYear].append(elem)
+            else:
+                try:
+                    curYear = self.idsAndYears[elem]
+                    if not curYear in years.keys():
+                        years[curYear] = []
+                    years[curYear].append(elem)
+                except KeyError:
+                    print("<getYearsAndArticles 'Did not find a year: %s'/>" % elem)
         return years
 
     def outputGraph(self, stream, direction = "TD"):
@@ -211,6 +274,7 @@ class citationmapbuilder:
     def outputYearNodesAndMarkObjectsWithTheSameRank(self, stream):
         years = self.getYearsAndArticles()
         yeartags = years.keys()
+        print(yeartags)
         yeartags.sort()
         for year in yeartags:
             stream.write('y%s [fontsize="10", height="0.1668", label="%s", margin="0", rank="%s", shape="plaintext", width="0.398147893333333"]\n' % (year, year, year))
@@ -234,12 +298,21 @@ class citationmapbuilder:
                     color = "#00ff00"
                 else:
                     color = "#ff0000"
-                firstauthor = self.articles[key]["AU"][0]
+                firstauthor = self.createLabelFromCRLine(self.idsAndCRLines[key])
             except(KeyError):
                 pass
             nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
             fontsize = math.sqrt(self.outdegrees[key] + 1)*2
             stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, nodesize, firstauthor, fontsize, color))
+
+    def createLabelFromCRLine(self, crline):
+        authorYearPattern = re.compile("^(.*?,\s?\d{4})")
+        res = authorYearPattern.match(crline)
+        if(res):
+            print(res.group(1))
+            return res.group(1)
+        print crline
+        return crline
 
     def outputEdges(self, stream):
         for edge in self.graphForAnalysis.edges():

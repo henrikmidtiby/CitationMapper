@@ -20,7 +20,6 @@ cache = percache.Cache(TESTFILE, livesync=True)
 
 @cache
 def getDOIInformation(doi):
-    print("Requesting information about %s" % doi)
     conn = httplib.HTTPConnection("data.crossref.org")
     headers = {"Accept": "application/vnd.citationstyles.csl+json"}
     conn.request("GET", "/" + doi, headers=headers)

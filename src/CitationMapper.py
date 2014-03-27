@@ -145,8 +145,6 @@ class GuiMainWindow:
         accelgroup = uimanager.get_accel_group()
         self.citationmapperwindow.add_accel_group(accelgroup)
 
-
-
         # Add a UI descrption
         uimanager.add_ui_from_string(self.ui)
 
