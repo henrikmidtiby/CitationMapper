@@ -100,6 +100,11 @@ class citationmapbuilder:
     def newIdentifierInspiredByWos2Pajek(self, ident):
         # Basically ignore the abbreviated journal name
 
+        pattern = re.compile(".*DOI (.*)")
+        res = pattern.match(ident)
+        if(res):
+            return "DOI %s" % res.group(1)            
+            
         # Match journal entries (Volume and page present)
         # VIENOT TC, 2007, LIB Q, V77, P157
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
@@ -150,6 +155,10 @@ class citationmapbuilder:
                 pass
             try:
                 identString = "%s, P%s" % (identString, values["BP"][0])
+            except KeyError:
+                pass
+            try:
+                identString = "%s, DOI %s" % (identString, values["DI"][0])
             except KeyError:
                 pass
             return(identString)
