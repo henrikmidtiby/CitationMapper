@@ -73,11 +73,11 @@ class GuiArticleDetails:
         self.requestDOIInformation.connect("clicked", self.requestDOIInformationCallback, None)
 
     def requestDOIInformationCallback(self, p1, p2):
-        text = DoiLookup.DoiLookup.getDOIInformation(self.doi)
+        text = DoiLookup.getDOIInformation(self.doi)
         self.text.get_buffer().insert_at_cursor('\nDOI Information: \n')
 
         for k,v in text.items():
-            self.text.get_buffer().insert_at_cursor('%s:\t%s\n' % (k, v))
+            self.text.get_buffer().insert_at_cursor("%-*s: %s\n" % (15, k, v))
 
     def generateNodeScrolledWindow(self):
         self.nodescrolledwindow = gtk.ScrolledWindow()
@@ -90,6 +90,14 @@ class GuiArticleDetails:
         pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
         pp.pprint(article)
         fullInfoAsText = allKnowledgeAboutArticle.getvalue()
+
+        pattern = re.compile(".*DOI (.*)")
+        res = pattern.match(url)
+        if(res):
+            print(res.group(1))
+            self.updateDOIInformation(res.group(1))
+        else:
+            print("Not found")
 
         try:
             author = string.join(article["AU"], ' and ')
@@ -109,11 +117,11 @@ class GuiArticleDetails:
             self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
             self.text.get_buffer().insert_at_cursor('\n')
 
-            baseurl = "http://gateway.isiknowledge.com/gateway/Gateway.cgi?GWVersion=2&SrcApp=SFX&SrcAuth=SFX&DestApp=WOS&DestLinkType=GeneralSearchSummary"
-            titlematch = "&title=%s" % title.replace(" ", "+")
-            yearmatch = "&Period=Year+Selection&years=1985+1986+1987"
-            searchurl = baseurl +  titlematch
-            self.linklabel.set_uri(searchurl)
+#            baseurl = "http://gateway.isiknowledge.com/gateway/Gateway.cgi?GWVersion=2&SrcApp=SFX&SrcAuth=SFX&DestApp=WOS&DestLinkType=GeneralSearchSummary"
+#            titlematch = "&title=%s" % title.replace(" ", "+")
+#            yearmatch = "&Period=Year+Selection&years=1985+1986+1987"
+#            searchurl = baseurl +  titlematch
+#            self.linklabel.set_uri(searchurl)
 
         except(KeyError):
             try:
@@ -122,9 +130,7 @@ class GuiArticleDetails:
                 res = pattern.match(article["Journal"])
                 if(res):
                     print(res.group(1))
-                    self.linklabel.set_uri("http://dx.doi.org/%s" % res.group(1))
-                    self.linklabel.set_label("Locate by DOI")
-                    self.doi = res.group(1)
+                    self.updateDOIInformation(res.group(1))
                 else:
                     print("Not found")
 
@@ -138,6 +144,13 @@ class GuiArticleDetails:
                 print "Unexpected error:", sys.exc_info()[0]
 
         self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
+    
+    def updateDOIInformation(self, doi):
+        print("Updating doi information: %s" % doi)
+        self.linklabel.set_uri("http://dx.doi.org/%s" % doi)
+        self.linklabel.set_label("Locate by DOI")
+        self.doi = doi
+        
 
 def main():
     GuiArticleDetails()
