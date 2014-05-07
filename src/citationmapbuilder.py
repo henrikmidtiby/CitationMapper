@@ -56,6 +56,7 @@ class citationmapbuilder:
         crlines = []
         lastSeenCode = "XX"
         values = {}
+        erCounter = 0
         # Parse file line by line
         for line in filehandle:
             res = pattern.match(line)
@@ -81,6 +82,7 @@ class citationmapbuilder:
 
             res = erPattern.match(line)
             if(res):
+                erCounter = erCounter + 1
                 rawIdentifier = self.formatIdentifier(values)
                 identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
                 self.graph.add_node(identifier)
@@ -112,6 +114,7 @@ class citationmapbuilder:
                 self.articles[identifier] = values
                 crlines = []
                 values = {}
+        print("Analyzed %d entries." % erCounter)
         #print("</parsing>")
 
 
