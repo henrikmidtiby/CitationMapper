@@ -83,6 +83,7 @@ class citationmapbuilder:
             if(res):
                 rawIdentifier = self.formatIdentifier(values)
                 identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
+                self.graph.add_node(identifier)
                 for line in crlines:
                     year = self.getYearFromIdentity(line)
                     crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
