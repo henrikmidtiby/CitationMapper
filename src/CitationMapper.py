@@ -72,6 +72,7 @@ class GuiMainWindow:
             <toolitem action="ZoomOut"/>
             <toolitem action="ZoomFit"/>
             <toolitem action="Zoom100"/>
+            <toolitem action="Print"/>
         </toolbar>
     </ui>
     '''
@@ -127,6 +128,7 @@ class GuiMainWindow:
             ('ZoomOut', gtk.STOCK_ZOOM_OUT, None, None, None, self.mapview.on_zoom_out),
             ('ZoomFit', gtk.STOCK_ZOOM_FIT, None, None, None, self.mapview.on_zoom_fit),
             ('Zoom100', gtk.STOCK_ZOOM_100, None, None, None, self.mapview.on_zoom_100),
+            ('Print', gtk.STOCK_PRINT, None, None, None, self.mapview.on_print),
         ))
 
 
