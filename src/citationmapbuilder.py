@@ -101,8 +101,8 @@ class citationmapbuilder:
                 try:
                     year = int(values["PY"][0])
                     self.idsAndYears[identifier] = year
-                except KeyError:
-                    print("KeyError - Either is 'DI' or 'PY' missing    :")
+                except KeyError as KE:
+                    print("KeyError - %s is missing:" % KE)
                     print(values)
                 except:
                     print("Unknown error:")
