@@ -152,7 +152,25 @@ class citationmapbuilder:
         if(res):
             # FRION P,2009,P68
             return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
-        return "ErrorInMatching %s" % ident
+
+        # Match entries like
+        # JACKSON MA, 2010, PROC FRONT EDUC CONF
+        crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
+        res = crPattern2.match(ident)
+        if(res):
+            # JACKSON MA,2010,PROC FRONT EDUC CONF
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
+
+        # Match entries like
+        # ANTON G, 2010
+        crPattern2 = re.compile("(.*?), (\d{4})")
+        res = crPattern2.match(ident)
+        if(res):
+            # ANTON G,2010
+            return ("%s,%s" % (res.group(1), res.group(2))).upper()
+
+        print("ErrorInMatching %s" % ident)
+        return ident
 
     def getYearFromIdentity(self, ident):            
         # Match journal entries (Volume and page present)
@@ -183,6 +201,22 @@ class citationmapbuilder:
         res = crPattern2.match(ident)
         if(res):
             # FRION P,2009,P68
+            return int(res.group(2))
+
+        # Match entries like
+        # JACKSON MA, 2010, PROC FRONT EDUC CONF
+        crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
+        res = crPattern2.match(ident)
+        if(res):
+            # JACKSON MA,2010,PROC FRONT EDUC CONF
+            return int(res.group(2))
+
+        # Match entries like
+        # ANTON G, 2010
+        crPattern2 = re.compile("(.*?), (\d{4})")
+        res = crPattern2.match(ident)
+        if(res):
+            # ANTON G,2010
             return int(res.group(2))
 
         try:
