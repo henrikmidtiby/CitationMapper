@@ -99,8 +99,8 @@ class citationmapbuilder:
                         self.articles[crIdentifier] = tempvalue
                         
                 try:
-                    tempID = values["DI"][0]
-                    self.idsAndYears[tempID] = values["PY"]
+                    year = int(values["PY"][0])
+                    self.idsAndYears[identifier] = year
                 except KeyError:
                     print("KeyError - Either is 'DI' or 'PY' missing    :")
                     print(values)
