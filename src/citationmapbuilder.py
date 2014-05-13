@@ -369,6 +369,11 @@ class citationmapbuilder:
     def outputPostamble(self, stream):
         stream.write("}")
 
+    def removeNamedNodes(self, excludedNodeNames):
+        print("len(excludedNodeNames) = %d" % len(excludedNodeNames))
+        for key in excludedNodeNames:
+           self.graphForAnalysis.remove_node(key)
+        print("left nodes: %d" % len(self.graphForAnalysis.nodes()))
 
 
 def main():

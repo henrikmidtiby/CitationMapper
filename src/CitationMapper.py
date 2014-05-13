@@ -93,6 +93,8 @@ class GuiMainWindow:
         self.citationmapperwindow = None
         self.origNetworkCitations = None
         self.origNetworkReferences = None
+        self.includedNodeNames = []
+        self.excludedNodeNames = []
         self.maxCitations = None
         self.uimanager = None
         self.mapview = None
@@ -201,10 +203,18 @@ class GuiMainWindow:
     def calculateNewGraphSizeAndUpdateOptionsWindow(self):
         # Count the number of articles with the required number of references and citations.
         nNodes = 0
-        for index in range(0, len(self.origNetworkCitations)):
-            if(self.origNetworkCitations[index] >= self.minNumberOfCitations
-                    and self.origNetworkReferences[index] >= self.minNumberOfReferences):
+        self.includedNodeNames = []
+        self.excludedNodeNames = []
+        for key in self.origNetworkCitations.keys():
+            testOne = (self.origNetworkCitations[key] >= self.minNumberOfCitations 
+                    and self.origNetworkReferences[key] >= self.minNumberOfReferences)
+            if(testOne):
                 nNodes = nNodes + 1
+                self.includedNodeNames.append(key)
+            else:
+                self.excludedNodeNames.append(key)
+                
+        self.citationmap.removeNamedNodes(self.excludedNodeNames)
         self.optionsWindow.graphSize = nNodes
         self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
@@ -262,11 +272,12 @@ class GuiMainWindow:
         self.calculateNetworkProperties()
 
     def calculateNetworkProperties(self):
-        self.origNetworkCitations = self.origNetwork.out_degree().values()
-        self.origNetworkReferences = self.origNetwork.in_degree().values()
+        self.origNetworkCitations = self.origNetwork.out_degree()
+        self.origNetworkReferences = self.origNetwork.in_degree()
+        assert(len(self.origNetworkCitations) == len(self.origNetworkReferences))
         try:
-            self.maxCitations = max(self.origNetworkCitations)
-            self.maxReferences = max(self.origNetworkReferences)
+            self.maxCitations = max(self.origNetworkCitations.values())
+            self.maxReferences = max(self.origNetworkReferences.values())
         except:
             self.maxCitations = 20
             self.maxReferences = 20
@@ -274,7 +285,7 @@ class GuiMainWindow:
     def filterCurrentCitationMap(self):
         self.citationmap.graph = self.origNetwork.copy()
         self.citationmap.analyzeGraph()
-        self.citationmap.cleanUpGraph(self.minNumberOfReferences, self.minNumberOfCitations)
+        self.citationmap.removeNamedNodes(self.excludedNodeNames)
 
     def filterAndExportCurrentCitationMap(self):
         self.filterCurrentCitationMap()
