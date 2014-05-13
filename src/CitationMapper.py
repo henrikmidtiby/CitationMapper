@@ -381,8 +381,8 @@ class GuiMainWindow:
                         fieldTC, fieldNR, fieldSO, fieldAuthors, fieldTitle])
             except(KeyError):
                 listOfNodes.nodesTreestore.append(None, 
-                    [key, 0, networkCitations, networkReferences, 
-                        0, 0, "", "", ""])
+                    [key, -1, networkCitations, networkReferences, 
+                        -1, -1, "", "", ""])
 
     def ignoreArticlesInBanFile(self, action, data):
         self.origNetwork = self.origNetworkPreFiltered.copy()
