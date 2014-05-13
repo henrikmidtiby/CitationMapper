@@ -336,9 +336,16 @@ class citationmapbuilder:
                     color = "#00ff00"
                 else:
                     color = "#ff0000"
+            except(KeyError):
+                #print("outputNodeInformation: KeyError: %s" % key)
+                #print(article)
+                pass
+
+            try:
                 firstauthor = self.createLabelFromCRLine(self.idsAndCRLines[key])
             except(KeyError):
-                pass
+                print("outputNodeInformation - firstauthor: KeyError: %s" % key)
+
             nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
             fontsize = math.sqrt(self.outdegrees[key] + 1)*2
             stream.write('"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n' % (key, key, nodesize, firstauthor, fontsize, color))
