@@ -57,7 +57,7 @@ class GuiMainWindow:
                 <menuitem action="Open"/>
                 <menuitem action="Reload"/>
                 <menuitem action="CloseArticleDetailsWindows"/>
-                <menuitem action="ExportToPDF"/>
+                <menuitem action="Print"/>
                 <menuitem action="Quit"/>
             </menu>
             <menu action="Help">
@@ -139,7 +139,7 @@ class GuiMainWindow:
         actiongroup.add_actions([
             ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
             ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C', None, self.articleDetailsWindows.closeAll),
-            ('ExportToPDF', None, '_Export to pdf', 'E', None, self.exportToPDF),
+            ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
             ('About', None, '_About', None, None, self.showAboutDialog),
             ('File', None, '_File'),
             ('Help', None, '_Help')])
@@ -416,17 +416,6 @@ class GuiMainWindow:
 
     def showAboutDialog(self, action):
         GuiAboutDialog.GuiAboutDialog()
-
-    def exportToPDF(self, action):
-        chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
-        if chooser.run() == gtk.RESPONSE_OK:
-            filename = chooser.get_filename()
-            chooser.destroy()
-            self.mapview.exportToPDF(filename)
-        else:
-            chooser.destroy()
-        return False
 
 
 def main():
