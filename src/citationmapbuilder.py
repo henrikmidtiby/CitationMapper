@@ -372,7 +372,10 @@ class citationmapbuilder:
     def removeNamedNodes(self, excludedNodeNames):
         print("len(excludedNodeNames) = %d" % len(excludedNodeNames))
         for key in excludedNodeNames:
-           self.graphForAnalysis.remove_node(key)
+            try:
+                self.graphForAnalysis.remove_node(key)
+            except networkx.NetworkXError as KE:
+                print("NetworkXError: %s" % KE)
         print("left nodes: %d" % len(self.graphForAnalysis.nodes()))
 
 
