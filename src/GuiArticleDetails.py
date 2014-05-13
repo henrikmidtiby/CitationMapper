@@ -46,7 +46,7 @@ class GuiArticleDetails:
         self.nodescrolledwindow = None
         self.nodeinformationwindow = gtk.Window()
         self.nodeinformationwindow.set_title("Article details")
-        self.nodeinformationwindow.set_size_request(500, 200)
+        self.nodeinformationwindow.set_size_request(500, 300)
         self.vbox = gtk.VBox(False, 0)
         self.addLinkButton()
         self.addTextArea()
@@ -65,9 +65,10 @@ class GuiArticleDetails:
 
     def addTextArea(self):
         self.text = gtk.TextView()
+        self.text.set_wrap_mode(gtk.WRAP_WORD)
 
     def addRequestDOIInformationButton(self):
-        self.requestDOIInformation = gtk.Button("Look up DOI")
+        self.requestDOIInformation = gtk.Button("Fetch more information based on DOI")
         self.requestDOIInformation.show()
         self.vbox.pack_start(self.requestDOIInformation, False, False, 5)
         self.requestDOIInformation.connect("clicked", self.requestDOIInformationCallback, None)
@@ -78,6 +79,8 @@ class GuiArticleDetails:
 
         for k,v in text.items():
             self.text.get_buffer().insert_at_cursor("%-*s: %s\n" % (15, k, v))
+            
+        self.requestDOIInformation.hide()
 
     def generateNodeScrolledWindow(self):
         self.nodescrolledwindow = gtk.ScrolledWindow()
@@ -97,21 +100,28 @@ class GuiArticleDetails:
             print(res.group(1))
             self.updateDOIInformation(res.group(1))
         else:
+            self.linklabel.set_uri("http://google.com/#q=%s" % url)
+            self.linklabel.set_label("Google this article")
+            self.requestDOIInformation.hide()
             print("Not found")
 
+        self.nodeinformationwindow.set_title("Article details - %s" % url)
         try:
             author = string.join(article["AU"], ' and ')
             title = string.join(article["TI"], " ")
             journal = article["SO"][0]
+            abstract = string.join(article["AB"], " ")
             nreferences = article["NR"][0]
             nreferencesInGraph = graph.in_degree(url)
             ncitations = article["TC"][0]
             ncitationsInGraph = graph.out_degree(url)
-            self.text.get_buffer().insert_at_cursor('%s\n' % url)
-            self.text.get_buffer().insert_at_cursor('\n')
+            #self.text.get_buffer().insert_at_cursor('%s\n' % url)
+            #self.text.get_buffer().insert_at_cursor('\n')
+            self.text.get_buffer().insert_at_cursor('%s: %s\n' % (article["PY"][0], author))
             self.text.get_buffer().insert_at_cursor('%s\n' % title)
-            self.text.get_buffer().insert_at_cursor('%s\n' % author)
             self.text.get_buffer().insert_at_cursor('%s\n' % journal)
+            self.text.get_buffer().insert_at_cursor('\n')
+            self.text.get_buffer().insert_at_cursor('%s\n' % abstract)
             self.text.get_buffer().insert_at_cursor('\n')
             self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
             self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
@@ -147,7 +157,7 @@ class GuiArticleDetails:
     def updateDOIInformation(self, doi):
         print("Updating doi information: %s" % doi)
         self.linklabel.set_uri("http://dx.doi.org/%s" % doi)
-        self.linklabel.set_label("Locate by DOI")
+        self.linklabel.set_label("Open full text")
         self.doi = doi
         
 
