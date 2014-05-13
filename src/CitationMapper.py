@@ -80,6 +80,8 @@ class GuiMainWindow:
     openfilename = None
     minNumberOfReferences = 1
     minNumberOfCitations = 3
+    minNumberOfReferencesTwo = 1
+    minNumberOfCitationsTwo = 3
 
 
     def __init__(self):
@@ -200,6 +202,14 @@ class GuiMainWindow:
         self.minNumberOfCitations = adj.value
         self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
+    def updateMinNumberOfReferencesTwo(self, adj):
+        self.minNumberOfReferencesTwo = adj.value
+        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+
+    def updateMinNumberOfCitationsTwo(self, adj):
+        self.minNumberOfCitationsTwo = adj.value
+        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+
     def calculateNewGraphSizeAndUpdateOptionsWindow(self):
         # Count the number of articles with the required number of references and citations.
         nNodes = 0
@@ -208,7 +218,9 @@ class GuiMainWindow:
         for key in self.origNetworkCitations.keys():
             testOne = (self.origNetworkCitations[key] >= self.minNumberOfCitations 
                     and self.origNetworkReferences[key] >= self.minNumberOfReferences)
-            if(testOne):
+            testTwo = (self.origNetworkCitations[key] >= self.minNumberOfCitationsTwo 
+                    and self.origNetworkReferences[key] >= self.minNumberOfReferencesTwo)
+            if(testOne or testTwo):
                 nNodes = nNodes + 1
                 self.includedNodeNames.append(key)
             else:
@@ -227,6 +239,8 @@ class GuiMainWindow:
         self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow(self.maxCitations, self.maxReferences)
         self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
         self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
+        self.optionsWindow.adjMinNumberOfReferencesTwo.connect("value_changed", self.updateMinNumberOfReferencesTwo)
+        self.optionsWindow.adjMinNumberOfCitationsTwo.connect("value_changed", self.updateMinNumberOfCitationsTwo)
         self.optionsWindow.showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
         self.optionsWindow.exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
         self.optionsWindow.listofnodesbutton.connect("clicked", self.getListOfNodes, None)
