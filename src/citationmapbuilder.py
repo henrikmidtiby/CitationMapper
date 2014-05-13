@@ -99,7 +99,7 @@ class citationmapbuilder:
                         tempvalue = {}
                         tempvalue["Journal"] = line
                         self.articles[crIdentifier] = tempvalue
-                        
+
                 try:
                     year = int(values["PY"][0])
                     self.idsAndYears[identifier] = year
@@ -115,6 +115,7 @@ class citationmapbuilder:
                 crlines = []
                 values = {}
         print("Analyzed %d entries." % erCounter)
+        print("Found %d articles." % len(self.articles))
         #print("</parsing>")
 
 
@@ -312,7 +313,6 @@ class citationmapbuilder:
     def outputYearNodesAndMarkObjectsWithTheSameRank(self, stream):
         years = self.getYearsAndArticles()
         yeartags = years.keys()
-        print(yeartags)
         yeartags.sort()
         for year in yeartags:
             stream.write('y%s [fontsize="10", height="0.1668", label="%s", margin="0", rank="%s", shape="plaintext", width="0.398147893333333"]\n' % (year, year, year))
@@ -347,7 +347,7 @@ class citationmapbuilder:
         authorYearPattern = re.compile("^(.*?,\s?\d{4})")
         res = authorYearPattern.match(crline)
         if(res):
-            print(res.group(1))
+            #print(res.group(1))
             return res.group(1)
         print crline
         return crline
