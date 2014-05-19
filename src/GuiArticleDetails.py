@@ -100,6 +100,8 @@ class GuiArticleDetails:
                 self.roughArticleInformation(article, graph)
             except:
                 print "Unexpected error:", sys.exc_info()[0]
+        except:
+            print "Other error"
 
         self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
         self.listCitationOfCurrentArticle(url, graph)
