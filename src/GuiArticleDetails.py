@@ -97,20 +97,7 @@ class GuiArticleDetails:
             self.insertDetailedArticleInformationIfAvailable(article, graph)
         except(KeyError):
             try:
-                # BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
-                pattern = re.compile(".*DOI (.*)")
-                res = pattern.match(article["Journal"])
-                if(res):
-                    self.updateDOIInformation(res.group(1))
-                else:
-                    pass
-
-                self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
-                nreferencesInGraph = graph.in_degree(url)
-                ncitationsInGraph = graph.out_degree(url)
-                self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
-                self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
-
+                self.roughArticleInformation(article, graph)
             except:
                 print "Unexpected error:", sys.exc_info()[0]
 
@@ -161,6 +148,21 @@ class GuiArticleDetails:
 #            yearmatch = "&Period=Year+Selection&years=1985+1986+1987"
 #            searchurl = baseurl +  titlematch
 #            self.linklabel.set_uri(searchurl)
+    def roughArticleInformation(self, article, graph):
+        # BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
+        pattern = re.compile(".*DOI (.*)")
+        res = pattern.match(article["Journal"])
+        if(res):
+            self.updateDOIInformation(res.group(1))
+        else:
+            pass
+
+        self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
+        nreferencesInGraph = graph.in_degree(url)
+        ncitationsInGraph = graph.out_degree(url)
+        self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
+        self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
+
 
     def updateDOIInformation(self, doi):
         print("Updating doi information: %s" % doi)
