@@ -102,6 +102,7 @@ class GuiArticleDetails:
                 print "Unexpected error:", sys.exc_info()[0]
 
         self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
+        self.listCitationOfCurrentArticle(url, graph)
 
     def getAllInformationAsText(self, article):
         allKnowledgeAboutArticle = StringIO.StringIO()
@@ -148,6 +149,7 @@ class GuiArticleDetails:
 #            yearmatch = "&Period=Year+Selection&years=1985+1986+1987"
 #            searchurl = baseurl +  titlematch
 #            self.linklabel.set_uri(searchurl)
+
     def roughArticleInformation(self, article, graph):
         # BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
         pattern = re.compile(".*DOI (.*)")
@@ -163,6 +165,11 @@ class GuiArticleDetails:
         self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
         self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
 
+    def listCitationOfCurrentArticle(self, url, graph):
+        listOfEdges = graph.edges(url)
+        self.text.get_buffer().insert_at_cursor("Cited by\n")
+        for edge in listOfEdges:
+            self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[1])
 
     def updateDOIInformation(self, doi):
         print("Updating doi information: %s" % doi)
