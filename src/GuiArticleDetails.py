@@ -88,7 +88,7 @@ class GuiArticleDetails:
         self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.nodescrolledwindow.add(self.text)
 
-    def updateArticleInformation(self, url, article = None, graph = None):
+    def updateArticleInformation(self, url, graph = None, article = None):
         allKnowledgeAboutArticle = StringIO.StringIO()
         pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
         pp.pprint(article)

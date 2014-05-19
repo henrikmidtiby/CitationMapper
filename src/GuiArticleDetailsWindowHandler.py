@@ -36,10 +36,9 @@ class GuiArticleDetailsWindowHandler:
         articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
         try:
             article = citationmap.articles[url]
-            graph = citationmap.graph
-            articleDetailsWindow.updateArticleInformation(url, article, graph)
+            articleDetailsWindow.updateArticleInformation(url, citationmap.graph, article)
         except:
-            articleDetailsWindow.updateArticleInformation(url)
+            articleDetailsWindow.updateArticleInformation(url, citationmap.graph)
         self.listOfWindows.append(articleDetailsWindow)
 
     def closeAll(self, action):
