@@ -90,17 +90,7 @@ class GuiArticleDetails:
 
     def updateArticleInformation(self, url, graph = None, article = None):
         fullInfoAsText = self.getAllInformationAsText(article)
-
-        pattern = re.compile(".*DOI (.*)")
-        res = pattern.match(url)
-        if(res):
-            print(res.group(1))
-            self.updateDOIInformation(res.group(1))
-        else:
-            self.linklabel.set_uri("http://google.com/#q=%s" % url)
-            self.linklabel.set_label("Google this article")
-            self.requestDOIInformation.hide()
-            print("Not found")
+        self.updateButtons(url)
 
         self.nodeinformationwindow.set_title("Article details - %s" % url)
         try:
@@ -132,6 +122,18 @@ class GuiArticleDetails:
         pp.pprint(article)
         fullInfoAsText = allKnowledgeAboutArticle.getvalue()
         return fullInfoAsText
+
+    def updateButtons(self, url):
+        pattern = re.compile(".*DOI (.*)")
+        res = pattern.match(url)
+        if(res):
+            print(res.group(1))
+            self.updateDOIInformation(res.group(1))
+        else:
+            self.linklabel.set_uri("http://google.com/#q=%s" % url)
+            self.linklabel.set_label("Google this article")
+            self.requestDOIInformation.hide()
+            print("Not found")
 
     def insertDetailedArticleInformationIfAvailable(self, article, graph):
             author = string.join(article["AU"], ' and ')
