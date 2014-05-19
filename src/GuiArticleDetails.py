@@ -79,7 +79,7 @@ class GuiArticleDetails:
 
         for k,v in text.items():
             self.text.get_buffer().insert_at_cursor("%-*s: %s\n" % (15, k, v))
-            
+
         self.requestDOIInformation.hide()
 
     def generateNodeScrolledWindow(self):
@@ -89,10 +89,7 @@ class GuiArticleDetails:
         self.nodescrolledwindow.add(self.text)
 
     def updateArticleInformation(self, url, graph = None, article = None):
-        allKnowledgeAboutArticle = StringIO.StringIO()
-        pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
-        pp.pprint(article)
-        fullInfoAsText = allKnowledgeAboutArticle.getvalue()
+        fullInfoAsText = self.getAllInformationAsText(article)
 
         pattern = re.compile(".*DOI (.*)")
         res = pattern.match(url)
@@ -153,13 +150,20 @@ class GuiArticleDetails:
                 print "Unexpected error:", sys.exc_info()[0]
 
         self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
-    
+
+    def getAllInformationAsText(self, article):
+        allKnowledgeAboutArticle = StringIO.StringIO()
+        pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
+        pp.pprint(article)
+        fullInfoAsText = allKnowledgeAboutArticle.getvalue()
+        return fullInfoAsText
+
     def updateDOIInformation(self, doi):
         print("Updating doi information: %s" % doi)
         self.linklabel.set_uri("http://dx.doi.org/%s" % doi)
         self.linklabel.set_label("Open full text")
         self.doi = doi
-        
+
 
 def main():
     GuiArticleDetails()
