@@ -56,6 +56,14 @@ class Pen:
         self.linewidth = 1.0
         self.fontsize = 14.0
         self.fontname = "Times-Roman"
+        self.bold = False
+        self.italic = False
+        self.underline = False
+        self.superscript = False
+        self.subscript = False
+        self.strikethrough = False
+        self.overline = False
+
         self.dash = ()
 
     def copy(self):
@@ -102,9 +110,9 @@ class TextShape(Shape):
         self.pen = pen.copy()
         self.x = x
         self.y = y
-        self.j = j
-        self.w = w
-        self.t = t
+        self.j = j  # Centering
+        self.w = w  # width
+        self.t = t  # text
 
     def draw(self, cr, highlight=False):
 
@@ -129,8 +137,28 @@ class TextShape(Shape):
 
             # set font
             font = pango.FontDescription()
+            attrs = pango.AttrList()
+
+            # set font attributes
+            if self.pen.bold:
+                font.set_weight(pango.WEIGHT_BOLD)
+            if self.pen.italic:
+                font.set_style(pango.STYLE_ITALIC)
+            if self.pen.underline:
+                underline = pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, len(self.t))
+                attrs.insert(underline)
+            if self.pen.strikethrough:
+                st =  pango.AttrStrikethrough(True, 0, len(self.t))
+                attrs.insert(st)
+
+            layout.set_attributes(attrs)
+
+            fontsize = self.pen.fontsize
+            if self.pen.superscript or self.pen.subscript:
+                fontsize /= 1.5
+
             font.set_family(self.pen.fontname)
-            font.set_absolute_size(self.pen.fontsize*pango.SCALE)
+            font.set_absolute_size(fontsize*pango.SCALE)
             layout.set_font_description(font)
 
             # set text
@@ -146,6 +174,7 @@ class TextShape(Shape):
         width, height = layout.get_size()
         width = float(width)/pango.SCALE
         height = float(height)/pango.SCALE
+
         # we know the width that dot thinks this text should have
         # we do not necessarily have a font with the same metrics
         # scale it so that the text fits inside its box
@@ -166,7 +195,10 @@ class TextShape(Shape):
         else:
             assert 0
 
-        y = self.y - height + descent
+        if self.pen.superscript:
+            y = self.y - 1.5*height
+        else:
+            y = self.y - height + descent
 
         cr.move_to(x, y)
 
@@ -510,6 +542,7 @@ UNDERLINE = 4
 SUPERSCRIPT = 8
 SUBSCRIPT = 16
 STRIKE_THROUGH = 32
+OVERLINE = 64
 
 
 class XDotAttrParser:
@@ -717,9 +750,15 @@ class XDotAttrParser:
         self.pen.fontname = name
 
     def handle_font_characteristics(self, flags):
-        # TODO
-        if flags != 0:
-            sys.stderr.write("warning: font characteristics not supported yet\n" % op)
+        self.pen.bold = bool(flags & BOLD)
+        self.pen.italic = bool(flags & ITALIC)
+        self.pen.underline = bool(flags & UNDERLINE)
+        self.pen.superscript = bool(flags & SUPERSCRIPT)
+        self.pen.subscript = bool(flags & SUBSCRIPT)
+        self.pen.strikethrough = bool(flags & STRIKE_THROUGH)
+        self.pen.overline = bool(flags & OVERLINE)
+        if self.pen.overline:
+            sys.stderr.write('warning: overlined text not supported yet\n')
 
     def handle_text(self, x, y, j, w, t):
         self.shapes.append(TextShape(self.pen, x, y, j, w, t))
@@ -1146,7 +1185,7 @@ class DotParser(Parser):
 
 class XDotParser(DotParser):
 
-    XDOTVERSION = '1.6'
+    XDOTVERSION = '1.7'
 
     def __init__(self, xdotcode):
         lexer = DotLexer(buf = xdotcode)
@@ -1512,18 +1551,28 @@ class DotWidget(gtk.DrawingArea):
         self.filter = filter
 
     def run_filter(self, dotcode):
+        print("Testing")
+        #print(dotcode)
         if not self.filter:
             return dotcode
-        p = subprocess.Popen(
-            [self.filter, '-Txdot'],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=False,
-            universal_newlines=True
-        )
-        xdotcode, error = p.communicate(dotcode)
-        sys.stderr.write(error)
+        try:
+            p = subprocess.Popen(
+                [self.filter, '-Txdot'],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                shell=False,
+                universal_newlines=True
+            )
+        except OSError as exc:
+            error = '%s: %s' % (self.filter, exc.strerror)
+            p = subprocess.CalledProcessError(exc.errno, self.filter, exc.strerror)
+        else:
+            xdotcode, error = p.communicate(dotcode)
+        error = error.rstrip()
+        print("Testing out")
+        if error:
+            sys.stderr.write(error + '\n')
         if p.returncode != 0:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
                                        message_format=error,
@@ -1535,6 +1584,7 @@ class DotWidget(gtk.DrawingArea):
         return xdotcode
 
     def set_dotcode(self, dotcode, filename=None):
+        print("set_dotcode")
         self.openfilename = None
         if isinstance(dotcode, unicode):
             dotcode = dotcode.encode('utf8')
@@ -2025,7 +2075,9 @@ class DotWindow(gtk.Window):
     def open_file(self, filename):
         try:
             fp = file(filename, 'rt')
+            print("open_file")
             self.set_dotcode(fp.read(), filename)
+            print("open_file2")
             fp.close()
         except IOError as ex:
             dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
@@ -2107,10 +2159,7 @@ Shortcuts:
     win = DotWindow()
     win.connect('destroy', gtk.main_quit)
     win.set_filter(options.filter)
-    if len(args) == 0:
-        if not sys.stdin.isatty():
-            win.set_dotcode(sys.stdin.read())
-    else:
+    if len(args) >= 1:
         if args[0] == '-':
             win.set_dotcode(sys.stdin.read())
         else:
