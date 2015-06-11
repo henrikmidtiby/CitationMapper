@@ -126,31 +126,32 @@ class GuiArticleDetails:
             print("Not found")
 
     def insertDetailedArticleInformationIfAvailable(self, article, graph):
+            publicationYear = article["PY"][0]
             author = string.join(article["AU"], ' and ')
+            self.text.get_buffer().insert_at_cursor('%s: %s\n' % (publicationYear, author))
+
             title = string.join(article["TI"], " ")
-            journal = article["SO"][0]
-            abstract = string.join(article["AB"], " ")
-            nreferences = article["NR"][0]
-            nreferencesInGraph = graph.in_degree(url)
-            ncitations = article["TC"][0]
-            ncitationsInGraph = graph.out_degree(url)
-            #self.text.get_buffer().insert_at_cursor('%s\n' % url)
-            #self.text.get_buffer().insert_at_cursor('\n')
-            self.text.get_buffer().insert_at_cursor('%s: %s\n' % (article["PY"][0], author))
             self.text.get_buffer().insert_at_cursor('%s\n' % title)
+
+            journal = article["SO"][0]
             self.text.get_buffer().insert_at_cursor('%s\n' % journal)
-            self.text.get_buffer().insert_at_cursor('\n')
-            self.text.get_buffer().insert_at_cursor('%s\n' % abstract)
-            self.text.get_buffer().insert_at_cursor('\n')
-            self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
-            self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
+
+            doi = article["DI"][0]
+            self.text.get_buffer().insert_at_cursor('doi: %s\n' % (doi))
             self.text.get_buffer().insert_at_cursor('\n')
 
-#            baseurl = "http://gateway.isiknowledge.com/gateway/Gateway.cgi?GWVersion=2&SrcApp=SFX&SrcAuth=SFX&DestApp=WOS&DestLinkType=GeneralSearchSummary"
-#            titlematch = "&title=%s" % title.replace(" ", "+")
-#            yearmatch = "&Period=Year+Selection&years=1985+1986+1987"
-#            searchurl = baseurl +  titlematch
-#            self.linklabel.set_uri(searchurl)
+            abstract = string.join(article["AB"], " ")
+            self.text.get_buffer().insert_at_cursor('%s\n' % abstract)
+
+            nreferences = article["NR"][0]
+            nreferencesInGraph = graph.in_degree(url)
+            self.text.get_buffer().insert_at_cursor('\n')
+            self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
+
+            ncitations = article["TC"][0]
+            ncitationsInGraph = graph.out_degree(url)
+            self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
+            self.text.get_buffer().insert_at_cursor('\n')
 
     def roughArticleInformation(self, article, graph):
         # BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
