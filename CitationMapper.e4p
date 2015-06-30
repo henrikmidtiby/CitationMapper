@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-4.6.dtd">
+<!-- eric4 project file for project CitationMapper -->
+<!-- Saved: 2015-06-30, 08:31:42 -->
+<!-- Copyright (C) 2015 Henrik Skov Midtiby, hemi@mmmi.sdu.dk -->
+<Project version="4.6">
+  <Language>en</Language>
+  <ProgLanguage mixed="0">Python</ProgLanguage>
+  <ProjectType>Console</ProjectType>
+  <Description></Description>
+  <Version>0.1</Version>
+  <Author>Henrik Skov Midtiby</Author>
+  <Email>hemi@mmmi.sdu.dk</Email>
+  <Sources>
+    <Source>src/CitationMapper.py</Source>
+    <Source>src/GuiOptionsWindow.py</Source>
+    <Source>src/xdot.py</Source>
+    <Source>src/GuiListOfArticlesInGraph.py</Source>
+    <Source>src/GuiArticleContextMenu.py</Source>
+    <Source>src/GuiArticleDetailsWindowHandler.py</Source>
+    <Source>src/citationmapbuilder.py</Source>
+    <Source>src/citationmapbuildertests.py</Source>
+    <Source>src/DoiLookup.py</Source>
+    <Source>src/GuiArticleDetails.py</Source>
+    <Source>src/percache.py</Source>
+    <Source>src/GuiAboutDialog.py</Source>
+    <Source>__init__.py</Source>
+  </Sources>
+  <Forms>
+  </Forms>
+  <Translations>
+  </Translations>
+  <Resources>
+  </Resources>
+  <Interfaces>
+  </Interfaces>
+  <Others>
+  </Others>
+  <MainScript>src/CitationMapper.py</MainScript>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES" />
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES" />
+    <FiletypeAssociation pattern="*.py" type="SOURCES" />
+    <FiletypeAssociation pattern="*.ptl" type="SOURCES" />
+  </FiletypeAssociations>
+</Project>
