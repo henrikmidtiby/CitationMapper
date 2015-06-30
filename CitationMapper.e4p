@@ -24,7 +24,8 @@
     <Source>src/GuiArticleDetails.py</Source>
     <Source>src/percache.py</Source>
     <Source>src/GuiAboutDialog.py</Source>
-    <Source>__init__.py</Source>
+    <Source>src/WebOfKnowledgeParser.py</Source>
+    <Source>src/ArticleWithReferences.py</Source>
   </Sources>
   <Forms>
   </Forms>
