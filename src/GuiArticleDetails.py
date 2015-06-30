@@ -36,6 +36,7 @@ import string
 import webbrowser
 import sys
 import DoiLookup
+import ArticleWithReferences
 
 def open_url(widget, url):
     webbrowser.open(url)
@@ -89,6 +90,17 @@ class GuiArticleDetails:
         self.nodescrolledwindow.add(self.text)
 
     def updateArticleInformation(self, url, graph = None, article = None):
+        print("updateArticleInformation url = %s" % url)
+        if(isinstance(article,  ArticleWithReferences.ArticleWithReferences)):
+            #article.printInformation()
+            self.doi = article.doi
+            self.text.get_buffer().insert_at_cursor('%d %s\n' % (article.year,  string.join(article.authors,  " and ")))
+            if(article.doi):
+                self.text.get_buffer().insert_at_cursor('%s\n' % article.doi)
+            self.text.get_buffer().insert_at_cursor('%s\n\n' % article.title)
+            self.text.get_buffer().insert_at_cursor('%s\n' % article.abstract)
+            return
+            
         fullInfoAsText = self.getAllInformationAsText(article)
         self.updateButtons(url)
 
@@ -100,8 +112,8 @@ class GuiArticleDetails:
                 self.roughArticleInformation(article, graph)
             except:
                 print "Unexpected error:", sys.exc_info()[0]
-        except:
-            print "Other error"
+        except():
+            print "Other error", sys.exc_info()[0]
 
         self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
         self.listCitationOfCurrentArticle(url, graph)
@@ -126,23 +138,6 @@ class GuiArticleDetails:
             print("Not found")
 
     def insertDetailedArticleInformationIfAvailable(self, article, graph):
-            publicationYear = article["PY"][0]
-            author = string.join(article["AU"], ' and ')
-            self.text.get_buffer().insert_at_cursor('%s: %s\n' % (publicationYear, author))
-
-            title = string.join(article["TI"], " ")
-            self.text.get_buffer().insert_at_cursor('%s\n' % title)
-
-            journal = article["SO"][0]
-            self.text.get_buffer().insert_at_cursor('%s\n' % journal)
-
-            doi = article["DI"][0]
-            self.text.get_buffer().insert_at_cursor('doi: %s\n' % (doi))
-            self.text.get_buffer().insert_at_cursor('\n')
-
-            abstract = string.join(article["AB"], " ")
-            self.text.get_buffer().insert_at_cursor('%s\n' % abstract)
-
             nreferences = article["NR"][0]
             nreferencesInGraph = graph.in_degree(url)
             self.text.get_buffer().insert_at_cursor('\n')
