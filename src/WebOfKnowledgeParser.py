@@ -82,6 +82,7 @@ class WebOfKnowledgeParser:
                     article.id = identifier
                     article.title = values["TI"][0]
                     article.year = int(values["PY"][0])
+                    article.ncites = int(values["TC"][0])
                     try:
                         article.abstract = string.join(values["AB"], " ")
                     except(KeyError):

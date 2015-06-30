@@ -33,7 +33,7 @@ import networkx
 import math
 import StringIO
 import pprint
-
+import WebOfKnowledgeParser
 
 class citationmapbuilder:
     def __init__(self):
@@ -46,225 +46,14 @@ class citationmapbuilder:
         self.idsAndCRLines = {}
 
     def parsefile(self, filename):
-        #print("<parsing alt=%s>" % filename)
-        filehandle = open(filename)
-        pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
-        repeatedPattern = re.compile("^   (.*)")
-        crPattern = re.compile("^.. (.*?, \d{4}, .*?, V\d+, P\d+)")
-        erPattern = re.compile("^ER")
-        state = 0    # Are we currently looking for cross references?
-        crlines = []
-        lastSeenCode = "XX"
-        values = {}
-        erCounter = 0
-        # Parse file line by line
-        for line in filehandle:
-            res = pattern.match(line)
-            if(res):
-                lastSeenCode = res.group(1)
-                values[res.group(1)] = [res.group(2)]
-                if(res.group(1) == "CR"):
-                    state = 1
-                else:
-                    state = 0
-
-            res = repeatedPattern.match(line)
-            if(res):
-                if(state == 1):
-                    newres = crPattern.match(line)
-                    if(newres):
-                        crlines.append(res.group(1))
-
-                tempkey = lastSeenCode
-                if(not tempkey in values):
-                    values[tempkey] = []
-                values[tempkey].append(res.group(1))
-
-            res = erPattern.match(line)
-            if(res):
-                erCounter = erCounter + 1
-                rawIdentifier = self.formatIdentifier(values)
-                identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
-                self.graph.add_node(identifier)
-                for line in crlines:
-                    year = self.getYearFromIdentity(line)
-                    crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
-                    self.idsAndYears[crIdentifier] = year
-                    self.idsAndCRLines[crIdentifier] = line
-                    #print("%d - %s - %s" % (year, crIdentifier, line))
-                    self.graph.add_edge(crIdentifier, identifier)
-                    try:
-                        self.articles[crIdentifier]["Journal"] = line
-                    except KeyError:
-                        tempvalue = {}
-                        tempvalue["Journal"] = line
-                        self.articles[crIdentifier] = tempvalue
-
-                try:
-                    year = int(values["PY"][0])
-                    self.idsAndYears[identifier] = year
-                except KeyError as KE:
-                    print("KeyError - %s is missing:" % KE)
-                    print(values)
-                except:
-                    print("Unknown error:")
-                    print(values)
-                    quit
-
-                self.articles[identifier] = values
-                crlines = []
-                values = {}
-        print("Analyzed %d entries." % erCounter)
-        print("Found %d articles." % len(self.articles))
-        #print("</parsing>")
-
-
-    def newIdentifierInspiredByWos2Pajek(self, ident):
-        # Basically ignore the abbreviated journal name
-        self.getYearFromIdentity(ident)
-
-        pattern = re.compile(".*DOI (.*)")
-        res = pattern.match(ident)
-        if(res):
-            return "DOI %s" % res.group(1)            
-            
-        # Match journal entries (Volume and page present)
-        # VIENOT TC, 2007, LIB Q, V77, P157
-        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
-        res = crPattern.match(ident)
-        if(res):
-            # VIENOT TC,2007,V77,P157
-            return ("%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4), res.group(5))).upper()
-
-        # Match book entries
-        crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
-        res = crPattern2.match(ident)
-        if(res):
-            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(4))).upper()
-
-        # Match cases with only volume and not page numbers
-        # OLANDER B, 2007, INFORM RES, V12
-        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
-        res = crPattern.match(ident)
-        if(res):
-            # OLANDER B,2007,V12
-            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(4))).upper()
-
-        # Match book entries
-        # FRION P, 2009, P68
-        crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
-        res = crPattern2.match(ident)
-        if(res):
-            # FRION P,2009,P68
-            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
-
-        # Match entries like
-        # JACKSON MA, 2010, PROC FRONT EDUC CONF
-        crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
-        res = crPattern2.match(ident)
-        if(res):
-            # JACKSON MA,2010,PROC FRONT EDUC CONF
-            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
-
-        # Match entries like
-        # ANTON G, 2010
-        crPattern2 = re.compile("(.*?), (\d{4})")
-        res = crPattern2.match(ident)
-        if(res):
-            # ANTON G,2010
-            return ("%s,%s" % (res.group(1), res.group(2))).upper()
-
-        print("ErrorInMatching %s" % ident)
-        return ident
-
-    def getYearFromIdentity(self, ident):            
-        # Match journal entries (Volume and page present)
-        # VIENOT TC, 2007, LIB Q, V77, P157
-        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
-        res = crPattern.match(ident)
-        if(res):
-            # VIENOT TC,2007,V77,P157
-            return int(res.group(2))
-
-        # Match book entries
-        crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
-        res = crPattern2.match(ident)
-        if(res):
-            return int(res.group(2))
-
-        # Match cases with only volume and not page numbers
-        # OLANDER B, 2007, INFORM RES, V12
-        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
-        res = crPattern.match(ident)
-        if(res):
-            # OLANDER B,2007,V12
-            return int(res.group(2))
-
-        # Match book entries
-        # FRION P, 2009, P68
-        crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
-        res = crPattern2.match(ident)
-        if(res):
-            # FRION P,2009,P68
-            return int(res.group(2))
-
-        # Match entries like
-        # JACKSON MA, 2010, PROC FRONT EDUC CONF
-        crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
-        res = crPattern2.match(ident)
-        if(res):
-            # JACKSON MA,2010,PROC FRONT EDUC CONF
-            return int(res.group(2))
-
-        # Match entries like
-        # ANTON G, 2010
-        crPattern2 = re.compile("(.*?), (\d{4})")
-        res = crPattern2.match(ident)
-        if(res):
-            # ANTON G,2010
-            return int(res.group(2))
-
-        try:
-            return self.idsAndYears[ident]
-        except KeyError:
-            print("Could not determine year from %s" % ident)
-            return -1
-
-
-    def formatIdentifier(self, values):
-        try:
-            author = values["AU"][0].replace(",", "").upper()
-            identString = author
-            try:
-                identString = "%s, %s" % (identString, values["PY"][0])
-            except KeyError:
-                pass
-            try:
-                identString = "%s, %s" % (identString, values["J9"][0])
-            except KeyError:
-                pass
-            try:
-                identString = "%s, V%s" % (identString, values["VL"][0])
-            except KeyError:
-                pass
-            try:
-                identString = "%s, P%s" % (identString, values["BP"][0])
-            except KeyError:
-                pass
-            try:
-                identString = "%s, DOI %s" % (identString, values["DI"][0])
-            except KeyError:
-                pass
-            return(identString)
-        except:
-            print "Unexpected error:", sys.exc_info()[0]
-            logfile = open('logfile.txt', 'a')
-            allKnowledgeAboutArticle = StringIO.StringIO()
-            formattedValues = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
-            formattedValues.pprint(values)
-            fullInfoAsText = allKnowledgeAboutArticle.getvalue()
-            logfile.write(fullInfoAsText)
-            return "Conversion error: %s %s %s" % (values["PT"][0], values["AU"][0], values["PY"][0])
+        parser = WebOfKnowledgeParser.WebOfKnowledgeParser()
+        parser.parsefile(filename)
+        
+        for article in parser.articles:
+            self.articles[article.id] = article
+            self.graph.add_node(article.id)
+            for reference in article.references:
+                self.graph.add_edge(reference, article.id)
 
     def analyzeGraph(self):
         self.graphForAnalysis = self.graph.copy()
@@ -330,21 +119,16 @@ class citationmapbuilder:
             color = "#0000ff"
             firstauthor = key
             try:
-                ncites = int(self.articles[key]["TC"][0])
+                ncites = self.articles[key].ncites
                 ncitesingraph = self.graph.out_degree(key)
                 if 0.95 * ncites < ncitesingraph:
                     color = "#00ff00"
                 else:
                     color = "#ff0000"
             except(KeyError):
-                #print("outputNodeInformation: KeyError: %s" % key)
-                #print(article)
+                print("outputNodeInformation: KeyError: %s" % key)
+                print(article)
                 pass
-
-            try:
-                firstauthor = self.createLabelFromCRLine(self.idsAndCRLines[key])
-            except(KeyError):
-                print("outputNodeInformation - firstauthor: KeyError: %s" % key)
 
             nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
             fontsize = math.sqrt(self.outdegrees[key] + 1)*2
