@@ -80,7 +80,7 @@ class WebOfKnowledgeParser:
                 try:
                     article = ArticleWithReferences.ArticleWithReferences()
                     article.id = identifier
-                    article.title = values["TI"][0]
+                    article.title = string.join(values["TI"], " ")
                     article.year = int(values["PY"][0])
                     article.ncites = int(values["TC"][0])
                     try:
@@ -91,6 +91,10 @@ class WebOfKnowledgeParser:
                         article.doi = values["DI"][0]
                     except(KeyError):
                         article.doi = None
+                    try:
+                        article.authors = values["AU"]
+                    except(KeyError):
+                        article.authors = None
 
                     for line in crlines:
                         year = self.getYearFromIdentity(line)
@@ -256,16 +260,6 @@ class WebOfKnowledgeParser:
             fullInfoAsText = allKnowledgeAboutArticle.getvalue()
             logfile.write(fullInfoAsText)
             return "Conversion error: %s %s %s" % (values["PT"][0], values["AU"][0], values["PY"][0])
-
-    def removeNamedNodes(self, excludedNodeNames):
-        print("len(excludedNodeNames) = %d" % len(excludedNodeNames))
-        for key in excludedNodeNames:
-            try:
-                self.graphForAnalysis.remove_node(key)
-            except networkx.NetworkXError as KE:
-                print("NetworkXError: %s" % KE)
-        print("left nodes: %d" % len(self.graphForAnalysis.nodes()))
-
 
 def main():
     cmb = WebOfKnowledgeParser()
