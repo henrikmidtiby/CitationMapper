@@ -26,6 +26,7 @@
     <Source>src/GuiAboutDialog.py</Source>
     <Source>src/WebOfKnowledgeParser.py</Source>
     <Source>src/ArticleWithReferences.py</Source>
+    <Source>src/ScopusParser.py</Source>
   </Sources>
   <Forms>
   </Forms>

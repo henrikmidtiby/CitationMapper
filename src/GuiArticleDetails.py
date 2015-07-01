@@ -89,24 +89,40 @@ class GuiArticleDetails:
         self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.nodescrolledwindow.add(self.text)
 
-    def updateArticleInformation(self, url, graph = None, article = None):
+    def updateArticleInformation(self, url, citationmapbuild = None, article = None):
         print("updateArticleInformation url = %s" % url)
+        try:
+            article = citationmapbuild.articles[url]
+        except:
+            print("Lookup failed")
         if(isinstance(article,  ArticleWithReferences.ArticleWithReferences)):
-            #article.printInformation()
+            self.text.get_buffer().insert_at_cursor('%s\n' % url)
+            article.printInformation()
             self.doi = article.doi
-            self.text.get_buffer().insert_at_cursor('%d %s\n' % (article.year,  string.join(article.authors,  " and ")))
+            self.text.get_buffer().insert_at_cursor('%d %s\n' % (int(article.year),  string.join(article.authors,  " and ")))
             if(article.doi):
                 self.text.get_buffer().insert_at_cursor('%s\n' % article.doi)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.title)
-            self.text.get_buffer().insert_at_cursor('%s\n' % article.abstract)
+            self.text.get_buffer().insert_at_cursor('%s\n\n' % article.abstract)
+            self.text.get_buffer().insert_at_cursor('ncites: %d\n' % article.ncites)
+            self.text.get_buffer().insert_at_cursor('%s\n' % article.references)
+            
+            self.insertGraphInformation(article, citationmapbuild.graph)
+            
+            self.listCitationOfCurrentArticle(url,  citationmapbuild.graph)
+            self.listReferencesOfCurrentArticle(url,  citationmapbuild.graph)
+
             return
+        else:
+            print("Not an article")
             
         fullInfoAsText = self.getAllInformationAsText(article)
         self.updateButtons(url)
 
         self.nodeinformationwindow.set_title("Article details - %s" % url)
         try:
-            self.insertDetailedArticleInformationIfAvailable(article, graph)
+            #self.insertDetailedArticleInformationIfAvailable(article, graph)
+            pass
         except(KeyError):
             try:
                 self.roughArticleInformation(article, graph)
@@ -148,26 +164,23 @@ class GuiArticleDetails:
             self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
             self.text.get_buffer().insert_at_cursor('\n')
 
-    def roughArticleInformation(self, article, graph):
-        # BLUM H, 1978, PATTERN RECOGN, V10, P167, DOI 10.1016/0031-3203(78)90025-0
-        pattern = re.compile(".*DOI (.*)")
-        res = pattern.match(article["Journal"])
-        if(res):
-            self.updateDOIInformation(res.group(1))
-        else:
-            pass
-
-        self.text.get_buffer().insert_at_cursor('%s\n' % article["Journal"])
-        nreferencesInGraph = graph.in_degree(url)
-        ncitationsInGraph = graph.out_degree(url)
+    def insertGraphInformation(self, article, graph):
+        nreferencesInGraph = graph.in_degree(article.id)
+        ncitationsInGraph = graph.out_degree(article.id)
         self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
         self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
 
     def listCitationOfCurrentArticle(self, url, graph):
-        listOfEdges = graph.edges(url)
-        self.text.get_buffer().insert_at_cursor("Cited by\n")
+        listOfEdges = graph.out_edges(url)
+        self.text.get_buffer().insert_at_cursor("\nCited by\n")
         for edge in listOfEdges:
             self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[1])
+
+    def listReferencesOfCurrentArticle(self, url, graph):
+        listOfEdges = graph.in_edges(url)
+        self.text.get_buffer().insert_at_cursor("\nReferences\n")
+        for edge in listOfEdges:
+            self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[0])
 
     def updateDOIInformation(self, doi):
         print("Updating doi information: %s" % doi)

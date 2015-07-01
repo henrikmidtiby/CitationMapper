@@ -275,9 +275,11 @@ class GuiMainWindow:
         self.openfilename = directory
         self.citationmap.__init__()
         files = os.listdir(directory)
+        print("<open_directory>")
         for currentFile in files:
             print("Parsing file: %s" % currentFile)
             self.citationmap.parsefile(os.path.join(directory, currentFile))
+        print("</open_directory>")
         self.updateOrigNetwork()
 
     def updateOrigNetwork(self):

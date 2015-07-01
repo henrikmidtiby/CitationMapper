@@ -30,8 +30,8 @@ class ArticleWithReferences:
     def __init__(self):
         self.id = None
         self.title = None
-        self.year = None
-        self.authors = None
+        self.year = 0
+        self.authors = []
         self.doi = None
         self.references = []
         self.abstract = None

@@ -34,6 +34,8 @@ import math
 import StringIO
 import pprint
 import WebOfKnowledgeParser
+import ScopusParser
+import types
 
 class citationmapbuilder:
     def __init__(self):
@@ -47,13 +49,28 @@ class citationmapbuilder:
 
     def parsefile(self, filename):
         parser = WebOfKnowledgeParser.WebOfKnowledgeParser()
+        #parser = ScopusParser.ScopusParser()
         parser.parsefile(filename)
         
-        for article in parser.articles:
+        for articleKey in parser.articles.keys():
+            article = parser.articles[articleKey]
+            if not type(article.year) is types.IntType:
+                print("Year is not a number")
             self.articles[article.id] = article
             self.graph.add_node(article.id)
+            self.idsAndYears[article.id] = int(article.year)
+            print("nodeid %s out" % article.id)
+            halt = 1 == 2
             for reference in article.references:
                 self.graph.add_edge(reference, article.id)
+                print("nodeid %s in" % reference)
+                halt = 1 == 1
+            if(halt):
+                #return
+                pass
+                
+        #for node in self.graph.nodes():
+        #    print node
 
     def analyzeGraph(self):
         self.graphForAnalysis = self.graph.copy()
@@ -73,23 +90,18 @@ class citationmapbuilder:
                 self.graphForAnalysis.remove_node(key)
 
     def getYearsAndArticles(self):
+        
         years = {}
-        citationPattern = re.compile("^(.*?),(\d{4}),(V\d+),(P\d+)")
         for elem in self.graphForAnalysis.nodes():
-            res = citationPattern.match(elem)
-            if(res):
-                curYear = int(res.group(2))
+            try:
+                curYear = self.idsAndYears[elem]
                 if not curYear in years.keys():
                     years[curYear] = []
                 years[curYear].append(elem)
-            else:
-                try:
-                    curYear = self.idsAndYears[elem]
-                    if not curYear in years.keys():
-                        years[curYear] = []
-                    years[curYear].append(elem)
-                except KeyError:
-                    print("<getYearsAndArticles 'Did not find a year: %s'/>" % elem)
+            except KeyError:
+                print "getYearsAndArticles - KeyError - \'%s\''" % elem
+                
+        print years
         return years
 
     def outputGraph(self, stream, direction = "TD"):
@@ -127,7 +139,6 @@ class citationmapbuilder:
                     color = "#ff0000"
             except(KeyError):
                 print("outputNodeInformation: KeyError: %s" % key)
-                print(article)
                 pass
 
             nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
@@ -166,7 +177,8 @@ class citationmapbuilder:
             try:
                 self.graphForAnalysis.remove_node(key)
             except networkx.NetworkXError as KE:
-                print("NetworkXError: %s" % KE)
+                #print("NetworkXError: %s" % KE)
+                pass
         print("left nodes: %d" % len(self.graphForAnalysis.nodes()))
 
 

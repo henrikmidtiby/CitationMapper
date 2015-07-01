@@ -34,7 +34,7 @@ import ArticleWithReferences
 
 class WebOfKnowledgeParser:
     def __init__(self):
-        self.articles = []
+        self.articles = {}
 
     def parsefile(self, filename):
         print("<parsing alt=%s>" % filename)
@@ -100,12 +100,15 @@ class WebOfKnowledgeParser:
                         year = self.getYearFromIdentity(line)
                         crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
                         article.references.append(crIdentifier)
+                        referenceArticle = ArticleWithReferences.ArticleWithReferences()
+                        referenceArticle.id = crIdentifier
+                        referenceArticle.year = year
+                        self.articles[crIdentifier] = referenceArticle
                         
-                    self.articles.append(article)
+                    self.articles[identifier] = article
                     
                 except(KeyError):
                     print values
-                    
 
                 crlines = []
                 values = {}
