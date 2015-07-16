@@ -35,6 +35,8 @@ import bibtexparser
 class ScopusParser:
     def __init__(self):
         self.articles = {}
+        self.referenceMatchCounter = 0
+        self.referenceUnmatchCounter = 0
 
     def parsefile(self, filename):
         print("parsefile filename = %s",  filename)
@@ -48,6 +50,7 @@ class ScopusParser:
             
             article = ArticleWithReferences.ArticleWithReferences()
             article.id = self.generateArticleID(bibtexArticle)
+            article.origin = 'Bibtex entry'
             try:
                 article.title = bibtexArticle['title']
             except:
@@ -110,7 +113,14 @@ class ScopusParser:
         return id
         
     def generateReference(self, reference):
-           
+        # Observations
+        # 1. semicolon ; can appear within references 
+        # 2. authors lists have 
+        # #############
+        self.test3(reference)
+        #print("Could not match reference: '%s'" % reference)
+        # #############
+        # Authors, Titel (year) Journal, vol (issue), pp pagestart-pageend
         # Zwiggelaar, R., A review of spectral properties of plants and their potential use for crop/weed discrimination in row-crops (1998) Crop Prot., 17 (3), pp. 189-206
         pattern = re.compile("(.*) \((\d\d\d\d)\) (.*), (.*), pp. (.*)")
         res = pattern.match(reference)
@@ -154,7 +164,77 @@ class ScopusParser:
         referenceArticle = ArticleWithReferences.ArticleWithReferences()
         referenceArticle.id = id
         referenceArticle.year = year
+        referenceArticle.origin = 'Rerefence'
         return referenceArticle
+
+    def test1(self,  reference):
+        print("Reference: '%s'" % reference.encode('latin-1', 'ignore'))
+        pattern = re.compile("(.*)\((\d\d\d\d)\) ?(.*)")
+        res = pattern.match(reference.encode('latin-1',  'ignore'))
+        if(res):
+            print("Matched 1: '%s'" % res.group(1))
+            pattern2 = re.compile("([^,]*), ([A-Z]\.)+, (.*)")
+            tempString = res.group(1)
+            res2 = pattern2.match(tempString)
+            while(res2):
+                tempString = res2.group(3)
+                print("Matched 1 author: '%s' - rest '%s'" % (res2.group(1),  res2.group(3)))
+                res2 = pattern2.match(tempString)
+            print("Matched 1 title: '%s'" % tempString)
+            print("Matched 2: '%s'" % res.group(2))
+            print("Matched 3: '%s'" % res.group(3))
+            self.referenceMatchCounter += 1
+        else:
+            print("Unmatched: %s" % reference.encode('latin-1',  'ignore'))
+            self.referenceUnmatchCounter += 1
+
+    def test2(self,  reference):
+        reference = reference.encode('latin-1', 'replace')
+        print("Reference: '%s'" % reference)
+        # Author, title and year
+        pattern = re.compile("^(?P<authors>(?P<author>[^,]+, (?:[A-Z]\.)+, )+)(?P<title>.*)\((?P<year>\d\d\d\d)\) ?(?P<rest>.*)")
+        res = pattern.match(reference)
+        if(res):
+            authors = res.group('authors')
+            firstAuthor = authors.partition(',')[0]
+            title = res.group('title').strip() # Remove trailing spaces
+            year = int(res.group('year'))
+            restOfString = res.group('rest')
+            print("Matched 1: '%s'" % authors)
+            print("Matched 1 first author: '%s'" % firstAuthor)
+            print("Matched 2: '%s'" % title)
+            print("Matched 3: '%s'" % year)
+            print("Matched 4: '%s'" % restOfString)
+            self.referenceMatchCounter += 1
+        else:
+            print("Unmatched: %s" % reference)
+            self.referenceUnmatchCounter += 1
+
+    def test3(self,  reference):
+        reference = reference.encode('latin-1', 'replace')
+        print("Reference: '%s'" % reference)
+        # Author, title and year
+        pattern = re.compile("^(?P<authors>(?P<author>[^,]+, (?:[A-Z]\.)+, )+)(?P<title>.*)\((?P<year>\d\d\d\d)\) ?(?P<rest1>.*)(?P<pages>pp?. \d+(-\d+))(?P<rest2>).*")
+        res = pattern.match(reference)
+        if(res):
+            authors = res.group('authors')
+            firstAuthor = authors.partition(',')[0]
+            title = res.group('title').strip() # Remove trailing spaces
+            year = int(res.group('year'))
+            restOfString1 = res.group('rest1')
+            pages = res.group('pages')
+            restOfString2 = res.group('rest2')
+            print("Matched 1: '%s'" % authors)
+            print("Matched 1 first author: '%s'" % firstAuthor)
+            print("Matched 2: '%s'" % title)
+            print("Matched 3: '%s'" % year)
+            print("Matched 4: '%s'" % restOfString1)
+            print("Matched 5: '%s'" % pages)
+            print("Matched 4: '%s'" % restOfString2)
+            self.referenceMatchCounter += 1
+        else:
+            print("Unmatched: %s" % reference)
+            self.referenceUnmatchCounter += 1
 
 
 def main():
@@ -168,6 +248,9 @@ def main():
         article = cmb.articles[articleKey]
         article.printInformation()
         break
+    
+    print("Matches: %d" % cmb.referenceMatchCounter)
+    print("No matches: %d" % cmb.referenceUnmatchCounter)
 
 if __name__ == '__main__':
     main()

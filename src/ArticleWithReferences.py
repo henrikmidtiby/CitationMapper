@@ -36,6 +36,7 @@ class ArticleWithReferences:
         self.references = []
         self.abstract = None
         self.ncites = 0
+        self.origin = None
         
     def printInformation(self):
         print("Article")
