@@ -26,6 +26,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 class ArticleWithReferences:
     def __init__(self):
         self.id = None
@@ -37,7 +38,7 @@ class ArticleWithReferences:
         self.abstract = None
         self.ncites = 0
         self.origin = None
-        
+
     def printInformation(self):
         print("Article")
         print("id: %s" % self.id)

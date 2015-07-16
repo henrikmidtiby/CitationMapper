@@ -28,9 +28,10 @@
 
 import GuiArticleDetails
 
+
 class GuiArticleDetailsWindowHandler:
     def __init__(self):
-        self.listOfWindows = [];
+        self.listOfWindows = []
 
     def openNewArticleDetailsWindow(self, url, citationmap):
         articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
@@ -47,9 +48,10 @@ class GuiArticleDetailsWindowHandler:
             window.nodeinformationwindow.destroy()
         self.listOfWindows = []
 
+
 def main():
     pass
 
+
 if __name__ == '__main__':
     main()
-

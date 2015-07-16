@@ -9,7 +9,6 @@
 # Licence:     LGPL
 #-------------------------------------------------------------------------------
 
-
 import httplib
 import json
 import percache
@@ -17,6 +16,7 @@ import tempfile
 import os
 TESTFILE = os.path.join(tempfile.gettempdir(), "doilookup.cache")
 cache = percache.Cache(TESTFILE, livesync=True)
+
 
 @cache
 def getDOIInformation(doi):
@@ -29,18 +29,21 @@ def getDOIInformation(doi):
     parsedData = json.JSONDecoder().decode(data)
     return parsedData
 
+
 def showDOIInformation(doi):
     print("showDOIInformation('%s')" % doi)
     parsedData = getDOIInformation(doi)
-    for k,v in parsedData.items():
+    for k, v in parsedData.items():
         print("%-*s: %s" % (15, k, v))
 
     print("\n\n")
+
 
 def main():
     showDOIInformation("10.1007/978-3-642-02674-4_9")
     showDOIInformation("10.1117/12.909861")
     showDOIInformation("10.1007/978-3-642-02674-4_9")
+
 
 if __name__ == '__main__':
     main()

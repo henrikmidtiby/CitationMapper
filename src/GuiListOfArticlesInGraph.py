@@ -29,6 +29,7 @@
 import gtk
 import StringIO
 
+
 class GuiListOfArticlesInGraph:
     def __init__(self):
         self.tvcolumn = None
@@ -58,11 +59,14 @@ class GuiListOfArticlesInGraph:
 
 
     def generateNodesTreeView(self):
-        tmsort = gtk.TreeModelSort(self.nodesTreestore) # produce a sortable treemodel
+        tmsort = gtk.TreeModelSort(self.nodesTreestore
+                                   )  # produce a sortable treemodel
         self.nodesTreeview = gtk.TreeView(tmsort)
         self.nodesTreeview.connect("row-activated", self.row_clicked)
 
-        column_names = ['ID', 'Year', 'In graph citations', 'In graph references', 'Total citations', 'Total references', 'Journal', 'Authors', 'Title']
+        column_names = ['ID', 'Year', 'In graph citations',
+                        'In graph references', 'Total citations',
+                        'Total references', 'Journal', 'Authors', 'Title']
 
         self.tvcolumn = [None] * len(column_names)
         for n in range(0, len(column_names)):
@@ -80,17 +84,22 @@ class GuiListOfArticlesInGraph:
     def generateNodeScrolledWindow(self):
         self.nodescrolledwindow = gtk.ScrolledWindow()
         self.nodescrolledwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC,
+                                           gtk.POLICY_AUTOMATIC)
         self.nodescrolledwindow.add(self.nodesTreeview)
 
     def row_clicked(self, widget, row, col):
         model = widget.get_model()
-        text = "%s %d %d %d" % (model[row][0], model[row][1], model[row][2], model[row][3])
+        text = "%s %d %d %d" % (model[row][0], model[row][1], model[row][2],
+                                model[row][3])
         print(text)
 
-    def exportListOfNodes(self, widget, temp2 = None):
-        chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+    def exportListOfNodes(self, widget, temp2=None):
+        chooser = gtk.FileChooserDialog(
+            title=None,
+            action=gtk.FILE_CHOOSER_ACTION_SAVE,
+            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE,
+                     gtk.RESPONSE_OK))
         if chooser.run() == gtk.RESPONSE_OK:
             filename = chooser.get_filename()
             chooser.destroy()
@@ -103,7 +112,6 @@ class GuiListOfArticlesInGraph:
         else:
             chooser.destroy()
         return False
-
 
     def encodeCurrentListAsHTML(self):
         output = StringIO.StringIO()
@@ -121,10 +129,12 @@ class GuiListOfArticlesInGraph:
 
         return output.getvalue()
 
+
 def main():
     loaig = GuiListOfArticlesInGraph()
     loaig.nodewindow.connect('destroy', gtk.main_quit)
     gtk.main()
+
 
 if __name__ == '__main__':
     main()

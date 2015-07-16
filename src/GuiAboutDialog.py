@@ -28,6 +28,7 @@
 
 import gtk
 
+
 class GuiAboutDialog:
     def __init__(self):
         self.aboutdialog = None
@@ -49,8 +50,9 @@ class GuiAboutDialog:
         self.vbox = gtk.VBox(False, 0)
 
     def addLabel(self):
-        self.label = gtk.Label("Citation mapper was developed by "
-            + "Henrik Skov Midtiby (hemi@kbm.sdu.dk), University of Southern Denmark. ")
+        self.label = gtk.Label(
+            "Citation mapper was developed by " +
+            "Henrik Skov Midtiby (hemi@kbm.sdu.dk), University of Southern Denmark. ")
         self.label.set_line_wrap(True)
         self.label.show()
         self.vbox.pack_start(self.label, True, True, 5)
@@ -71,10 +73,12 @@ class GuiAboutDialog:
     def closeAction(self, action, data):
         self.aboutdialog.destroy()
 
+
 def main():
     gab = GuiAboutDialog()
     gab.aboutdialog.connect('destroy', gtk.main_quit)
     gtk.main()
+
 
 if __name__ == '__main__':
     main()

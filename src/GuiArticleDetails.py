@@ -26,8 +26,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
-
 import re
 import gtk
 import pprint
@@ -38,8 +36,10 @@ import sys
 import DoiLookup
 import ArticleWithReferences
 
+
 def open_url(widget, url):
     webbrowser.open(url)
+
 
 class GuiArticleDetails:
     def __init__(self):
@@ -69,16 +69,18 @@ class GuiArticleDetails:
         self.text.set_wrap_mode(gtk.WRAP_WORD)
 
     def addRequestDOIInformationButton(self):
-        self.requestDOIInformation = gtk.Button("Fetch more information based on DOI")
+        self.requestDOIInformation = gtk.Button(
+            "Fetch more information based on DOI")
         self.requestDOIInformation.show()
         self.vbox.pack_start(self.requestDOIInformation, False, False, 5)
-        self.requestDOIInformation.connect("clicked", self.requestDOIInformationCallback, None)
+        self.requestDOIInformation.connect(
+            "clicked", self.requestDOIInformationCallback, None)
 
     def requestDOIInformationCallback(self, p1, p2):
         text = DoiLookup.getDOIInformation(self.doi)
         self.text.get_buffer().insert_at_cursor('\nDOI Information: \n')
 
-        for k,v in text.items():
+        for k, v in text.items():
             self.text.get_buffer().insert_at_cursor("%-*s: %s\n" % (15, k, v))
 
         self.requestDOIInformation.hide()
@@ -89,13 +91,15 @@ class GuiArticleDetails:
         self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.nodescrolledwindow.add(self.text)
 
-    def updateArticleInformation(self, url, citationmapbuild = None, article = None):
+    def updateArticleInformation(self, url,
+                                 citationmapbuild=None,
+                                 article=None):
         print("updateArticleInformation url = %s" % url)
         try:
             article = citationmapbuild.articles[url]
         except:
             print("Lookup failed")
-        if(isinstance(article,  ArticleWithReferences.ArticleWithReferences)):
+        if (isinstance(article, ArticleWithReferences.ArticleWithReferences)):
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
             article.printInformation()
             self.doi = article.doi
@@ -115,7 +119,7 @@ class GuiArticleDetails:
             return
         else:
             print("Not an article")
-            
+
         fullInfoAsText = self.getAllInformationAsText(article)
         self.updateButtons(url)
 
@@ -123,20 +127,21 @@ class GuiArticleDetails:
         try:
             #self.insertDetailedArticleInformationIfAvailable(article, graph)
             pass
-        except(KeyError):
+        except (KeyError):
             try:
                 self.roughArticleInformation(article, graph)
             except:
                 print "Unexpected error:", sys.exc_info()[0]
-        except():
+        except ():
             print "Other error", sys.exc_info()[0]
 
-        self.text.get_buffer().insert_at_cursor('\nAll available information:\n%s' % fullInfoAsText)
+        self.text.get_buffer().insert_at_cursor(
+            '\nAll available information:\n%s' % fullInfoAsText)
         self.listCitationOfCurrentArticle(url, graph)
 
     def getAllInformationAsText(self, article):
         allKnowledgeAboutArticle = StringIO.StringIO()
-        pp = pprint.PrettyPrinter(stream = allKnowledgeAboutArticle)
+        pp = pprint.PrettyPrinter(stream=allKnowledgeAboutArticle)
         pp.pprint(article)
         fullInfoAsText = allKnowledgeAboutArticle.getvalue()
         return fullInfoAsText
@@ -144,7 +149,7 @@ class GuiArticleDetails:
     def updateButtons(self, url):
         pattern = re.compile(".*DOI (.*)")
         res = pattern.match(url)
-        if(res):
+        if (res):
             print(res.group(1))
             self.updateDOIInformation(res.group(1))
         else:
@@ -154,21 +159,26 @@ class GuiArticleDetails:
             print("Not found")
 
     def insertDetailedArticleInformationIfAvailable(self, article, graph):
-            nreferences = article["NR"][0]
-            nreferencesInGraph = graph.in_degree(url)
-            self.text.get_buffer().insert_at_cursor('\n')
-            self.text.get_buffer().insert_at_cursor('Number of references: %s (%s)\n' % (nreferences, nreferencesInGraph))
+        nreferences = article["NR"][0]
+        nreferencesInGraph = graph.in_degree(url)
+        self.text.get_buffer().insert_at_cursor('\n')
+        self.text.get_buffer().insert_at_cursor(
+            'Number of references: %s (%s)\n' %
+            (nreferences, nreferencesInGraph))
 
-            ncitations = article["TC"][0]
-            ncitationsInGraph = graph.out_degree(url)
-            self.text.get_buffer().insert_at_cursor('Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
-            self.text.get_buffer().insert_at_cursor('\n')
+        ncitations = article["TC"][0]
+        ncitationsInGraph = graph.out_degree(url)
+        self.text.get_buffer().insert_at_cursor(
+            'Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
+        self.text.get_buffer().insert_at_cursor('\n')
 
     def insertGraphInformation(self, article, graph):
         nreferencesInGraph = graph.in_degree(article.id)
         ncitationsInGraph = graph.out_degree(article.id)
-        self.text.get_buffer().insert_at_cursor('Number of references in graph: %s\n' % nreferencesInGraph)
-        self.text.get_buffer().insert_at_cursor('Number of citations in graph: %s\n' % ncitationsInGraph)
+        self.text.get_buffer().insert_at_cursor(
+            'Number of references in graph: %s\n' % nreferencesInGraph)
+        self.text.get_buffer().insert_at_cursor(
+            'Number of citations in graph: %s\n' % ncitationsInGraph)
 
     def listCitationOfCurrentArticle(self, url, graph):
         listOfEdges = graph.out_edges(url)
@@ -192,6 +202,7 @@ class GuiArticleDetails:
 def main():
     GuiArticleDetails()
     gtk.main()
+
 
 if __name__ == "__main__":
     main()

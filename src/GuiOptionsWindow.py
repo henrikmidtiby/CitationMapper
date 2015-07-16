@@ -28,6 +28,7 @@
 
 import gtk
 
+
 class GuiOptionsWindow:
     minNumberOfReferences = 1
     minNumberOfCitations = 3
@@ -75,8 +76,12 @@ class GuiOptionsWindow:
 
     def addHscrollbarReferences(self, maxReferences):
         self.adjMinNumberOfReferences = gtk.Adjustment(
-            value=self.minNumberOfReferences, lower=0, upper=maxReferences, 
-            step_incr=1, page_incr=5, page_size=0)
+            value=self.minNumberOfReferences,
+            lower=0,
+            upper=maxReferences,
+            step_incr=1,
+            page_incr=5,
+            page_size=0)
         self.hscrollbarReferences = gtk.HScale(self.adjMinNumberOfReferences)
         self.hscrollbarReferences.set_digits(0)
         self.hscrollbarReferences.set_value_pos(gtk.POS_LEFT)
@@ -90,8 +95,12 @@ class GuiOptionsWindow:
 
     def addHscrollbarCitations(self, maxCitations):
         self.adjMinNumberOfCitations = gtk.Adjustment(
-            value=self.minNumberOfCitations, lower=0, upper=maxCitations, 
-            step_incr=1, page_incr=5, page_size=0)
+            value=self.minNumberOfCitations,
+            lower=0,
+            upper=maxCitations,
+            step_incr=1,
+            page_incr=5,
+            page_size=0)
         self.hscrollbarCitations = gtk.HScale(self.adjMinNumberOfCitations)
         self.hscrollbarCitations.set_digits(0)
         self.hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
@@ -105,9 +114,14 @@ class GuiOptionsWindow:
 
     def addHscrollbarReferencesTwo(self, maxReferences):
         self.adjMinNumberOfReferencesTwo = gtk.Adjustment(
-            value=self.minNumberOfReferencesTwo, lower=0, upper=maxReferences, 
-            step_incr=1, page_incr=5, page_size=0)
-        self.hscrollbarReferencesTwo = gtk.HScale(self.adjMinNumberOfReferencesTwo)
+            value=self.minNumberOfReferencesTwo,
+            lower=0,
+            upper=maxReferences,
+            step_incr=1,
+            page_incr=5,
+            page_size=0)
+        self.hscrollbarReferencesTwo = gtk.HScale(
+            self.adjMinNumberOfReferencesTwo)
         self.hscrollbarReferencesTwo.set_digits(0)
         self.hscrollbarReferencesTwo.set_value_pos(gtk.POS_LEFT)
         self.hscrollbarReferencesTwo.show()
@@ -120,9 +134,14 @@ class GuiOptionsWindow:
 
     def addHscrollbarCitationsTwo(self, maxCitations):
         self.adjMinNumberOfCitationsTwo = gtk.Adjustment(
-            value=self.minNumberOfCitationsTwo, lower=0, upper=maxCitations, 
-            step_incr=1, page_incr=5, page_size=0)
-        self.hscrollbarCitationsTwo = gtk.HScale(self.adjMinNumberOfCitationsTwo)
+            value=self.minNumberOfCitationsTwo,
+            lower=0,
+            upper=maxCitations,
+            step_incr=1,
+            page_incr=5,
+            page_size=0)
+        self.hscrollbarCitationsTwo = gtk.HScale(
+            self.adjMinNumberOfCitationsTwo)
         self.hscrollbarCitationsTwo.set_digits(0)
         self.hscrollbarCitationsTwo.set_value_pos(gtk.POS_LEFT)
         self.hscrollbarCitationsTwo.show()
@@ -153,10 +172,11 @@ class GuiOptionsWindow:
         self.ignoreArticlesButton.show()
         self.vbox.pack_start(self.ignoreArticlesButton, True, True, 0)
 
+
 def main():
     GuiOptionsWindow()
     gtk.main()
 
+
 if __name__ == '__main__':
     main()
-

@@ -12,6 +12,7 @@
 
 import gtk
 
+
 class GuiArticleContextMenu:
     def __init__(self, directoryName):
         self.opendirectory = directoryName
@@ -22,7 +23,7 @@ class GuiArticleContextMenu:
         try:
             filehandle = open(filename, 'a')
             filehandle.write("%s\n" % data)
-        except(IOError):
+        except (IOError):
             pass
         filehandle.close()
         return False
@@ -41,7 +42,7 @@ class GuiArticleContextMenu:
         two.connect("activate", self.hello)
         submenu.append(two)
         one.set_submenu(submenu)
-        three = gtk.MenuItem("Three") 
+        three = gtk.MenuItem("Three")
         three.connect("activate", self.hello)
         menu.append(three)
         menu.show_all()
@@ -56,4 +57,3 @@ class GuiArticleContextMenu:
         menu.show_all()
         menu.popup(None, None, None, event.button, event.get_time())
         return True
-

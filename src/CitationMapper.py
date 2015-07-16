@@ -41,6 +41,7 @@ import GuiOptionsWindow
 import GuiArticleContextMenu
 import GuiAboutDialog
 
+
 class GuiMainWindow:
     dotcode = """
     digraph G {
@@ -82,7 +83,6 @@ class GuiMainWindow:
     minNumberOfCitations = 3
     minNumberOfReferencesTwo = 1
     minNumberOfCitationsTwo = 3
-
 
     def __init__(self):
         self.origNetworkPreFiltered = None
@@ -173,11 +173,11 @@ class GuiMainWindow:
     def changeColorOfNode(self, url, newcolor):
         temp = self.mapview.graph
         for node in temp.nodes:
-            if(isinstance(node, xdot.Node) and node.url == url):
+            if (isinstance(node, xdot.Node) and node.url == url):
                 for shape in node.shapes:
-                    if(isinstance(shape, xdot.TextShape)):
+                    if (isinstance(shape, xdot.TextShape)):
                         print(shape.t)
-                    if(isinstance(shape, xdot.EllipseShape)):
+                    if (isinstance(shape, xdot.EllipseShape)):
                         shape.pen.fillcolor = newcolor
                         shape.pen.color = newcolor
         self.mapview.queue_draw()
@@ -187,11 +187,13 @@ class GuiMainWindow:
         self.citationmapperwindow.connect('destroy', gtk.main_quit)
 
     def articleClicked(self, widget, data, event):
-        if(event.button == 1):
-            self.articleDetailsWindows.openNewArticleDetailsWindow(data, self.citationmap)
+        if (event.button == 1):
+            self.articleDetailsWindows.openNewArticleDetailsWindow(
+                data, self.citationmap)
             self.changeColorOfNode(data, (1, 0.75, 0.75, 1))
         else:
-            articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(self.openfilename)
+            articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(
+                self.openfilename)
             articleContextMenu.showContextMenu(widget, data, event)
 
     def updateMinNumberOfReferences(self, adj):
@@ -216,16 +218,19 @@ class GuiMainWindow:
         self.includedNodeNames = []
         self.excludedNodeNames = []
         for key in self.origNetworkCitations.keys():
-            testOne = (self.origNetworkCitations[key] >= self.minNumberOfCitations 
-                    and self.origNetworkReferences[key] >= self.minNumberOfReferences)
-            testTwo = (self.origNetworkCitations[key] >= self.minNumberOfCitationsTwo 
-                    and self.origNetworkReferences[key] >= self.minNumberOfReferencesTwo)
-            if(testOne or testTwo):
+            testOne = (
+                self.origNetworkCitations[key] >= self.minNumberOfCitations and
+                self.origNetworkReferences[key] >= self.minNumberOfReferences)
+            testTwo = (
+                self.origNetworkCitations[key] >= self.minNumberOfCitationsTwo
+                and self.origNetworkReferences[key] >=
+                self.minNumberOfReferencesTwo)
+            if (testOne or testTwo):
                 nNodes = nNodes + 1
                 self.includedNodeNames.append(key)
             else:
                 self.excludedNodeNames.append(key)
-                
+
         self.citationmap.removeNamedNodes(self.excludedNodeNames)
         self.optionsWindow.graphSize = nNodes
         self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
@@ -248,12 +253,11 @@ class GuiMainWindow:
         self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
     def on_open(self, action):
-        chooser = gtk.FileChooserDialog(title="Open directory with bibliography",
-                                        action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                        buttons=(gtk.STOCK_CANCEL,
-                                                 gtk.RESPONSE_CANCEL,
-                                                 gtk.STOCK_OPEN,
-                                                 gtk.RESPONSE_OK))
+        chooser = gtk.FileChooserDialog(
+            title="Open directory with bibliography",
+            action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OPEN,
+                     gtk.RESPONSE_OK))
         chooser.set_default_response(gtk.RESPONSE_OK)
         if chooser.run() == gtk.RESPONSE_OK:
             filename = chooser.get_filename()
@@ -290,7 +294,8 @@ class GuiMainWindow:
     def calculateNetworkProperties(self):
         self.origNetworkCitations = self.origNetwork.out_degree()
         self.origNetworkReferences = self.origNetwork.in_degree()
-        assert(len(self.origNetworkCitations) == len(self.origNetworkReferences))
+        assert (len(self.origNetworkCitations) ==
+                len(self.origNetworkReferences))
         try:
             self.maxCitations = max(self.origNetworkCitations.values())
             self.maxReferences = max(self.origNetworkReferences.values())
@@ -311,8 +316,8 @@ class GuiMainWindow:
         return dotcode
 
     def filterAndShowCurrentCitationMap(self, action, data):
-        if(self.optionsWindow.graphSize > 200):
-            if(not self.dialogShowLargeGraph(self.optionsWindow.graphSize)):
+        if (self.optionsWindow.graphSize > 200):
+            if (not self.dialogShowLargeGraph(self.optionsWindow.graphSize)):
                 return
         dotcode = self.filterAndExportCurrentCitationMap()
         self.mapview.set_dotcode(dotcode)
@@ -322,20 +327,22 @@ class GuiMainWindow:
         self.quit_dialog = gtk.Dialog()
 
         # Set it modal and transient for main window.
-        self.quit_dialog.set_modal( True )
+        self.quit_dialog.set_modal(True)
         #self.quit_dialog.set_transient_for( self )
 
         # Set title
-        self.quit_dialog.set_title( 'Confirmation' )
+        self.quit_dialog.set_title('Confirmation')
 
         # Add buttons.
-        self.quit_dialog.add_button( gtk.STOCK_YES, 1 )
-        self.quit_dialog.add_button( gtk.STOCK_NO,  2 )
+        self.quit_dialog.add_button(gtk.STOCK_YES, 1)
+        self.quit_dialog.add_button(gtk.STOCK_NO, 2)
 
         # Create label
-        label = gtk.Label( 'Will you really visualize this huge graph? (# nodes = %d)' % nNodes )
+        label = gtk.Label(
+            'Will you really visualize this huge graph? (# nodes = %d)' %
+            nNodes)
 
-        self.quit_dialog.vbox.pack_start( label )
+        self.quit_dialog.vbox.pack_start(label)
 
         # Show dialog
         self.quit_dialog.show_all()
@@ -344,12 +351,14 @@ class GuiMainWindow:
         response = self.quit_dialog.run()
         self.quit_dialog.hide()
 
-        return(response == 1)
-
+        return (response == 1)
 
     def exportFilteredCitationMap(self, action, data):
-        chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+        chooser = gtk.FileChooserDialog(
+            title=None,
+            action=gtk.FILE_CHOOSER_ACTION_SAVE,
+            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE,
+                     gtk.RESPONSE_OK))
         if chooser.run() == gtk.RESPONSE_OK:
             filename = chooser.get_filename()
             chooser.destroy()
@@ -378,39 +387,44 @@ class GuiMainWindow:
                 fieldAuthors = string.join(article['AU'], ' and ')
                 fieldTC = int(article['TC'][0])
                 fieldNR = int(article['NR'][0])
-                listOfNodes.nodesTreestore.append(None, 
-                    [key, year, networkCitations, networkReferences, 
-                        fieldTC, fieldNR, fieldSO, fieldAuthors, fieldTitle])
-            except(KeyError):
-                listOfNodes.nodesTreestore.append(None, 
-                    [key, -1, networkCitations, networkReferences, 
-                        -1, -1, "", "", ""])
+                listOfNodes.nodesTreestore.append(None,
+                                                  [key, year, networkCitations,
+                                                   networkReferences, fieldTC,
+                                                   fieldNR, fieldSO,
+                                                   fieldAuthors, fieldTitle])
+            except (KeyError):
+                listOfNodes.nodesTreestore.append(None,
+                                                  [key, -1, networkCitations,
+                                                   networkReferences, -1, -1,
+                                                   "", "", ""])
 
     def ignoreArticlesInBanFile(self, action, data):
         self.origNetwork = self.origNetworkPreFiltered.copy()
-        filename = "%s/banlist" % self.openfilename 
+        filename = "%s/banlist" % self.openfilename
         try:
             filehandle = open(filename)
             for line in filehandle:
                 articleIdentifier = line[:-1]
                 try:
                     # Remove things that are only mentioned by the node
-                    thingsReferenced = self.origNetwork.in_edges([articleIdentifier])
+                    thingsReferenced = self.origNetwork.in_edges(
+                        [articleIdentifier])
                     for edge in thingsReferenced:
                         referencedArticle = edge[0]
-                        numberOfCitations = self.origNetwork.out_degree(referencedArticle)
-                        if(numberOfCitations == 1):
+                        numberOfCitations = self.origNetwork.out_degree(
+                            referencedArticle)
+                        if (numberOfCitations == 1):
                             print referencedArticle
                             self.origNetwork.remove_node(referencedArticle)
 
-                    # Remove node                        
+                    # Remove node
                     print articleIdentifier
                     self.origNetwork.remove_node(articleIdentifier)
                 except IOError:
                     pass
                 except:
                     print "Unknown error detected"
-                
+
         except IOError:
             pass
         self.calculateNetworkProperties()
@@ -423,12 +437,12 @@ class GuiMainWindow:
 def main():
     gmw = GuiMainWindow()
 
-    if(len(sys.argv) > 1):
+    if (len(sys.argv) > 1):
         gmw.open_directory(sys.argv[1])
         gmw.showOptionsWindow()
 
     gtk.main()
 
+
 if __name__ == '__main__':
     main()
-
