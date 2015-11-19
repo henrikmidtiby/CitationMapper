@@ -77,13 +77,14 @@ class WebOfKnowledgeParser:
                 erCounter = erCounter + 1
                 rawIdentifier = self.formatIdentifier(values)
                 identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
-                
+
                 try:
                     article = ArticleWithReferences.ArticleWithReferences()
                     article.id = identifier
                     article.title = string.join(values["TI"], " ")
                     article.year = int(values["PY"][0])
                     article.ncites = int(values["TC"][0])
+                    article.origin = "PrimaryRecord"
                     try:
                         article.abstract = string.join(values["AB"], " ")
                     except (KeyError):
@@ -104,6 +105,13 @@ class WebOfKnowledgeParser:
                         referenceArticle = ArticleWithReferences.ArticleWithReferences()
                         referenceArticle.id = crIdentifier
                         referenceArticle.year = year
+
+                        doiPattern = re.compile("^DOI (.*)")
+                        doiRes = doiPattern.match(crIdentifier)
+                        if(doiRes):
+                            referenceArticle.doi = doiRes.group(1)
+
+                        referenceArticle.origin = "ListedInCitations"
                         self.articles[crIdentifier] = referenceArticle
 
                     self.articles[identifier] = article
