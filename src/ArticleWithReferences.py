@@ -45,6 +45,7 @@ class ArticleWithReferences:
         print("doi: %s" % self.doi)
         print("Title: %s" % self.title)
         print("Year: %s" % self.year)
+        print("Origin: %s" % self.origin)
         #print("Abstract: %s" % self.abstract)
         #print("References:")
         #for reference in self.references:
