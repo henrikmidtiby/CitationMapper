@@ -96,7 +96,7 @@ class GuiArticleDetails:
     def updateArticleInformation(self, url,
                                  citationmapbuild=None,
                                  article=None):
-        print("updateArticleInformation url = %s" % url)
+        print("updateArticleInformation url = '%s'" % url)
         try:
             article = citationmapbuild.articles[url]
         except:
