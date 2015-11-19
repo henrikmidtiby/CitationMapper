@@ -57,14 +57,21 @@ class citationmapbuilder:
             article = parser.articles[articleKey]
             if not type(article.year) is types.IntType:
                 print("Year is not a number")
+
+            # Add article to database if it is a primary record or it is
+            # not in the database already.
+            if(article.origin == "PrimaryRecord"):
+                self.articles[article.id] = article
+            elif(not self.articles.has_key(article.id)):
+                self.articles[article.id] = article
+
             self.articles[article.id] = article
             self.graph.add_node(article.id)
             self.idsAndYears[article.id] = int(article.year)
-            print("nodeid %s out" % article.id)
+
             halt = 1 == 2
             for reference in article.references:
                 self.graph.add_edge(reference, article.id)
-                print("nodeid %s in" % reference)
                 halt = 1 == 1
             if (halt):
                 #return
