@@ -101,6 +101,9 @@ class GuiArticleDetails:
             article = citationmapbuild.articles[url]
         except:
             print("Lookup failed")
+
+        self.updateButtons(url)
+
         if (isinstance(article, ArticleWithReferences.ArticleWithReferences)):
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
             article.printInformation()
@@ -112,9 +115,9 @@ class GuiArticleDetails:
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.abstract)
             self.text.get_buffer().insert_at_cursor('ncites: %d\n' % article.ncites)
             self.text.get_buffer().insert_at_cursor('%s\n' % article.references)
-            
+
             self.insertGraphInformation(article, citationmapbuild.graph)
-            
+
             self.listCitationOfCurrentArticle(url,  citationmapbuild.graph)
             self.listReferencesOfCurrentArticle(url,  citationmapbuild.graph)
 
@@ -123,7 +126,6 @@ class GuiArticleDetails:
             print("Not an article")
 
         fullInfoAsText = self.getAllInformationAsText(article)
-        self.updateButtons(url)
 
         self.nodeinformationwindow.set_title("Article details - %s" % url)
         try:
