@@ -78,10 +78,12 @@ class GuiArticleDetails:
 
     def requestDOIInformationCallback(self, p1, p2):
         text = DoiLookup.getDOIInformation(self.doi)
-        self.text.get_buffer().insert_at_cursor('\nDOI Information: \n')
+        endIter = self.text.get_buffer().get_end_iter()
+        self.text.get_buffer().insert(endIter, '\nDOI Information: \n')
 
         for k, v in text.items():
-            self.text.get_buffer().insert_at_cursor("%-*s: %s\n" % (15, k, v))
+            endIter = self.text.get_buffer().get_end_iter()
+            self.text.get_buffer().insert(endIter, "%-*s: %s\n" % (15, k, v))
 
         self.requestDOIInformation.hide()
 
