@@ -142,10 +142,11 @@ class citationmapbuilder:
     def outputNodeInformation(self, stream):
         for key in self.graphForAnalysis.nodes():
             color = "#0000ff"
-            firstauthor = key
+            labelOnGraph = key
             try:
                 ncites = self.articles[key].ncites
                 ncitesingraph = self.graph.out_degree(key)
+                labelOnGraph = self.articles[key].firstAuthor
                 if 0.95 * ncites < ncitesingraph:
                     color = "#00ff00"
                 else:
@@ -158,7 +159,7 @@ class citationmapbuilder:
             fontsize = math.sqrt(self.outdegrees[key] + 1) * 2
             stream.write(
                 '"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n'
-                % (key, key, nodesize, firstauthor, fontsize, color))
+                % (key, key, nodesize, labelOnGraph, fontsize, color))
 
     def createLabelFromCRLine(self, crline):
         authorYearPattern = re.compile("^(.*?,\s?\d{4})")
