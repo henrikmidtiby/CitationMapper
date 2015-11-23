@@ -57,6 +57,7 @@ class GuiMainWindow:
             <menu action="File">
                 <menuitem action="Open"/>
                 <menuitem action="Reload"/>
+                <menuitem action="OpenOptionsDialog"/>
                 <menuitem action="CloseArticleDetailsWindows"/>
                 <menuitem action="Print"/>
                 <menuitem action="Quit"/>
@@ -139,6 +140,7 @@ class GuiMainWindow:
         actiongroup.add_actions([
             ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
             ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C', None, self.articleDetailsWindows.closeAll),
+            ('OpenOptionsDialog', None, '_Options', 'O', None, self.showOptionsWindow),
             ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
             ('About', None, '_About', None, None, self.showAboutDialog),
             ('File', None, '_File'),
@@ -235,7 +237,7 @@ class GuiMainWindow:
         self.optionsWindow.graphSize = nNodes
         self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
-    def showOptionsWindow(self):
+    def showOptionsWindow(self, action = None):
         try:
             self.optionsWindow.searchoptionswindow.destroy()
         except:
