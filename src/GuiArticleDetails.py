@@ -32,7 +32,6 @@ import pprint
 import StringIO
 import string
 import webbrowser
-import sys
 import DoiLookup
 import ArticleWithReferences
 
@@ -105,6 +104,7 @@ class GuiArticleDetails:
         self.updateButtons(url)
 
         if (isinstance(article, ArticleWithReferences.ArticleWithReferences)):
+            article = self.useDOIInformation(article)
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
             article.printInformation()
             self.doi = article.doi
@@ -121,27 +121,21 @@ class GuiArticleDetails:
             self.listCitationOfCurrentArticle(url,  citationmapbuild.graph)
             self.listReferencesOfCurrentArticle(url,  citationmapbuild.graph)
 
+            fullInfoAsText = self.getAllInformationAsText(article)
+            self.text.get_buffer().insert_at_cursor(
+                '\nAll available information:\n%s' % fullInfoAsText)
             return
         else:
             print("Not an article")
 
-        fullInfoAsText = self.getAllInformationAsText(article)
-
-        self.nodeinformationwindow.set_title("Article details - %s" % url)
+    def useDOIInformation(self, article):
+        doiInformation = DoiLookup.getDOIInformation(article.doi)
         try:
-            #self.insertDetailedArticleInformationIfAvailable(article, graph)
+            article.title = doiInformation['title']
+            article.journal = doiInformation['container-title']
+        except:
             pass
-        except (KeyError):
-            try:
-                self.roughArticleInformation(article, graph)
-            except:
-                print "Unexpected error:", sys.exc_info()[0]
-        except ():
-            print "Other error", sys.exc_info()[0]
-
-        self.text.get_buffer().insert_at_cursor(
-            '\nAll available information:\n%s' % fullInfoAsText)
-        self.listCitationOfCurrentArticle(url, graph)
+        return article
 
     def getAllInformationAsText(self, article):
         allKnowledgeAboutArticle = StringIO.StringIO()
@@ -161,20 +155,6 @@ class GuiArticleDetails:
             self.linklabel.set_label("Google this article")
             self.requestDOIInformation.hide()
             print("Not found")
-
-    def insertDetailedArticleInformationIfAvailable(self, article, graph):
-        nreferences = article["NR"][0]
-        nreferencesInGraph = graph.in_degree(url)
-        self.text.get_buffer().insert_at_cursor('\n')
-        self.text.get_buffer().insert_at_cursor(
-            'Number of references: %s (%s)\n' %
-            (nreferences, nreferencesInGraph))
-
-        ncitations = article["TC"][0]
-        ncitationsInGraph = graph.out_degree(url)
-        self.text.get_buffer().insert_at_cursor(
-            'Times cited: %s (%s)\n' % (ncitations, ncitationsInGraph))
-        self.text.get_buffer().insert_at_cursor('\n')
 
     def insertGraphInformation(self, article, graph):
         nreferencesInGraph = graph.in_degree(article.id)
