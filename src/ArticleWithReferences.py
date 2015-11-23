@@ -32,6 +32,7 @@ class ArticleWithReferences:
         self.id = None
         self.title = None
         self.year = 0
+        self.firstAuthor = None
         self.authors = []
         self.doi = None
         self.references = []
@@ -45,6 +46,7 @@ class ArticleWithReferences:
         print("doi: %s" % self.doi)
         print("Title: %s" % self.title)
         print("Year: %s" % self.year)
+        print("First author: %s" % self.firstAuthor)
         print("Origin: %s" % self.origin)
         #print("Abstract: %s" % self.abstract)
         #print("References:")

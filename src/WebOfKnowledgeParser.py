@@ -95,8 +95,10 @@ class WebOfKnowledgeParser:
                         article.doi = None
                     try:
                         article.authors = values["AU"]
+                        article.firstAuthor = values["AU"][0]
                     except (KeyError):
                         article.authors = None
+                        article.firstAuthor = None
 
                     for line in crlines:
                         year = self.getYearFromIdentity(line)
@@ -105,7 +107,7 @@ class WebOfKnowledgeParser:
                         referenceArticle = ArticleWithReferences.ArticleWithReferences()
                         referenceArticle.id = crIdentifier
                         referenceArticle.year = year
-
+                        referenceArticle.firstAuthor = self.getAuthorFromIdentity(line)
                         doiPattern = re.compile("^DOI (.*)")
                         doiRes = doiPattern.match(crIdentifier)
                         if(doiRes):
@@ -240,6 +242,56 @@ class WebOfKnowledgeParser:
         except KeyError:
             print("Could not determine year from %s" % ident)
             return -1
+
+    def getAuthorFromIdentity(self, ident):
+        # Match journal entries (Volume and page present)
+        # VIENOT TC, 2007, LIB Q, V77, P157
+        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
+        res = crPattern.match(ident)
+        if (res):
+            # VIENOT TC,2007,V77,P157
+            return res.group(1)
+
+        # Match book entries
+        crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
+        res = crPattern2.match(ident)
+        if (res):
+            return res.group(1)
+
+        # Match cases with only volume and not page numbers
+        # OLANDER B, 2007, INFORM RES, V12
+        crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
+        res = crPattern.match(ident)
+        if (res):
+            # OLANDER B,2007,V12
+            return res.group(1)
+
+        # Match book entries
+        # FRION P, 2009, P68
+        crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
+        res = crPattern2.match(ident)
+        if (res):
+            # FRION P,2009,P68
+            return res.group(1)
+
+        # Match entries like
+        # JACKSON MA, 2010, PROC FRONT EDUC CONF
+        crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
+        res = crPattern2.match(ident)
+        if (res):
+            # JACKSON MA,2010,PROC FRONT EDUC CONF
+            return res.group(1)
+
+        # Match entries like
+        # ANTON G, 2010
+        crPattern2 = re.compile("(.*?), (\d{4})")
+        res = crPattern2.match(ident)
+        if (res):
+            # ANTON G,2010
+            return res.group(1)
+
+        print("Could not determine author from %s" % ident)
+        return "No author found"
 
     def formatIdentifier(self, values):
         try:
