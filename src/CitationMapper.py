@@ -102,11 +102,11 @@ class GuiMainWindow:
         self.uimanager = None
         self.mapview = None
         self.articleDetailsWindows = GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler();
-        self.setupWindowContents()
-        self.setupConnections()
+        self.setup_window_contents()
+        self.setup_connections()
         self.citationmap = citationmapbuilder.citationmapbuilder()
 
-    def setupWindowContents(self):
+    def setup_window_contents(self):
         self.citationmapperwindow = gtk.Window()
         self.citationmapperwindow.set_title("Citation mapper")
         self.citationmapperwindow.set_size_request(500, 200)
@@ -140,7 +140,7 @@ class GuiMainWindow:
         actiongroup.add_actions([
             ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
             ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C', None, self.articleDetailsWindows.closeAll),
-            ('OpenOptionsDialog', None, '_Options', 'O', None, self.showOptionsWindow),
+            ('OpenOptionsDialog', None, '_Options', 'O', None, self.show_options_window),
             ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
             ('About', None, '_About', None, None, self.showAboutDialog),
             ('File', None, '_File'),
@@ -172,7 +172,7 @@ class GuiMainWindow:
 
         self.mapview.set_dotcode(self.dotcode)
 
-    def changeColorOfNode(self, url, newcolor):
+    def change_color_of_node(self, url, newcolor):
         temp = self.mapview.graph
         for node in temp.nodes:
             if (isinstance(node, xdot.Node) and node.url == url):
@@ -184,37 +184,37 @@ class GuiMainWindow:
                         shape.pen.color = newcolor
         self.mapview.queue_draw()
 
-    def setupConnections(self):
-        self.mapview.connect('clicked', self.articleClicked)
+    def setup_connections(self):
+        self.mapview.connect('clicked', self.article_clicked)
         self.citationmapperwindow.connect('destroy', gtk.main_quit)
 
-    def articleClicked(self, widget, data, event):
+    def article_clicked(self, widget, data, event):
         if (event.button == 1):
             self.articleDetailsWindows.openNewArticleDetailsWindow(
                 data, self.citationmap)
-            self.changeColorOfNode(data, (1, 0.75, 0.75, 1))
+            self.change_color_of_node(data, (1, 0.75, 0.75, 1))
         else:
             articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(
                 self.openfilename)
             articleContextMenu.showContextMenu(widget, data, event)
 
-    def updateMinNumberOfReferences(self, adj):
+    def update_min_number_of_references(self, adj):
         self.minNumberOfReferences = adj.value
-        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+        self.calculate_new_graph_size_and_update_options_window()
 
-    def updateMinNumberOfCitations(self, adj):
+    def update_min_number_of_citations(self, adj):
         self.minNumberOfCitations = adj.value
-        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+        self.calculate_new_graph_size_and_update_options_window()
 
-    def updateMinNumberOfReferencesTwo(self, adj):
+    def update_min_number_of_references_two(self, adj):
         self.minNumberOfReferencesTwo = adj.value
-        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+        self.calculate_new_graph_size_and_update_options_window()
 
-    def updateMinNumberOfCitationsTwo(self, adj):
+    def update_min_number_of_citations_two(self, adj):
         self.minNumberOfCitationsTwo = adj.value
-        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+        self.calculate_new_graph_size_and_update_options_window()
 
-    def calculateNewGraphSizeAndUpdateOptionsWindow(self):
+    def calculate_new_graph_size_and_update_options_window(self):
         # Count the number of articles with the required number of references and citations.
         nNodes = 0
         self.includedNodeNames = []
@@ -237,22 +237,22 @@ class GuiMainWindow:
         self.optionsWindow.graphSize = nNodes
         self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
-    def showOptionsWindow(self, action = None):
+    def show_options_window(self, action = None):
         try:
             self.optionsWindow.searchoptionswindow.destroy()
         except:
             pass
 
         self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow(self.maxCitations, self.maxReferences)
-        self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.updateMinNumberOfReferences)
-        self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
-        self.optionsWindow.adjMinNumberOfReferencesTwo.connect("value_changed", self.updateMinNumberOfReferencesTwo)
-        self.optionsWindow.adjMinNumberOfCitationsTwo.connect("value_changed", self.updateMinNumberOfCitationsTwo)
+        self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.update_min_number_of_references)
+        self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.update_min_number_of_citations)
+        self.optionsWindow.adjMinNumberOfReferencesTwo.connect("value_changed", self.update_min_number_of_references_two)
+        self.optionsWindow.adjMinNumberOfCitationsTwo.connect("value_changed", self.update_min_number_of_citations_two)
         self.optionsWindow.showgraphbutton.connect("clicked", self.filter_and_show_current_citation_map, None)
         self.optionsWindow.exportgraphbutton.connect("clicked", self.export_eiltered_citation_map, None)
         self.optionsWindow.listofnodesbutton.connect("clicked", self.get_list_of_nodes, None)
         self.optionsWindow.ignoreArticlesButton.connect("clicked", self.ignore_articles_in_ban_file, None)
-        self.calculateNewGraphSizeAndUpdateOptionsWindow()
+        self.calculate_new_graph_size_and_update_options_window()
 
     def on_open(self, action):
         chooser = gtk.FileChooserDialog(
@@ -265,7 +265,7 @@ class GuiMainWindow:
             filename = chooser.get_filename()
             chooser.destroy()
             self.open_directory(filename)
-            self.showOptionsWindow()
+            self.show_options_window()
         else:
             chooser.destroy()
 
@@ -273,7 +273,7 @@ class GuiMainWindow:
         if self.openfilename is not None:
             try:
                 self.open_directory(self.openfilename)
-                self.showOptionsWindow()
+                self.show_options_window()
             except IOError:
                 pass
 
@@ -430,7 +430,7 @@ class GuiMainWindow:
         except IOError:
             pass
         self.calculate_network_properties()
-        self.showOptionsWindow()
+        self.show_options_window()
 
     def showAboutDialog(self, action):
         GuiAboutDialog.GuiAboutDialog()
@@ -441,7 +441,7 @@ def main():
 
     if (len(sys.argv) > 1):
         gmw.open_directory(sys.argv[1])
-        gmw.showOptionsWindow()
+        gmw.show_options_window()
 
     gtk.main()
 
