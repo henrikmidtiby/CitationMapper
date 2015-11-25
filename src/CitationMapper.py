@@ -248,10 +248,10 @@ class GuiMainWindow:
         self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.updateMinNumberOfCitations)
         self.optionsWindow.adjMinNumberOfReferencesTwo.connect("value_changed", self.updateMinNumberOfReferencesTwo)
         self.optionsWindow.adjMinNumberOfCitationsTwo.connect("value_changed", self.updateMinNumberOfCitationsTwo)
-        self.optionsWindow.showgraphbutton.connect("clicked", self.filterAndShowCurrentCitationMap, None)
-        self.optionsWindow.exportgraphbutton.connect("clicked", self.exportFilteredCitationMap, None)
-        self.optionsWindow.listofnodesbutton.connect("clicked", self.getListOfNodes, None)
-        self.optionsWindow.ignoreArticlesButton.connect("clicked", self.ignoreArticlesInBanFile, None)
+        self.optionsWindow.showgraphbutton.connect("clicked", self.filter_and_show_current_citation_map, None)
+        self.optionsWindow.exportgraphbutton.connect("clicked", self.export_eiltered_citation_map, None)
+        self.optionsWindow.listofnodesbutton.connect("clicked", self.get_list_of_nodes, None)
+        self.optionsWindow.ignoreArticlesButton.connect("clicked", self.ignore_articles_in_ban_file, None)
         self.calculateNewGraphSizeAndUpdateOptionsWindow()
 
     def on_open(self, action):
@@ -286,14 +286,14 @@ class GuiMainWindow:
             print("Parsing file: %s" % currentFile)
             self.citationmap.parse_file(os.path.join(directory, currentFile))
         print("</open_directory>")
-        self.updateOrigNetwork()
+        self.update_orig_network()
 
-    def updateOrigNetwork(self):
+    def update_orig_network(self):
         self.origNetworkPreFiltered = self.citationmap.graph.copy()
         self.origNetwork = self.origNetworkPreFiltered.copy()
-        self.calculateNetworkProperties()
+        self.calculate_network_properties()
 
-    def calculateNetworkProperties(self):
+    def calculate_network_properties(self):
         self.origNetworkCitations = self.origNetwork.out_degree()
         self.origNetworkReferences = self.origNetwork.in_degree()
         assert (len(self.origNetworkCitations) ==
@@ -305,27 +305,27 @@ class GuiMainWindow:
             self.maxCitations = 20
             self.maxReferences = 20
 
-    def filterCurrentCitationMap(self):
+    def filter_current_citation_map(self):
         self.citationmap.graph = self.origNetwork.copy()
         self.citationmap.analyze_graph()
         self.citationmap.remove_named_nodes(self.excludedNodeNames)
 
-    def filterAndExportCurrentCitationMap(self):
-        self.filterCurrentCitationMap()
+    def filter_and_export_current_citation_map(self):
+        self.filter_current_citation_map()
         output = StringIO.StringIO()
         self.citationmap.output_graph(output, "BT")
         dotcode = output.getvalue()
         return dotcode
 
-    def filterAndShowCurrentCitationMap(self, action, data):
+    def filter_and_show_current_citation_map(self, action, data):
         if (self.optionsWindow.graphSize > 200):
-            if (not self.dialogShowLargeGraph(self.optionsWindow.graphSize)):
+            if (not self.dialog_show_large_graph(self.optionsWindow.graphSize)):
                 return
-        dotcode = self.filterAndExportCurrentCitationMap()
+        dotcode = self.filter_and_export_current_citation_map()
         self.mapview.set_dotcode(dotcode)
         self.mapview.zoom_to_fit()
 
-    def dialogShowLargeGraph(self, nNodes):
+    def dialog_show_large_graph(self, nNodes):
         self.quit_dialog = gtk.Dialog()
 
         # Set it modal and transient for main window.
@@ -355,7 +355,7 @@ class GuiMainWindow:
 
         return (response == 1)
 
-    def exportFilteredCitationMap(self, action, data):
+    def export_eiltered_citation_map(self, action, data):
         chooser = gtk.FileChooserDialog(
             title=None,
             action=gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -366,7 +366,7 @@ class GuiMainWindow:
             chooser.destroy()
 
             exportfile = open(filename, 'w')
-            dotcode = self.filterAndExportCurrentCitationMap()
+            dotcode = self.filter_and_export_current_citation_map()
             exportfile.write(dotcode)
             exportfile.close()
 
@@ -374,9 +374,9 @@ class GuiMainWindow:
             chooser.destroy()
         return False
 
-    def getListOfNodes(self, action, data):
+    def get_list_of_nodes(self, action, data):
         listOfNodes = GuiListOfArticlesInGraph.GuiListOfArticlesInGraph()
-        self.filterCurrentCitationMap()
+        self.filter_current_citation_map()
         listOfNodes.nodesTreestore.clear()
         for key in self.citationmap.graphForAnalysis.nodes():
             try:
@@ -400,17 +400,17 @@ class GuiMainWindow:
                                                    networkReferences, -1, -1,
                                                    "", "", ""])
 
-    def ignoreArticlesInBanFile(self, action, data):
+    def ignore_articles_in_ban_file(self, action, data):
         self.origNetwork = self.origNetworkPreFiltered.copy()
         filename = "%s/banlist" % self.openfilename
         try:
-            filehandle = open(filename)
-            for line in filehandle:
-                articleIdentifier = line[:-1]
+            file_handle = open(filename)
+            for line in file_handle:
+                article_identifier = line[:-1]
                 try:
                     # Remove things that are only mentioned by the node
                     thingsReferenced = self.origNetwork.in_edges(
-                        [articleIdentifier])
+                        [article_identifier])
                     for edge in thingsReferenced:
                         referencedArticle = edge[0]
                         numberOfCitations = self.origNetwork.out_degree(
@@ -420,8 +420,8 @@ class GuiMainWindow:
                             self.origNetwork.remove_node(referencedArticle)
 
                     # Remove node
-                    print articleIdentifier
-                    self.origNetwork.remove_node(articleIdentifier)
+                    print article_identifier
+                    self.origNetwork.remove_node(article_identifier)
                 except IOError:
                     pass
                 except:
@@ -429,7 +429,7 @@ class GuiMainWindow:
 
         except IOError:
             pass
-        self.calculateNetworkProperties()
+        self.calculate_network_properties()
         self.showOptionsWindow()
 
     def showAboutDialog(self, action):
