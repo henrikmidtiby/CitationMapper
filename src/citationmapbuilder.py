@@ -55,30 +55,35 @@ class citationmapbuilder:
 
         for articleKey in parser.articles.keys():
             article = parser.articles[articleKey]
-            if not type(article.year) is types.IntType:
-                print("Year is not a number")
+            self.addArticleToGraph(article)
 
-            # Add article to database if it is a primary record or it is
-            # not in the database already.
-            if(article.origin == "PrimaryRecord"):
-                self.articles[article.id] = article
-            elif(not self.articles.has_key(article.id)):
-                self.articles[article.id] = article
+    def addArticleToGraph(self, article):
+        """
 
+        Args:
+            article (ArticleWithReferences.ArticleWithReferences):
+        """
+        if not type(article.year) is types.IntType:
+            print("Year is not a number")
+
+        # not in the database already.
+        if (article.origin == "PrimaryRecord"):
             self.articles[article.id] = article
-            self.graph.add_node(article.id)
-            self.idsAndYears[article.id] = int(article.year)
+        elif (not self.articles.has_key(article.id)):
+            self.articles[article.id] = article
+        self.articles[article.id] = article
+        self.graph.add_node(article.id)
+        self.idsAndYears[article.id] = int(article.year)
+        halt = 1 == 2
+        for reference in article.references:
+            self.graph.add_edge(reference, article.id)
+            halt = 1 == 1
+        if (halt):
+            # return
+            pass
 
-            halt = 1 == 2
-            for reference in article.references:
-                self.graph.add_edge(reference, article.id)
-                halt = 1 == 1
-            if (halt):
-                #return
-                pass
-
-                #for node in self.graph.nodes():
-                #    print node
+            # for node in self.graph.nodes():
+            #    print node
 
     def analyzeGraph(self):
         self.graphForAnalysis = self.graph.copy()
