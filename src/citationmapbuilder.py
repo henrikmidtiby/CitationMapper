@@ -49,16 +49,16 @@ class citationmapbuilder:
         self.idsAndYears = {}
         self.idsAndCRLines = {}
 
-    def parsefile(self, filename):
+    def parse_file(self, filename):
         parser = WebOfKnowledgeParser.WebOfKnowledgeParser()
-        #parser = ScopusParser.ScopusParser()
+        # parser = ScopusParser.ScopusParser()
         parser.parsefile(filename)
 
         for articleKey in parser.articles.keys():
             article = parser.articles[articleKey]
-            self.addArticleToGraph(article)
+            self.add_article_to_graph(article)
 
-    def addArticleToGraph(self, article):
+    def add_article_to_graph(self, article):
         """
 
         Args:
@@ -86,13 +86,13 @@ class citationmapbuilder:
             # for node in self.graph.nodes():
             #    print node
 
-    def analyzeGraph(self):
+    def analyze_graph(self):
         self.graphForAnalysis = self.graph.copy()
         # Extract node parameters
         self.outdegrees = self.graphForAnalysis.out_degree()
         self.indegrees = self.graphForAnalysis.in_degree()
 
-    def cleanUpGraph(self, minNumberOfReferences=1, minNumberOfCitations=3):
+    def clean_up_graph(self, minNumberOfReferences=1, minNumberOfCitations=3):
         # Only keep articles that cite others (ie we have full information about them)
         for key in self.outdegrees:
             if self.outdegrees[key] < minNumberOfCitations:
@@ -119,11 +119,11 @@ class citationmapbuilder:
         return years
 
     def output_graph(self, stream, direction="TD"):
-        self.outputPreamble(stream, direction)
+        self.output_preamble(stream, direction)
         self.output_year_nodes_and_mark_objects_with_the_same_rank(stream)
         self.output_node_information(stream)
-        self.outputEdges(stream)
-        self.outputPostamble(stream)
+        self.output_edges(stream)
+        self.output_postamble(stream)
 
     def output_year_nodes_and_mark_objects_with_the_same_rank(self, stream):
         years = self.get_years_and_articles()
@@ -166,20 +166,19 @@ class citationmapbuilder:
                 '"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n'
                 % (key, key, nodesize, labelOnGraph, fontsize, color))
 
-    def createLabelFromCRLine(self, crline):
+    def create_label_from_cr_line(self, crline):
         authorYearPattern = re.compile("^(.*?,\s?\d{4})")
         res = authorYearPattern.match(crline)
         if (res):
-            #print(res.group(1))
             return res.group(1)
         print crline
         return crline
 
-    def outputEdges(self, stream):
+    def output_edges(self, stream):
         for edge in self.graphForAnalysis.edges():
             stream.write("\"%s\" -> \"%s\"\n" % edge)
 
-    def outputPreamble(self, stream, direction="TD"):
+    def output_preamble(self, stream, direction="TD"):
         stream.write("digraph citations {\n")
         stream.write("graph [rankdir=%s];\n" % direction)
         stream.write("ranksep=0.2;\n")
@@ -191,10 +190,10 @@ class citationmapbuilder:
         stream.write(
             'edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];\n')
 
-    def outputPostamble(self, stream):
+    def output_postamble(self, stream):
         stream.write("}")
 
-    def removeNamedNodes(self, excludedNodeNames):
+    def remove_named_nodes(self, excludedNodeNames):
         print("len(excludedNodeNames) = %d" % len(excludedNodeNames))
         for key in excludedNodeNames:
             try:
@@ -211,9 +210,9 @@ def main():
 
     if (len(sys.argv) > 1):
         for arg in sys.argv:
-            cmb.parsefile(str(arg))
-        cmb.analyzeGraph()
-        cmb.cleanUpGraph()
+            cmb.parse_file(str(arg))
+        cmb.analyze_graph()
+        cmb.clean_up_graph()
         cmb.output_graph(output)
 
         temp = output.getvalue()

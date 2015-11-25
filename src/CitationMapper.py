@@ -233,7 +233,7 @@ class GuiMainWindow:
             else:
                 self.excludedNodeNames.append(key)
 
-        self.citationmap.removeNamedNodes(self.excludedNodeNames)
+        self.citationmap.remove_named_nodes(self.excludedNodeNames)
         self.optionsWindow.graphSize = nNodes
         self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
@@ -284,7 +284,7 @@ class GuiMainWindow:
         print("<open_directory>")
         for currentFile in files:
             print("Parsing file: %s" % currentFile)
-            self.citationmap.parsefile(os.path.join(directory, currentFile))
+            self.citationmap.parse_file(os.path.join(directory, currentFile))
         print("</open_directory>")
         self.updateOrigNetwork()
 
@@ -307,8 +307,8 @@ class GuiMainWindow:
 
     def filterCurrentCitationMap(self):
         self.citationmap.graph = self.origNetwork.copy()
-        self.citationmap.analyzeGraph()
-        self.citationmap.removeNamedNodes(self.excludedNodeNames)
+        self.citationmap.analyze_graph()
+        self.citationmap.remove_named_nodes(self.excludedNodeNames)
 
     def filterAndExportCurrentCitationMap(self):
         self.filterCurrentCitationMap()
