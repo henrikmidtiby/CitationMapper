@@ -40,7 +40,7 @@ class ArticleWithReferences:
         self.ncites = 0
         self.origin = None
 
-    def printInformation(self):
+    def print_information(self):
         print("Article")
         print("id: %s" % self.id)
         print("doi: %s" % self.doi)

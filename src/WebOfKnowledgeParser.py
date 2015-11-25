@@ -339,7 +339,7 @@ def main():
             cmb.parsefile(str(arg))
 
     for article in cmb.articles:
-        article.printInformation()
+        article.print_information()
         break
 
 

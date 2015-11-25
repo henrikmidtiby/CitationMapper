@@ -76,7 +76,7 @@ class GuiArticleDetails:
             "clicked", self.requestDOIInformationCallback, None)
 
     def requestDOIInformationCallback(self, p1, p2):
-        text = DoiLookup.getDOIInformation(self.doi)
+        text = DoiLookup.get_doi_information(self.doi)
         endIter = self.text.get_buffer().get_end_iter()
         self.text.get_buffer().insert(endIter, '\nDOI Information: \n')
 
@@ -106,7 +106,7 @@ class GuiArticleDetails:
         if (isinstance(article, ArticleWithReferences.ArticleWithReferences)):
             article = self.useDOIInformation(article)
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
-            article.printInformation()
+            article.print_information()
             self.doi = article.doi
             self.text.get_buffer().insert_at_cursor('%d %s\n' % (int(article.year),  string.join(article.authors,  " and ")))
             if(article.doi):
@@ -129,7 +129,7 @@ class GuiArticleDetails:
             print("Not an article")
 
     def useDOIInformation(self, article):
-        doiInformation = DoiLookup.getDOIInformation(article.doi)
+        doiInformation = DoiLookup.get_doi_information(article.doi)
         try:
             article.title = doiInformation['title']
             article.journal = doiInformation['container-title']

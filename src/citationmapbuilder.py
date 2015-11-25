@@ -208,7 +208,7 @@ def main():
     output = StringIO.StringIO()
     cmb = citationmapbuilder()
 
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         for arg in sys.argv:
             cmb.parse_file(str(arg))
         cmb.analyze_graph()

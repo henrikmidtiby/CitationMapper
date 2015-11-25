@@ -250,7 +250,7 @@ def main():
 
     for articleKey in cmb.articles.keys():
         article = cmb.articles[articleKey]
-        article.printInformation()
+        article.print_information()
         break
 
     print("Matches: %d" % cmb.referenceMatchCounter)

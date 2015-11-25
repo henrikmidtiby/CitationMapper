@@ -19,7 +19,7 @@ cache = percache.Cache(TESTFILE, livesync=True)
 
 
 @cache
-def getDOIInformation(doi):
+def get_doi_information(doi):
     conn = httplib.HTTPConnection("data.crossref.org")
     headers = {"Accept": "application/vnd.citationstyles.csl+json"}
     conn.request("GET", "/" + doi, headers=headers)
@@ -30,9 +30,9 @@ def getDOIInformation(doi):
     return parsedData
 
 
-def showDOIInformation(doi):
-    print("showDOIInformation('%s')" % doi)
-    parsedData = getDOIInformation(doi)
+def show_doi_information(doi):
+    print("show_doi_information('%s')" % doi)
+    parsedData = get_doi_information(doi)
     for k, v in parsedData.items():
         print("%-*s: %s" % (15, k, v))
 
@@ -40,9 +40,9 @@ def showDOIInformation(doi):
 
 
 def main():
-    showDOIInformation("10.1007/978-3-642-02674-4_9")
-    showDOIInformation("10.1117/12.909861")
-    showDOIInformation("10.1007/978-3-642-02674-4_9")
+    show_doi_information("10.1007/978-3-642-02674-4_9")
+    show_doi_information("10.1117/12.909861")
+    show_doi_information("10.1007/978-3-642-02674-4_9")
 
 
 if __name__ == '__main__':
