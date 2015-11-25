@@ -52,13 +52,13 @@ class GuiAboutDialog:
     def addLabel(self):
         self.label = gtk.Label(
             "Citation mapper was developed by " +
-            "Henrik Skov Midtiby (hemi@kbm.sdu.dk), University of Southern Denmark. ")
+            "Henrik Skov Midtiby (hemi@mmmi.sdu.dk), University of Southern Denmark. ")
         self.label.set_line_wrap(True)
         self.label.show()
         self.vbox.pack_start(self.label, True, True, 5)
 
     def addLabel2(self):
-        self.label2 = gtk.Label("Version 2011-08-03")
+        self.label2 = gtk.Label("Version 2015-11-24")
         self.label2.set_line_wrap(True)
         self.label2.set_alignment(0, 0)
         self.label2.show()
