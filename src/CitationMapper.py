@@ -313,7 +313,7 @@ class GuiMainWindow:
     def filterAndExportCurrentCitationMap(self):
         self.filterCurrentCitationMap()
         output = StringIO.StringIO()
-        self.citationmap.outputGraph(output, "BT")
+        self.citationmap.output_graph(output, "BT")
         dotcode = output.getvalue()
         return dotcode
 

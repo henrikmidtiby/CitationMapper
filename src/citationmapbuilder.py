@@ -33,8 +33,9 @@ import networkx
 import math
 import StringIO
 import pprint
+import ArticleWithReferences
 import WebOfKnowledgeParser
-import ScopusParser
+#import ScopusParser
 import types
 
 
@@ -103,8 +104,7 @@ class citationmapbuilder:
                     key) and self.indegrees[key] < minNumberOfReferences:
                 self.graphForAnalysis.remove_node(key)
 
-    def getYearsAndArticles(self):
-
+    def get_years_and_articles(self):
         years = {}
         for elem in self.graphForAnalysis.nodes():
             try:
@@ -113,20 +113,20 @@ class citationmapbuilder:
                     years[curYear] = []
                 years[curYear].append(elem)
             except KeyError:
-                print "getYearsAndArticles - KeyError - \'%s\''" % elem
+                print "get_years_and_articles - KeyError - \'%s\''" % elem
 
         print years
         return years
 
-    def outputGraph(self, stream, direction="TD"):
+    def output_graph(self, stream, direction="TD"):
         self.outputPreamble(stream, direction)
-        self.outputYearNodesAndMarkObjectsWithTheSameRank(stream)
-        self.outputNodeInformation(stream)
+        self.output_year_nodes_and_mark_objects_with_the_same_rank(stream)
+        self.output_node_information(stream)
         self.outputEdges(stream)
         self.outputPostamble(stream)
 
-    def outputYearNodesAndMarkObjectsWithTheSameRank(self, stream):
-        years = self.getYearsAndArticles()
+    def output_year_nodes_and_mark_objects_with_the_same_rank(self, stream):
+        years = self.get_years_and_articles()
         yeartags = years.keys()
         yeartags.sort()
         for year in yeartags:
@@ -144,7 +144,7 @@ class citationmapbuilder:
                 yearElements = "%s \"%s\"" % (yearElements, element)
             stream.write("{rank=same; y%s %s}\n" % (year, yearElements))
 
-    def outputNodeInformation(self, stream):
+    def output_node_information(self, stream):
         for key in self.graphForAnalysis.nodes():
             color = "#0000ff"
             labelOnGraph = key
@@ -157,7 +157,7 @@ class citationmapbuilder:
                 else:
                     color = "#ff0000"
             except (KeyError):
-                print("outputNodeInformation: KeyError: %s" % key)
+                print("output_node_information: KeyError: %s" % key)
                 pass
 
             nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
@@ -214,7 +214,7 @@ def main():
             cmb.parsefile(str(arg))
         cmb.analyzeGraph()
         cmb.cleanUpGraph()
-        cmb.outputGraph(output)
+        cmb.output_graph(output)
 
         temp = output.getvalue()
 
