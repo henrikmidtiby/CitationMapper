@@ -101,7 +101,7 @@ class GuiMainWindow:
         self.maxCitations = None
         self.uimanager = None
         self.mapview = None
-        self.articleDetailsWindows = GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler();
+        self.articleDetailsWindows = GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler()
         self.setup_window_contents()
         self.setup_connections()
         self.citationmap = citationmapbuilder.citationmapbuilder()
@@ -139,10 +139,11 @@ class GuiMainWindow:
 
         actiongroup.add_actions([
             ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
-            ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C', None, self.articleDetailsWindows.closeAll),
+            ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C',
+                    None, self.articleDetailsWindows.closeAll),
             ('OpenOptionsDialog', None, '_Options', 'O', None, self.show_options_window),
             ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
-            ('About', None, '_About', None, None, self.showAboutDialog),
+            ('About', None, '_About', None, None, self.show_about_dialog),
             ('File', None, '_File'),
             ('Help', None, '_Help')])
 
@@ -175,11 +176,11 @@ class GuiMainWindow:
     def change_color_of_node(self, url, newcolor):
         temp = self.mapview.graph
         for node in temp.nodes:
-            if (isinstance(node, xdot.Node) and node.url == url):
+            if isinstance(node, xdot.Node) and node.url == url:
                 for shape in node.shapes:
-                    if (isinstance(shape, xdot.TextShape)):
+                    if isinstance(shape, xdot.TextShape):
                         print(shape.t)
-                    if (isinstance(shape, xdot.EllipseShape)):
+                    if isinstance(shape, xdot.EllipseShape):
                         shape.pen.fillcolor = newcolor
                         shape.pen.color = newcolor
         self.mapview.queue_draw()
@@ -394,7 +395,7 @@ class GuiMainWindow:
                                                    networkReferences, fieldTC,
                                                    fieldNR, fieldSO,
                                                    fieldAuthors, fieldTitle])
-            except (KeyError):
+            except KeyError:
                 listOfNodes.nodesTreestore.append(None,
                                                   [key, -1, networkCitations,
                                                    networkReferences, -1, -1,
@@ -432,14 +433,14 @@ class GuiMainWindow:
         self.calculate_network_properties()
         self.show_options_window()
 
-    def showAboutDialog(self, action):
+    def show_about_dialog(self, action):
         GuiAboutDialog.GuiAboutDialog()
 
 
 def main():
     gmw = GuiMainWindow()
 
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         gmw.open_directory(sys.argv[1])
         gmw.show_options_window()
 
