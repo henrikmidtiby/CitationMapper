@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Name:        ScopyParser
+# Name:        ScopusParser
 # Purpose:     
 #
 # Author:      Henrik Skov Midtiby
@@ -28,7 +28,6 @@
 
 import re
 import sys
-import string
 import ArticleWithReferences
 import bibtexparser
 

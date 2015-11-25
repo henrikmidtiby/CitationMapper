@@ -196,7 +196,7 @@ class GuiMainWindow:
         else:
             articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(
                 self.openfilename)
-            articleContextMenu.showContextMenu(widget, data, event)
+            articleContextMenu.show_context_menu(widget, data, event)
 
     def update_min_number_of_references(self, adj):
         self.minNumberOfReferences = adj.value
@@ -228,7 +228,7 @@ class GuiMainWindow:
                 and self.origNetworkReferences[key] >=
                 self.minNumberOfReferencesTwo)
             if (testOne or testTwo):
-                nNodes = nNodes + 1
+                nNodes += 1
                 self.includedNodeNames.append(key)
             else:
                 self.excludedNodeNames.append(key)

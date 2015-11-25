@@ -31,6 +31,7 @@ class ArticleWithReferences:
     def __init__(self):
         self.id = None
         self.title = None
+        self.journal = None
         self.year = 0
         self.firstAuthor = None
         self.authors = []

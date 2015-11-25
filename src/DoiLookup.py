@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Name:        DoiLoopup
+# Name:        Doi Look Up
 # Purpose:     Access information about articles identified by their doi.
 #
 # Author:      Henrik Skov Midtiby, hemi@mmmi.sdu.dk
@@ -32,8 +32,8 @@ def get_doi_information(doi):
 
 def show_doi_information(doi):
     print("show_doi_information('%s')" % doi)
-    parsedData = get_doi_information(doi)
-    for k, v in parsedData.items():
+    parsed_data = get_doi_information(doi)
+    for k, v in parsed_data.items():
         print("%-*s: %s" % (15, k, v))
 
     print("\n\n")

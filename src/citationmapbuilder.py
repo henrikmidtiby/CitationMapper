@@ -32,7 +32,6 @@ import sys
 import networkx
 import math
 import StringIO
-import pprint
 import ArticleWithReferences
 import WebOfKnowledgeParser
 #import ScopusParser

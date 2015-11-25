@@ -26,10 +26,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
+import pprint
 import re
 import sys
 import string
+import StringIO
+
 import ArticleWithReferences
 
 
@@ -74,7 +76,7 @@ class WebOfKnowledgeParser:
 
             res = erPattern.match(line)
             if (res):
-                erCounter = erCounter + 1
+                erCounter += 1
                 rawIdentifier = self.formatIdentifier(values)
                 identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 
@@ -100,14 +102,14 @@ class WebOfKnowledgeParser:
                         article.authors = None
                         article.firstAuthor = None
 
-                    for line in crlines:
-                        year = self.getYearFromIdentity(line)
-                        crIdentifier = self.newIdentifierInspiredByWos2Pajek(line)
+                    for cr_line in crlines:
+                        year = self.getYearFromIdentity(cr_line)
+                        crIdentifier = self.newIdentifierInspiredByWos2Pajek(cr_line)
                         article.references.append(crIdentifier)
                         referenceArticle = ArticleWithReferences.ArticleWithReferences()
                         referenceArticle.id = crIdentifier
                         referenceArticle.year = year
-                        referenceArticle.firstAuthor = self.getAuthorFromIdentity(line)
+                        referenceArticle.firstAuthor = self.getAuthorFromIdentity(cr_line)
                         doiPattern = re.compile("^DOI (.*)")
                         doiRes = doiPattern.match(crIdentifier)
                         if(doiRes):

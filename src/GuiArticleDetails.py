@@ -40,6 +40,7 @@ def open_url(widget, url):
     webbrowser.open(url)
 
 
+# noinspection PyAttributeOutsideInit
 class GuiArticleDetails:
     def __init__(self):
         self.doi = None
@@ -48,115 +49,115 @@ class GuiArticleDetails:
         self.nodeinformationwindow.set_title("Article details")
         self.nodeinformationwindow.set_size_request(500, 300)
         self.vbox = gtk.VBox(False, 0)
-        self.addLinkButton()
-        self.addTextArea()
-        self.generateNodeScrolledWindow()
+        self.add_link_button()
+        self.add_text_area()
+        self.generate_node_scrolled_window()
         self.nodescrolledwindow.show_all()
-        self.addRequestDOIInformationButton()
+        self.add_request_doi_information_button()
         self.vbox.pack_start(self.nodescrolledwindow, True, True, 0)
         self.nodeinformationwindow.add(self.vbox)
         self.nodeinformationwindow.show_all()
         gtk.link_button_set_uri_hook(open_url)
 
-    def addLinkButton(self):
-        self.linklabel = gtk.LinkButton("http://www.sdu.dk",
-            label="Locate article on Web of Science")
-        self.vbox.pack_start(self.linklabel, False, False, 0)
+    def add_link_button(self):
+        self.link_label = gtk.LinkButton("http://www.sdu.dk",
+                                         label="Locate article on Web of Science")
+        self.vbox.pack_start(self.link_label, False, False, 0)
 
-    def addTextArea(self):
+    def add_text_area(self):
         self.text = gtk.TextView()
         self.text.set_wrap_mode(gtk.WRAP_WORD)
 
-    def addRequestDOIInformationButton(self):
+    def add_request_doi_information_button(self):
         self.requestDOIInformation = gtk.Button(
             "Fetch more information based on DOI")
         self.requestDOIInformation.show()
         self.vbox.pack_start(self.requestDOIInformation, False, False, 5)
         self.requestDOIInformation.connect(
-            "clicked", self.requestDOIInformationCallback, None)
+            "clicked", self.request_doi_information_callback, None)
 
-    def requestDOIInformationCallback(self, p1, p2):
+    def request_doi_information_callback(self, p1, p2):
         text = DoiLookup.get_doi_information(self.doi)
-        endIter = self.text.get_buffer().get_end_iter()
-        self.text.get_buffer().insert(endIter, '\nDOI Information: \n')
+        end_iterator = self.text.get_buffer().get_end_iter()
+        self.text.get_buffer().insert(end_iterator, '\nDOI Information: \n')
 
         for k, v in text.items():
-            endIter = self.text.get_buffer().get_end_iter()
-            self.text.get_buffer().insert(endIter, "%-*s: %s\n" % (15, k, v))
+            end_iterator = self.text.get_buffer().get_end_iter()
+            self.text.get_buffer().insert(end_iterator, "%-*s: %s\n" % (15, k, v))
 
         self.requestDOIInformation.hide()
 
-    def generateNodeScrolledWindow(self):
+    def generate_node_scrolled_window(self):
         self.nodescrolledwindow = gtk.ScrolledWindow()
         self.nodescrolledwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.nodescrolledwindow.add(self.text)
 
-    def updateArticleInformation(self, url,
-                                 citationmapbuild=None,
-                                 article=None):
-        print("updateArticleInformation url = '%s'" % url)
+    def update_article_information(self, url,
+                                   citationmapbuild=None,
+                                   article=None):
+        print("update_article_information url = '%s'" % url)
         try:
             article = citationmapbuild.articles[url]
         except:
             print("Lookup failed")
 
-        self.updateButtons(url)
+        self.update_buttons(url)
 
-        if (isinstance(article, ArticleWithReferences.ArticleWithReferences)):
-            article = self.useDOIInformation(article)
+        if isinstance(article, ArticleWithReferences.ArticleWithReferences):
+            article = self.use_doi_information(article)
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
             article.print_information()
             self.doi = article.doi
             self.text.get_buffer().insert_at_cursor('%d %s\n' % (int(article.year),  string.join(article.authors,  " and ")))
-            if(article.doi):
+            if article.doi:
                 self.text.get_buffer().insert_at_cursor('%s\n' % article.doi)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.title)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.abstract)
             self.text.get_buffer().insert_at_cursor('ncites: %d\n' % article.ncites)
             self.text.get_buffer().insert_at_cursor('%s\n' % article.references)
 
-            self.insertGraphInformation(article, citationmapbuild.graph)
+            self.insert_graph_information(article, citationmapbuild.graph)
 
-            self.listCitationOfCurrentArticle(url,  citationmapbuild.graph)
-            self.listReferencesOfCurrentArticle(url,  citationmapbuild.graph)
+            self.list_citation_of_current_article(url, citationmapbuild.graph)
+            self.list_references_of_current_article(url, citationmapbuild.graph)
 
-            fullInfoAsText = self.getAllInformationAsText(article)
+            full_info_as_text = self.get_all_information_as_text(article)
             self.text.get_buffer().insert_at_cursor(
-                '\nAll available information:\n%s' % fullInfoAsText)
+                '\nAll available information:\n%s' % full_info_as_text)
             return
         else:
             print("Not an article")
 
-    def useDOIInformation(self, article):
-        doiInformation = DoiLookup.get_doi_information(article.doi)
+    def use_doi_information(self, article):
         try:
-            article.title = doiInformation['title']
-            article.journal = doiInformation['container-title']
+            doi_information = DoiLookup.get_doi_information(article.doi)
+            article.title = doi_information['title']
+            article.journal = doi_information['container-title']
         except:
             pass
         return article
 
-    def getAllInformationAsText(self, article):
+    def get_all_information_as_text(self, article):
         allKnowledgeAboutArticle = StringIO.StringIO()
         pp = pprint.PrettyPrinter(stream=allKnowledgeAboutArticle)
         pp.pprint(article)
         fullInfoAsText = allKnowledgeAboutArticle.getvalue()
         return fullInfoAsText
 
-    def updateButtons(self, url):
+    def update_buttons(self, url):
         pattern = re.compile(".*DOI (.*)")
         res = pattern.match(url)
         if (res):
             print(res.group(1))
-            self.updateDOIInformation(res.group(1))
+            self.update_doi_information(res.group(1))
         else:
-            self.linklabel.set_uri("http://google.com/#q=%s" % url)
-            self.linklabel.set_label("Google this article")
+            self.link_label.set_uri("http://google.com/#q=%s" % url)
+            self.link_label.set_label("Google this article")
             self.requestDOIInformation.hide()
             print("Not found")
 
-    def insertGraphInformation(self, article, graph):
+    def insert_graph_information(self, article, graph):
         nreferencesInGraph = graph.in_degree(article.id)
         ncitationsInGraph = graph.out_degree(article.id)
         self.text.get_buffer().insert_at_cursor(
@@ -164,22 +165,22 @@ class GuiArticleDetails:
         self.text.get_buffer().insert_at_cursor(
             'Number of citations in graph: %s\n' % ncitationsInGraph)
 
-    def listCitationOfCurrentArticle(self, url, graph):
+    def list_citation_of_current_article(self, url, graph):
         listOfEdges = graph.out_edges(url)
         self.text.get_buffer().insert_at_cursor("\nCited by\n")
         for edge in listOfEdges:
             self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[1])
 
-    def listReferencesOfCurrentArticle(self, url, graph):
+    def list_references_of_current_article(self, url, graph):
         listOfEdges = graph.in_edges(url)
         self.text.get_buffer().insert_at_cursor("\nReferences\n")
         for edge in listOfEdges:
             self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[0])
 
-    def updateDOIInformation(self, doi):
+    def update_doi_information(self, doi):
         print("Updating doi information: %s" % doi)
-        self.linklabel.set_uri("http://dx.doi.org/%s" % doi)
-        self.linklabel.set_label("Open full text")
+        self.link_label.set_uri("http://dx.doi.org/%s" % doi)
+        self.link_label.set_label("Open full text")
         self.doi = doi
 
 
