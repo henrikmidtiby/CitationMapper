@@ -297,8 +297,11 @@ class WebOfKnowledgeParser:
 
     def formatIdentifier(self, values):
         try:
-            author = values["AU"][0].replace(",", "").upper()
-            identString = author
+            try:
+                author = values["AU"][0].replace(",", "").upper()
+                identString = author
+            except KeyError:
+                identString = 'NoAuthorInformationWasPresent'
             try:
                 identString = "%s, %s" % (identString, values["PY"][0])
             except KeyError:
