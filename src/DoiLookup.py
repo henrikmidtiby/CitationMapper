@@ -26,8 +26,8 @@ def get_doi_information(doi):
     res = conn.getresponse()
     data = res.read()
     res.close()
-    parsedData = json.JSONDecoder().decode(data)
-    return parsedData
+    parsed_data = json.JSONDecoder().decode(data)
+    return parsed_data
 
 
 def show_doi_information(doi):
