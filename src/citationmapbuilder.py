@@ -155,6 +155,9 @@ class citationmapbuilder:
                     color = "#00ff00"
                 else:
                     color = "#ff0000"
+                if self.articles[key].origin == "ListedInCitations":
+                    color = "#0000ff"
+
             except (KeyError):
                 print("output_node_information: KeyError: %s" % key)
                 pass
