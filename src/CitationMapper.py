@@ -80,37 +80,37 @@ class GuiMainWindow:
     '''
 
     openfilename = None
-    minNumberOfReferences = 1
-    minNumberOfCitations = 3
+    min_number_of_references = 1
+    min_number_of_citations = 3
     min_mumber_of_references_two = 1
-    minNumberOfCitationsTwo = 3
+    min_number_of_citations_two = 3
 
     def __init__(self):
-        self.origNetworkPreFiltered = None
-        self.origNetwork = None
-        self.optionsWindow = None
+        self.orig_network_pre_filtered = None
+        self.orig_network = None
+        self.options_window = None
         self.actiongroup = None
-        self.maxReferences = None
-        self.articleDetailsWindow = None
+        self.max_references = None
+        self.article_details_window = None
         self.quit_dialog = None
-        self.citationmapperwindow = None
-        self.origNetworkCitations = None
-        self.origNetworkReferences = None
-        self.includedNodeNames = []
-        self.excludedNodeNames = []
-        self.maxCitations = None
+        self.citationmapper_window = None
+        self.orig_network_citations = None
+        self.orig_network_references = None
+        self.included_node_names = []
+        self.excluded_node_names = []
+        self.max_citations = None
         self.uimanager = None
         self.mapview = None
-        self.articleDetailsWindows = \
+        self.article_details_windows = \
             GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler()
         self.setup_window_contents()
         self.setup_connections()
         self.citationmap = citationmapbuilder.citationmapbuilder()
 
     def setup_window_contents(self):
-        self.citationmapperwindow = gtk.Window()
-        self.citationmapperwindow.set_title("Citation mapper")
-        self.citationmapperwindow.set_size_request(500, 200)
+        self.citationmapper_window = gtk.Window()
+        self.citationmapper_window.set_title("Citation mapper")
+        self.citationmapper_window.set_size_request(500, 200)
 
         # Create a UIManager instance
         uimanager = self.uimanager = gtk.UIManager()
@@ -141,7 +141,7 @@ class GuiMainWindow:
         actiongroup.add_actions([
             ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
             ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C',
-                    None, self.articleDetailsWindows.closeAll),
+                    None, self.article_details_windows.closeAll),
             ('OpenOptionsDialog', None, '_Options', 'O', None, self.show_options_window),
             ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
             ('About', None, '_About', None, None, self.show_about_dialog),
@@ -153,7 +153,7 @@ class GuiMainWindow:
 
         # Add the accelerator group to the toplevel window
         accelgroup = uimanager.get_accel_group()
-        self.citationmapperwindow.add_accel_group(accelgroup)
+        self.citationmapper_window.add_accel_group(accelgroup)
 
         # Add a UI descrption
         uimanager.add_ui_from_string(self.ui)
@@ -169,8 +169,8 @@ class GuiMainWindow:
         vbox.pack_start(self.mapview, True, True, 0)
 
         vbox.show_all()
-        self.citationmapperwindow.add(vbox)
-        self.citationmapperwindow.show()
+        self.citationmapper_window.add(vbox)
+        self.citationmapper_window.show()
 
         self.mapview.set_dotcode(self.dotcode)
 
@@ -188,11 +188,11 @@ class GuiMainWindow:
 
     def setup_connections(self):
         self.mapview.connect('clicked', self.article_clicked)
-        self.citationmapperwindow.connect('destroy', gtk.main_quit)
+        self.citationmapper_window.connect('destroy', gtk.main_quit)
 
     def article_clicked(self, widget, data, event):
         if event.button == 1:
-            self.articleDetailsWindows.openNewArticleDetailsWindow(
+            self.article_details_windows.openNewArticleDetailsWindow(
                 data, self.citationmap)
             self.change_color_of_node(data, (1, 0.75, 0.75, 1))
         else:
@@ -201,11 +201,11 @@ class GuiMainWindow:
             articleContextMenu.show_context_menu(widget, data, event)
 
     def update_min_number_of_references(self, adj):
-        self.minNumberOfReferences = adj.value
+        self.min_number_of_references = adj.value
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_citations(self, adj):
-        self.minNumberOfCitations = adj.value
+        self.min_number_of_citations = adj.value
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_references_two(self, adj):
@@ -213,47 +213,47 @@ class GuiMainWindow:
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_citations_two(self, adj):
-        self.minNumberOfCitationsTwo = adj.value
+        self.min_number_of_citations_two = adj.value
         self.calculate_new_graph_size_and_update_options_window()
 
     def calculate_new_graph_size_and_update_options_window(self):
         # Count the number of articles with the required number of references and citations.
         nNodes = 0
-        self.includedNodeNames = []
-        self.excludedNodeNames = []
-        for key in self.origNetworkCitations.keys():
+        self.included_node_names = []
+        self.excluded_node_names = []
+        for key in self.orig_network_citations.keys():
             testOne = (
-                self.origNetworkCitations[key] >= self.minNumberOfCitations and
-                self.origNetworkReferences[key] >= self.minNumberOfReferences)
+                self.orig_network_citations[key] >= self.min_number_of_citations and
+                self.orig_network_references[key] >= self.min_number_of_references)
             testTwo = (
-                self.origNetworkCitations[key] >= self.minNumberOfCitationsTwo
-                and self.origNetworkReferences[key] >=
+                self.orig_network_citations[key] >= self.min_number_of_citations_two
+                and self.orig_network_references[key] >=
                 self.min_mumber_of_references_two)
             if testOne or testTwo:
                 nNodes += 1
-                self.includedNodeNames.append(key)
+                self.included_node_names.append(key)
             else:
-                self.excludedNodeNames.append(key)
+                self.excluded_node_names.append(key)
 
-        self.citationmap.remove_named_nodes(self.excludedNodeNames)
-        self.optionsWindow.graphSize = nNodes
-        self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
+        self.citationmap.remove_named_nodes(self.excluded_node_names)
+        self.options_window.graphSize = nNodes
+        self.options_window.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
     def show_options_window(self, action=None):
         try:
-            self.optionsWindow.searchoptionswindow.destroy()
+            self.options_window.searchoptionswindow.destroy()
         except:
             pass
 
-        self.optionsWindow = GuiOptionsWindow.GuiOptionsWindow(self.maxCitations, self.maxReferences)
-        self.optionsWindow.adjMinNumberOfReferences.connect("value_changed", self.update_min_number_of_references)
-        self.optionsWindow.adjMinNumberOfCitations.connect("value_changed", self.update_min_number_of_citations)
-        self.optionsWindow.adjMinNumberOfReferencesTwo.connect("value_changed", self.update_min_number_of_references_two)
-        self.optionsWindow.adjMinNumberOfCitationsTwo.connect("value_changed", self.update_min_number_of_citations_two)
-        self.optionsWindow.showgraphbutton.connect("clicked", self.filter_and_show_current_citation_map, None)
-        self.optionsWindow.exportgraphbutton.connect("clicked", self.export_eiltered_citation_map, None)
-        self.optionsWindow.listofnodesbutton.connect("clicked", self.get_list_of_nodes, None)
-        self.optionsWindow.ignoreArticlesButton.connect("clicked", self.ignore_articles_in_ban_file, None)
+        self.options_window = GuiOptionsWindow.GuiOptionsWindow(self.max_citations, self.max_references)
+        self.options_window.adjMinNumberOfReferences.connect("value_changed", self.update_min_number_of_references)
+        self.options_window.adjMinNumberOfCitations.connect("value_changed", self.update_min_number_of_citations)
+        self.options_window.adjMinNumberOfReferencesTwo.connect("value_changed", self.update_min_number_of_references_two)
+        self.options_window.adjMinNumberOfCitationsTwo.connect("value_changed", self.update_min_number_of_citations_two)
+        self.options_window.showgraphbutton.connect("clicked", self.filter_and_show_current_citation_map, None)
+        self.options_window.exportgraphbutton.connect("clicked", self.export_eiltered_citation_map, None)
+        self.options_window.listofnodesbutton.connect("clicked", self.get_list_of_nodes, None)
+        self.options_window.ignoreArticlesButton.connect("clicked", self.ignore_articles_in_ban_file, None)
         self.calculate_new_graph_size_and_update_options_window()
 
     def on_open(self, action):
@@ -284,33 +284,33 @@ class GuiMainWindow:
         self.citationmap.__init__()
         files = os.listdir(directory)
         print "<open_directory>"
-        for currentFile in files:
-            print "Parsing file: %s" % currentFile
-            self.citationmap.parse_file(os.path.join(directory, currentFile))
+        for current_file in files:
+            print "Parsing file: %s" % current_file
+            self.citationmap.parse_file(os.path.join(directory, current_file))
         print "</open_directory>"
         self.update_orig_network()
 
     def update_orig_network(self):
-        self.origNetworkPreFiltered = self.citationmap.graph.copy()
-        self.origNetwork = self.origNetworkPreFiltered.copy()
+        self.orig_network_pre_filtered = self.citationmap.graph.copy()
+        self.orig_network = self.orig_network_pre_filtered.copy()
         self.calculate_network_properties()
 
     def calculate_network_properties(self):
-        self.origNetworkCitations = self.origNetwork.out_degree()
-        self.origNetworkReferences = self.origNetwork.in_degree()
-        assert (len(self.origNetworkCitations) ==
-                len(self.origNetworkReferences))
+        self.orig_network_citations = self.orig_network.out_degree()
+        self.orig_network_references = self.orig_network.in_degree()
+        assert (len(self.orig_network_citations) ==
+                len(self.orig_network_references))
         try:
-            self.maxCitations = max(self.origNetworkCitations.values())
-            self.maxReferences = max(self.origNetworkReferences.values())
+            self.max_citations = max(self.orig_network_citations.values())
+            self.max_references = max(self.orig_network_references.values())
         except:
-            self.maxCitations = 20
-            self.maxReferences = 20
+            self.max_citations = 20
+            self.max_references = 20
 
     def filter_current_citation_map(self):
-        self.citationmap.graph = self.origNetwork.copy()
+        self.citationmap.graph = self.orig_network.copy()
         self.citationmap.analyze_graph()
-        self.citationmap.remove_named_nodes(self.excludedNodeNames)
+        self.citationmap.remove_named_nodes(self.excluded_node_names)
 
     def filter_and_export_current_citation_map(self):
         self.filter_current_citation_map()
@@ -320,8 +320,8 @@ class GuiMainWindow:
         return dotcode
 
     def filter_and_show_current_citation_map(self, action, data):
-        if self.optionsWindow.graphSize > 200:
-            if not self.dialog_show_large_graph(self.optionsWindow.graphSize):
+        if self.options_window.graphSize > 200:
+            if not self.dialog_show_large_graph(self.options_window.graphSize):
                 return
         dotcode = self.filter_and_export_current_citation_map()
         self.mapview.set_dotcode(dotcode)
@@ -382,8 +382,8 @@ class GuiMainWindow:
         listOfNodes.nodesTreestore.clear()
         for key in self.citationmap.graphForAnalysis.nodes():
             try:
-                networkCitations = self.origNetwork.out_degree(key)
-                networkReferences = self.origNetwork.in_degree(key)
+                networkCitations = self.orig_network.out_degree(key)
+                networkReferences = self.orig_network.in_degree(key)
                 article = self.citationmap.articles[key]
                 year = int(article['PY'][0])
                 fieldSO = string.join(article['SO'])
@@ -403,7 +403,7 @@ class GuiMainWindow:
                                                    "", "", ""])
 
     def ignore_articles_in_ban_file(self, action, data):
-        self.origNetwork = self.origNetworkPreFiltered.copy()
+        self.orig_network = self.orig_network_pre_filtered.copy()
         filename = "%s/banlist" % self.openfilename
         try:
             file_handle = open(filename)
@@ -411,19 +411,19 @@ class GuiMainWindow:
                 article_identifier = line[:-1]
                 try:
                     # Remove things that are only mentioned by the node
-                    thingsReferenced = self.origNetwork.in_edges(
+                    thingsReferenced = self.orig_network.in_edges(
                         [article_identifier])
                     for edge in thingsReferenced:
                         referencedArticle = edge[0]
-                        numberOfCitations = self.origNetwork.out_degree(
+                        numberOfCitations = self.orig_network.out_degree(
                             referencedArticle)
-                        if (numberOfCitations == 1):
+                        if numberOfCitations == 1:
                             print referencedArticle
-                            self.origNetwork.remove_node(referencedArticle)
+                            self.orig_network.remove_node(referencedArticle)
 
                     # Remove node
                     print article_identifier
-                    self.origNetwork.remove_node(article_identifier)
+                    self.orig_network.remove_node(article_identifier)
                 except IOError:
                     pass
                 except:
