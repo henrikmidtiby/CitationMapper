@@ -82,7 +82,7 @@ class GuiMainWindow:
     openfilename = None
     minNumberOfReferences = 1
     minNumberOfCitations = 3
-    minNumberOfReferencesTwo = 1
+    min_mumber_of_references_two = 1
     minNumberOfCitationsTwo = 3
 
     def __init__(self):
@@ -101,7 +101,8 @@ class GuiMainWindow:
         self.maxCitations = None
         self.uimanager = None
         self.mapview = None
-        self.articleDetailsWindows = GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler()
+        self.articleDetailsWindows = \
+            GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler()
         self.setup_window_contents()
         self.setup_connections()
         self.citationmap = citationmapbuilder.citationmapbuilder()
@@ -179,7 +180,7 @@ class GuiMainWindow:
             if isinstance(node, xdot.Node) and node.url == url:
                 for shape in node.shapes:
                     if isinstance(shape, xdot.TextShape):
-                        print(shape.t)
+                        print shape.t
                     if isinstance(shape, xdot.EllipseShape):
                         shape.pen.fillcolor = newcolor
                         shape.pen.color = newcolor
@@ -190,7 +191,7 @@ class GuiMainWindow:
         self.citationmapperwindow.connect('destroy', gtk.main_quit)
 
     def article_clicked(self, widget, data, event):
-        if (event.button == 1):
+        if event.button == 1:
             self.articleDetailsWindows.openNewArticleDetailsWindow(
                 data, self.citationmap)
             self.change_color_of_node(data, (1, 0.75, 0.75, 1))
@@ -208,7 +209,7 @@ class GuiMainWindow:
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_references_two(self, adj):
-        self.minNumberOfReferencesTwo = adj.value
+        self.min_mumber_of_references_two = adj.value
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_citations_two(self, adj):
@@ -227,8 +228,8 @@ class GuiMainWindow:
             testTwo = (
                 self.origNetworkCitations[key] >= self.minNumberOfCitationsTwo
                 and self.origNetworkReferences[key] >=
-                self.minNumberOfReferencesTwo)
-            if (testOne or testTwo):
+                self.min_mumber_of_references_two)
+            if testOne or testTwo:
                 nNodes += 1
                 self.includedNodeNames.append(key)
             else:
@@ -238,7 +239,7 @@ class GuiMainWindow:
         self.optionsWindow.graphSize = nNodes
         self.optionsWindow.labelGraphSize.set_text("Graph size: %d" % (nNodes))
 
-    def show_options_window(self, action = None):
+    def show_options_window(self, action=None):
         try:
             self.optionsWindow.searchoptionswindow.destroy()
         except:
@@ -282,11 +283,11 @@ class GuiMainWindow:
         self.openfilename = directory
         self.citationmap.__init__()
         files = os.listdir(directory)
-        print("<open_directory>")
+        print "<open_directory>"
         for currentFile in files:
-            print("Parsing file: %s" % currentFile)
+            print "Parsing file: %s" % currentFile
             self.citationmap.parse_file(os.path.join(directory, currentFile))
-        print("</open_directory>")
+        print "</open_directory>"
         self.update_orig_network()
 
     def update_orig_network(self):
@@ -319,8 +320,8 @@ class GuiMainWindow:
         return dotcode
 
     def filter_and_show_current_citation_map(self, action, data):
-        if (self.optionsWindow.graphSize > 200):
-            if (not self.dialog_show_large_graph(self.optionsWindow.graphSize)):
+        if self.optionsWindow.graphSize > 200:
+            if not self.dialog_show_large_graph(self.optionsWindow.graphSize):
                 return
         dotcode = self.filter_and_export_current_citation_map()
         self.mapview.set_dotcode(dotcode)
@@ -354,7 +355,7 @@ class GuiMainWindow:
         response = self.quit_dialog.run()
         self.quit_dialog.hide()
 
-        return (response == 1)
+        return response == 1
 
     def export_eiltered_citation_map(self, action, data):
         chooser = gtk.FileChooserDialog(
