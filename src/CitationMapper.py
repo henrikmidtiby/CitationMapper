@@ -180,7 +180,7 @@ class GuiMainWindow:
             if isinstance(node, xdot.Node) and node.url == url:
                 for shape in node.shapes:
                     if isinstance(shape, xdot.TextShape):
-                        print shape.t
+                        print(shape.t)
                     if isinstance(shape, xdot.EllipseShape):
                         shape.pen.fillcolor = newcolor
                         shape.pen.color = newcolor
@@ -283,11 +283,11 @@ class GuiMainWindow:
         self.openfilename = directory
         self.citationmap.__init__()
         files = os.listdir(directory)
-        print "<open_directory>"
+        print("<open_directory>")
         for current_file in files:
-            print "Parsing file: %s" % current_file
+            print("Parsing file: %s" % current_file)
             self.citationmap.parse_file(os.path.join(directory, current_file))
-        print "</open_directory>"
+        print("</open_directory>")
         self.update_orig_network()
 
     def update_orig_network(self):
@@ -385,12 +385,13 @@ class GuiMainWindow:
                 networkCitations = self.orig_network.out_degree(key)
                 networkReferences = self.orig_network.in_degree(key)
                 article = self.citationmap.articles[key]
-                year = int(article['PY'][0])
-                fieldSO = string.join(article['SO'])
-                fieldTitle = string.join(article['TI'])
-                fieldAuthors = string.join(article['AU'], ' and ')
-                fieldTC = int(article['TC'][0])
-                fieldNR = int(article['NR'][0])
+                article.retrieve_information_based_on_doi()
+                year = article.year
+                fieldSO = article.journal
+                fieldTitle = article.title
+                fieldAuthors = string.join(article.authors, ' and ')
+                fieldTC = 0 #int(article['TC'][0])
+                fieldNR = 0 #int(article['NR'][0])
                 listOfNodes.nodesTreestore.append(None,
                                                   [key, year, networkCitations,
                                                    networkReferences, fieldTC,
@@ -418,16 +419,16 @@ class GuiMainWindow:
                         numberOfCitations = self.orig_network.out_degree(
                             referencedArticle)
                         if numberOfCitations == 1:
-                            print referencedArticle
+                            print( referencedArticle)
                             self.orig_network.remove_node(referencedArticle)
 
                     # Remove node
-                    print article_identifier
+                    print(article_identifier)
                     self.orig_network.remove_node(article_identifier)
                 except IOError:
                     pass
                 except:
-                    print "Unknown error detected"
+                    print("Unknown error detected")
 
         except IOError:
             pass

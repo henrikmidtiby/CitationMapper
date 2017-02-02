@@ -193,6 +193,7 @@ class WebOfKnowledgeParser:
         return ident
 
     def getYearFromIdentity(self, ident):
+        # type: (str) -> int
         # Match journal entries (Volume and page present)
         # VIENOT TC, 2007, LIB Q, V77, P157
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
@@ -299,6 +300,7 @@ class WebOfKnowledgeParser:
         try:
             try:
                 author = values["AU"][0].replace(",", "").upper()
+                author = author.replace("'", "")
                 identString = author
             except KeyError:
                 identString = 'NoAuthorInformationWasPresent'

@@ -26,6 +26,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
+import DoiLookup
 
 class ArticleWithReferences:
     def __init__(self):
@@ -54,3 +56,50 @@ class ArticleWithReferences:
         #for reference in self.references:
         #    print("  %s" % reference)
         print("\n")
+
+    def retrieve_information_based_on_doi(self):
+        pattern = re.compile('DOI (.*)')
+        res = pattern.match(self.id)
+        if res:
+            try:
+                doi = res.group(1)
+                res = DoiLookup.get_doi_information(doi)
+                self.get_title_from_doi(res)
+                self.get_publication_year_from_doi(res)
+                self.get_journal_from_doi(res)
+                self.get_author_information_from_doi(res)
+            except Exception as e:
+                print("retrieve_information_based_on_doi - error: %s" % e)
+        else:
+            print("Doi lookup failed: %s" % self.id)
+
+    def get_author_information_from_doi(self, res):
+        try:
+            self.firstAuthor = res['author'][0]['family'] + ", " + res['author'][0]['given']
+            self.authors = []
+            for author in res['author']:
+                self.authors.append(author['family'] + ", " + author['given'])
+        except:
+            print(res)
+            print("No author information available")
+
+    def get_journal_from_doi(self, res):
+        try:
+            self.journal = res['container-title']
+        except:
+            print(res)
+            print("No journal information available")
+
+    def get_publication_year_from_doi(self, res):
+        try:
+            self.year = res['issued']['date-parts'][0][0]
+        except:
+            print(res)
+            print("No publication year available")
+
+    def get_title_from_doi(self, res):
+        try:
+            self.title = res['title']
+        except:
+            print(res)
+            print("No title available")

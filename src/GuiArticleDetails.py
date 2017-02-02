@@ -113,6 +113,7 @@ class GuiArticleDetails:
             if article.doi:
                 self.text.get_buffer().insert_at_cursor('%s\n' % article.doi)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.title)
+            self.text.get_buffer().insert_at_cursor('%s\n\n' % article.origin)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.abstract)
             self.text.get_buffer().insert_at_cursor('ncites: %d\n' % article.ncites)
             self.text.get_buffer().insert_at_cursor('%s\n' % article.references)
