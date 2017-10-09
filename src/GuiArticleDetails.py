@@ -44,19 +44,19 @@ def open_url(widget, url):
 class GuiArticleDetails:
     def __init__(self):
         self.doi = None
-        self.nodescrolledwindow = None
-        self.nodeinformationwindow = gtk.Window()
-        self.nodeinformationwindow.set_title("Article details")
-        self.nodeinformationwindow.set_size_request(500, 300)
+        self.node_scrolled_window = None
+        self.node_information_window = gtk.Window()
+        self.node_information_window.set_title("Article details")
+        self.node_information_window.set_size_request(500, 300)
         self.vbox = gtk.VBox(False, 0)
         self.add_link_button()
         self.add_text_area()
         self.generate_node_scrolled_window()
-        self.nodescrolledwindow.show_all()
+        self.node_scrolled_window.show_all()
         self.add_request_doi_information_button()
-        self.vbox.pack_start(self.nodescrolledwindow, True, True, 0)
-        self.nodeinformationwindow.add(self.vbox)
-        self.nodeinformationwindow.show_all()
+        self.vbox.pack_start(self.node_scrolled_window, True, True, 0)
+        self.node_information_window.add(self.vbox)
+        self.node_information_window.show_all()
         gtk.link_button_set_uri_hook(open_url)
 
     def add_link_button(self):
@@ -88,10 +88,10 @@ class GuiArticleDetails:
         self.requestDOIInformation.hide()
 
     def generate_node_scrolled_window(self):
-        self.nodescrolledwindow = gtk.ScrolledWindow()
-        self.nodescrolledwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        self.nodescrolledwindow.add(self.text)
+        self.node_scrolled_window = gtk.ScrolledWindow()
+        self.node_scrolled_window.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+        self.node_scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.node_scrolled_window.add(self.text)
 
     def update_article_information(self, url,
                                    citationmapbuild=None,
@@ -143,11 +143,11 @@ class GuiArticleDetails:
         return article
 
     def get_all_information_as_text(self, article):
-        allKnowledgeAboutArticle = StringIO.StringIO()
-        pp = pprint.PrettyPrinter(stream=allKnowledgeAboutArticle)
+        all_knowledge_about_article = StringIO.StringIO()
+        pp = pprint.PrettyPrinter(stream=all_knowledge_about_article)
         pp.pprint(article)
-        fullInfoAsText = allKnowledgeAboutArticle.getvalue()
-        return fullInfoAsText
+        full_info_as_text = all_knowledge_about_article.getvalue()
+        return full_info_as_text
 
     def update_buttons(self, url):
         pattern = re.compile(".*DOI (.*)")
@@ -162,23 +162,23 @@ class GuiArticleDetails:
             print("Not found")
 
     def insert_graph_information(self, article, graph):
-        nreferencesInGraph = graph.in_degree(article.id)
-        ncitationsInGraph = graph.out_degree(article.id)
+        n_references_in_graph = graph.in_degree(article.id)
+        n_citations_in_graph = graph.out_degree(article.id)
         self.text.get_buffer().insert_at_cursor(
-            'Number of references in graph: %s\n' % nreferencesInGraph)
+            'Number of references in graph: %s\n' % n_references_in_graph)
         self.text.get_buffer().insert_at_cursor(
-            'Number of citations in graph: %s\n' % ncitationsInGraph)
+            'Number of citations in graph: %s\n' % n_citations_in_graph)
 
     def list_citation_of_current_article(self, url, graph):
-        listOfEdges = graph.out_edges(url)
+        list_of_edges = graph.out_edges(url)
         self.text.get_buffer().insert_at_cursor("\nCited by\n")
-        for edge in listOfEdges:
+        for edge in list_of_edges:
             self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[1])
 
     def list_references_of_current_article(self, url, graph):
-        listOfEdges = graph.in_edges(url)
+        list_of_edges = graph.in_edges(url)
         self.text.get_buffer().insert_at_cursor("\nReferences\n")
-        for edge in listOfEdges:
+        for edge in list_of_edges:
             self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[0])
 
     def update_doi_information(self, doi):
