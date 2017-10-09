@@ -105,6 +105,9 @@ class GuiArticleDetails:
         self.update_buttons(url)
 
         if isinstance(article, ArticleWithReferences.ArticleWithReferences):
+            # TODO: Consider to make this an asynchronous call, as it feels like the GUI
+            # TODO: does not respond when opening detailed information about a paper.
+            # TODO: The delay is on the order of five seconds.
             article = self.use_doi_information(article)
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
             article.print_information()
