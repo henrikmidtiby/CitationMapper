@@ -82,7 +82,7 @@ class GuiMainWindow:
     openfilename = None
     min_number_of_references = 1
     min_number_of_citations = 3
-    min_mumber_of_references_two = 1
+    min_number_of_references_two = 1
     min_number_of_citations_two = 3
 
     def __init__(self):
@@ -209,7 +209,7 @@ class GuiMainWindow:
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_references_two(self, adj):
-        self.min_mumber_of_references_two = adj.value
+        self.min_number_of_references_two = adj.value
         self.calculate_new_graph_size_and_update_options_window()
 
     def update_min_number_of_citations_two(self, adj):
@@ -222,14 +222,14 @@ class GuiMainWindow:
         self.included_node_names = []
         self.excluded_node_names = []
         for key in self.orig_network_citations.keys():
-            testOne = (
+            test_one = (
                 self.orig_network_citations[key] >= self.min_number_of_citations and
                 self.orig_network_references[key] >= self.min_number_of_references)
-            testTwo = (
+            test_two = (
                 self.orig_network_citations[key] >= self.min_number_of_citations_two
                 and self.orig_network_references[key] >=
-                self.min_mumber_of_references_two)
-            if testOne or testTwo:
+                self.min_number_of_references_two)
+            if test_one or test_two:
                 nNodes += 1
                 self.included_node_names.append(key)
             else:
@@ -377,13 +377,13 @@ class GuiMainWindow:
         return False
 
     def get_list_of_nodes(self, action, data):
-        listOfNodes = GuiListOfArticlesInGraph.GuiListOfArticlesInGraph()
+        list_of_nodes = GuiListOfArticlesInGraph.GuiListOfArticlesInGraph()
         self.filter_current_citation_map()
-        listOfNodes.nodesTreestore.clear()
+        list_of_nodes.nodesTreestore.clear()
         for key in self.citationmap.graphForAnalysis.nodes():
             try:
-                networkCitations = self.orig_network.out_degree(key)
-                networkReferences = self.orig_network.in_degree(key)
+                network_citations = self.orig_network.out_degree(key)
+                network_references = self.orig_network.in_degree(key)
                 article = self.citationmap.articles[key]
                 article.retrieve_information_based_on_doi()
                 year = article.year
@@ -392,15 +392,15 @@ class GuiMainWindow:
                 fieldAuthors = string.join(article.authors, ' and ')
                 fieldTC = 0 #int(article['TC'][0])
                 fieldNR = 0 #int(article['NR'][0])
-                listOfNodes.nodesTreestore.append(None,
-                                                  [key, year, networkCitations,
-                                                   networkReferences, fieldTC,
+                list_of_nodes.nodesTreestore.append(None,
+                                                  [key, year, network_citations,
+                                                   network_references, fieldTC,
                                                    fieldNR, fieldSO,
                                                    fieldAuthors, fieldTitle])
             except KeyError:
-                listOfNodes.nodesTreestore.append(None,
-                                                  [key, -1, networkCitations,
-                                                   networkReferences, -1, -1,
+                list_of_nodes.nodesTreestore.append(None,
+                                                  [key, -1, network_citations,
+                                                   network_references, -1, -1,
                                                    "", "", ""])
 
     def ignore_articles_in_ban_file(self, action, data):
@@ -412,15 +412,15 @@ class GuiMainWindow:
                 article_identifier = line[:-1]
                 try:
                     # Remove things that are only mentioned by the node
-                    thingsReferenced = self.orig_network.in_edges(
+                    things_referenced = self.orig_network.in_edges(
                         [article_identifier])
-                    for edge in thingsReferenced:
-                        referencedArticle = edge[0]
-                        numberOfCitations = self.orig_network.out_degree(
-                            referencedArticle)
-                        if numberOfCitations == 1:
-                            print( referencedArticle)
-                            self.orig_network.remove_node(referencedArticle)
+                    for edge in things_referenced:
+                        referenced_article = edge[0]
+                        number_of_citations = self.orig_network.out_degree(
+                            referenced_article)
+                        if number_of_citations == 1:
+                            print( referenced_article)
+                            self.orig_network.remove_node(referenced_article)
 
                     # Remove node
                     print(article_identifier)
