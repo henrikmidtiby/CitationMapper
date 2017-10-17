@@ -221,14 +221,15 @@ class GuiMainWindow:
         number_of_matching_nodes = 0
         self.included_node_names = []
         self.excluded_node_names = []
-        for key in self.orig_network_citations.keys():
+        for key in self.orig_network.nodes():
+            number_of_citations = self.orig_network.in_degree(key)
+            number_of_references = self.orig_network.out_degree(key)
             test_one = (
-                self.orig_network_citations[key] >= self.min_number_of_citations and
-                self.orig_network_references[key] >= self.min_number_of_references)
+                number_of_citations >= self.min_number_of_citations and
+                number_of_references >= self.min_number_of_references)
             test_two = (
-                self.orig_network_citations[key] >= self.min_number_of_citations_two
-                and self.orig_network_references[key] >=
-                self.min_number_of_references_two)
+                number_of_citations >= self.min_number_of_citations_two
+                and number_of_references >= self.min_number_of_references_two)
             if test_one or test_two:
                 number_of_matching_nodes += 1
                 self.included_node_names.append(key)

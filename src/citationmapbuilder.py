@@ -37,6 +37,7 @@ import WebOfKnowledgeParser
 #import ScopusParser
 import types
 
+assert(networkx.__version__ == '2.0')
 
 class citationmapbuilder:
     def __init__(self):
