@@ -251,7 +251,7 @@ class GuiMainWindow:
         self.options_window.adjMinNumberOfReferencesTwo.connect("value_changed", self.update_min_number_of_references_two)
         self.options_window.adjMinNumberOfCitationsTwo.connect("value_changed", self.update_min_number_of_citations_two)
         self.options_window.showgraphbutton.connect("clicked", self.filter_and_show_current_citation_map, None)
-        self.options_window.exportgraphbutton.connect("clicked", self.export_eiltered_citation_map, None)
+        self.options_window.exportgraphbutton.connect("clicked", self.export_filtered_citation_map, None)
         self.options_window.listofnodesbutton.connect("clicked", self.get_list_of_nodes, None)
         self.options_window.ignoreArticlesButton.connect("clicked", self.ignore_articles_in_ban_file, None)
         self.calculate_new_graph_size_and_update_options_window()
@@ -357,7 +357,7 @@ class GuiMainWindow:
 
         return response == 1
 
-    def export_eiltered_citation_map(self, action, data):
+    def export_filtered_citation_map(self, action, data):
         chooser = gtk.FileChooserDialog(
             title=None,
             action=gtk.FILE_CHOOSER_ACTION_SAVE,
