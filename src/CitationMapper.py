@@ -218,7 +218,7 @@ class GuiMainWindow:
 
     def calculate_new_graph_size_and_update_options_window(self):
         # Count the number of articles with the required number of references and citations.
-        nNodes = 0
+        number_of_matching_nodes = 0
         self.included_node_names = []
         self.excluded_node_names = []
         for key in self.orig_network_citations.keys():
@@ -230,14 +230,14 @@ class GuiMainWindow:
                 and self.orig_network_references[key] >=
                 self.min_number_of_references_two)
             if test_one or test_two:
-                nNodes += 1
+                number_of_matching_nodes += 1
                 self.included_node_names.append(key)
             else:
                 self.excluded_node_names.append(key)
 
         self.citationmap.remove_named_nodes(self.excluded_node_names)
-        self.options_window.graphSize = nNodes
-        self.options_window.labelGraphSize.set_text("Graph size: %d" % (nNodes))
+        self.options_window.graphSize = number_of_matching_nodes
+        self.options_window.labelGraphSize.set_text("Graph size: %d" % number_of_matching_nodes)
 
     def show_options_window(self, action=None):
         try:
