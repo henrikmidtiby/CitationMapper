@@ -110,13 +110,11 @@ class GuiArticleDetails:
             # TODO: The delay is on the order of five seconds.
             article = self.use_doi_information(article)
             self.text.get_buffer().insert_at_cursor('%s\n' % url)
+            self.text.get_buffer().insert_at_cursor('%d %s\n' % (int(article.year), article.firstAuthor))
             article.print_information()
             self.doi = article.doi
-            self.text.get_buffer().insert_at_cursor('%d %s\n' % (int(article.year),  string.join(article.authors,  " and ")))
-            if article.doi:
-                self.text.get_buffer().insert_at_cursor('%s\n' % article.doi)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.title)
-            self.text.get_buffer().insert_at_cursor('%s\n\n' % article.origin)
+            self.text.get_buffer().insert_at_cursor('Source: %s\n\n' % article.origin)
             self.text.get_buffer().insert_at_cursor('%s\n\n' % article.abstract)
             self.text.get_buffer().insert_at_cursor('ncites: %d\n' % article.ncites)
             self.text.get_buffer().insert_at_cursor('%s\n' % article.references)
