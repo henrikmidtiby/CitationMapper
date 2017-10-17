@@ -222,8 +222,8 @@ class GuiMainWindow:
         self.included_node_names = []
         self.excluded_node_names = []
         for key in self.orig_network.nodes():
-            number_of_citations = self.orig_network.in_degree(key)
-            number_of_references = self.orig_network.out_degree(key)
+            number_of_citations = self.orig_network.out_degree(key)
+            number_of_references = self.orig_network.in_degree(key)
             test_one = (
                 number_of_citations >= self.min_number_of_citations and
                 number_of_references >= self.min_number_of_references)
