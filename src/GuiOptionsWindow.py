@@ -37,22 +37,22 @@ class GuiOptionsWindow:
     graph_size = 0
 
     def __init__(self, maxCitations=50, maxReferences=50):
-        self.ignoreArticlesButton = None
-        self.hscrollbarCitations = None
-        self.hscrollbarReferences = None
-        self.adjMinNumberOfCitations = None
-        self.adjMinNumberOfReferences = None
-        self.adjMinNumberOfCitationsTwo = None
-        self.adjMinNumberOfReferencesTwo = None
-        self.exportgraphbutton = None
-        self.labelGraphSize = None
-        self.listofnodesbutton = None
-        self.showgraphbutton = None
+        self.ignore_articles_button = None
+        self.hscrollbar_citations = None
+        self.hscrollbar_references = None
+        self.adj_min_number_of_citations = None
+        self.adj_min_number_of_references = None
+        self.adj_min_number_of_citations_two = None
+        self.adj_min_number_of_references_two = None
+        self.export_graph_button = None
+        self.label_graph_size = None
+        self.list_of_nodes_button = None
+        self.show_graph_button = None
 
-        self.searchoptionswindow = gtk.Window()
-        self.searchoptionswindow.set_border_width(10)
+        self.searchoptions_window = gtk.Window()
+        self.searchoptions_window.set_border_width(10)
         self.vbox = gtk.VBox(False, 0)
-        self.searchoptionswindow.add(self.vbox)
+        self.searchoptions_window.add(self.vbox)
         self.add_label_references()
         self.add_hscrollbar_references(maxReferences)
         self.add_label_citations()
@@ -67,61 +67,61 @@ class GuiOptionsWindow:
         self.add_list_of_nodes_button()
         self.add_ignore_articles_button()
         self.vbox.show()
-        self.searchoptionswindow.show()
+        self.searchoptions_window.show()
 
     def add_label_references(self):
-        labelReferences = gtk.Label("Number of references")
-        labelReferences.show()
-        self.vbox.pack_start(labelReferences, True, True, 0)
+        label_references = gtk.Label("Number of references")
+        label_references.show()
+        self.vbox.pack_start(label_references, True, True, 0)
 
-    def add_hscrollbar_references(self, maxReferences):
-        self.adjMinNumberOfReferences = gtk.Adjustment(
+    def add_hscrollbar_references(self, max_references):
+        self.adj_min_number_of_references = gtk.Adjustment(
             value=self.min_number_of_references,
             lower=0,
-            upper=maxReferences,
+            upper=max_references,
             step_incr=1,
             page_incr=5,
             page_size=0)
-        self.hscrollbarReferences = gtk.HScale(self.adjMinNumberOfReferences)
-        self.hscrollbarReferences.set_digits(0)
-        self.hscrollbarReferences.set_value_pos(gtk.POS_LEFT)
-        self.hscrollbarReferences.show()
-        self.vbox.pack_start(self.hscrollbarReferences, True, True, 0)
+        self.hscrollbar_references = gtk.HScale(self.adj_min_number_of_references)
+        self.hscrollbar_references.set_digits(0)
+        self.hscrollbar_references.set_value_pos(gtk.POS_LEFT)
+        self.hscrollbar_references.show()
+        self.vbox.pack_start(self.hscrollbar_references, True, True, 0)
 
     def add_label_citations(self):
-        labelCitations = gtk.Label("Number of citations")
-        labelCitations.show()
-        self.vbox.pack_start(labelCitations, True, True, 0)
+        label_citations = gtk.Label("Number of citations")
+        label_citations.show()
+        self.vbox.pack_start(label_citations, True, True, 0)
 
-    def add_hscrollbar_citations(self, maxCitations):
-        self.adjMinNumberOfCitations = gtk.Adjustment(
+    def add_hscrollbar_citations(self, max_citations):
+        self.adj_min_number_of_citations = gtk.Adjustment(
             value=self.min_number_of_citations,
             lower=0,
-            upper=maxCitations,
+            upper=max_citations,
             step_incr=1,
             page_incr=5,
             page_size=0)
-        self.hscrollbarCitations = gtk.HScale(self.adjMinNumberOfCitations)
-        self.hscrollbarCitations.set_digits(0)
-        self.hscrollbarCitations.set_value_pos(gtk.POS_LEFT)
-        self.hscrollbarCitations.show()
-        self.vbox.pack_start(self.hscrollbarCitations, True, True, 0)
+        self.hscrollbar_citations = gtk.HScale(self.adj_min_number_of_citations)
+        self.hscrollbar_citations.set_digits(0)
+        self.hscrollbar_citations.set_value_pos(gtk.POS_LEFT)
+        self.hscrollbar_citations.show()
+        self.vbox.pack_start(self.hscrollbar_citations, True, True, 0)
 
     def add_label_references_two(self):
-        labelReferences = gtk.Label("Number of references")
-        labelReferences.show()
-        self.vbox.pack_start(labelReferences, True, True, 0)
+        label_references = gtk.Label("Number of references")
+        label_references.show()
+        self.vbox.pack_start(label_references, True, True, 0)
 
-    def add_hscrollbar_references_two(self, maxReferences):
-        self.adjMinNumberOfReferencesTwo = gtk.Adjustment(
+    def add_hscrollbar_references_two(self, max_references):
+        self.adj_min_number_of_references_two = gtk.Adjustment(
             value=self.min_number_of_references_two,
             lower=0,
-            upper=maxReferences,
+            upper=max_references,
             step_incr=1,
             page_incr=5,
             page_size=0)
         self.hscrollbar_references_two = gtk.HScale(
-            self.adjMinNumberOfReferencesTwo)
+            self.adj_min_number_of_references_two)
         self.hscrollbar_references_two.set_digits(0)
         self.hscrollbar_references_two.set_value_pos(gtk.POS_LEFT)
         self.hscrollbar_references_two.show()
@@ -133,44 +133,44 @@ class GuiOptionsWindow:
         self.vbox.pack_start(label_citations, True, True, 0)
 
     def add_hscrollbar_citations_two(self, maxCitations):
-        self.adjMinNumberOfCitationsTwo = gtk.Adjustment(
+        self.adj_min_number_of_citations_two = gtk.Adjustment(
             value=self.min_number_of_citations_two,
             lower=0,
             upper=maxCitations,
             step_incr=1,
             page_incr=5,
             page_size=0)
-        self.hscrollbarCitationsTwo = gtk.HScale(
-            self.adjMinNumberOfCitationsTwo)
-        self.hscrollbarCitationsTwo.set_digits(0)
-        self.hscrollbarCitationsTwo.set_value_pos(gtk.POS_LEFT)
-        self.hscrollbarCitationsTwo.show()
-        self.vbox.pack_start(self.hscrollbarCitationsTwo, True, True, 0)
+        self.hscrollbar_citations_two = gtk.HScale(
+            self.adj_min_number_of_citations_two)
+        self.hscrollbar_citations_two.set_digits(0)
+        self.hscrollbar_citations_two.set_value_pos(gtk.POS_LEFT)
+        self.hscrollbar_citations_two.show()
+        self.vbox.pack_start(self.hscrollbar_citations_two, True, True, 0)
 
     def add_label_graph_size(self):
-        self.labelGraphSize = gtk.Label("Graph size: nodes")
-        self.labelGraphSize.show()
-        self.vbox.pack_start(self.labelGraphSize, True, True, 0)
+        self.label_graph_size = gtk.Label("Graph size: nodes")
+        self.label_graph_size.show()
+        self.vbox.pack_start(self.label_graph_size, True, True, 0)
 
     def add_show_graph_button(self):
-        self.showgraphbutton = gtk.Button("Show graph")
-        self.showgraphbutton.show()
-        self.vbox.pack_start(self.showgraphbutton, True, True, 0)
+        self.show_graph_button = gtk.Button("Show graph")
+        self.show_graph_button.show()
+        self.vbox.pack_start(self.show_graph_button, True, True, 0)
 
     def add_export_graph_button(self):
-        self.exportgraphbutton = gtk.Button("Export graph")
-        self.exportgraphbutton.show()
-        self.vbox.pack_start(self.exportgraphbutton, True, True, 0)
+        self.export_graph_button = gtk.Button("Export graph")
+        self.export_graph_button.show()
+        self.vbox.pack_start(self.export_graph_button, True, True, 0)
 
     def add_list_of_nodes_button(self):
-        self.listofnodesbutton = gtk.Button("Get list of nodes")
-        self.listofnodesbutton.show()
-        self.vbox.pack_start(self.listofnodesbutton, True, True, 0)
+        self.list_of_nodes_button = gtk.Button("Get list of nodes")
+        self.list_of_nodes_button.show()
+        self.vbox.pack_start(self.list_of_nodes_button, True, True, 0)
 
     def add_ignore_articles_button(self):
-        self.ignoreArticlesButton = gtk.Button("Ignore articles in ban file")
-        self.ignoreArticlesButton.show()
-        self.vbox.pack_start(self.ignoreArticlesButton, True, True, 0)
+        self.ignore_articles_button = gtk.Button("Ignore articles in ban file")
+        self.ignore_articles_button.show()
+        self.vbox.pack_start(self.ignore_articles_button, True, True, 0)
 
 
 def main():
