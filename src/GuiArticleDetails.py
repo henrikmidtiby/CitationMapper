@@ -26,6 +26,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import gobject
 import re
 import gtk
 import pprint
@@ -41,8 +42,9 @@ def open_url(widget, url):
 
 
 # noinspection PyAttributeOutsideInit
-class GuiArticleDetails:
+class GuiArticleDetails(gobject.GObject):
     def __init__(self):
+        self.__gobject_init__()
         self.doi = None
         self.node_scrolled_window = None
         self.node_information_window = gtk.Window()
@@ -68,9 +70,10 @@ class GuiArticleDetails:
         if event.type == gtk.gdk.BUTTON_PRESS:
             end_iter = iter.copy()
             end_iter.forward_to_tag_toggle(self.citation_tag)
+            end_iter.backward_char()
             iter.backward_to_tag_toggle(self.citation_tag)
             id_of_clicked_article = self.text_buffer.get_text(iter, end_iter)
-            print(id_of_clicked_article)
+            self.emit('citation_clicked', id_of_clicked_article)
 
     def add_text_area(self):
         self.text_tag_table = gtk.TextTagTable()
@@ -202,6 +205,11 @@ class GuiArticleDetails:
         self.link_label.set_uri("http://dx.doi.org/%s" % doi)
         self.link_label.set_label("Open full text")
         self.doi = doi
+
+
+gobject.type_register(GuiArticleDetails)
+gobject.signal_new("citation_clicked", GuiArticleDetails, gobject.SIGNAL_RUN_FIRST,
+                   gobject.TYPE_NONE, (gobject.TYPE_STRING,))
 
 
 def main():

@@ -193,8 +193,7 @@ class GuiMainWindow:
 
     def article_clicked(self, widget, data, event):
         if event.button == 1:
-            self.article_details_windows.openNewArticleDetailsWindow(
-                data, self.citationmap)
+            self.article_details_windows.openNewArticleDetailsWindow(data)
             self.change_color_of_node(data, (1, 0.75, 0.75, 1))
         else:
             article_context_menu = GuiArticleContextMenu.GuiArticleContextMenu(
@@ -339,6 +338,7 @@ class GuiMainWindow:
         dotcode = self.filter_and_export_current_citation_map()
         self.mapview.set_dotcode(dotcode)
         self.mapview.zoom_to_fit()
+        self.article_details_windows.set_citationmap(self.citationmap)
 
     def dialog_show_large_graph(self, nNodes):
         self.quit_dialog = gtk.Dialog()

@@ -26,21 +26,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import gobject
 import GuiArticleDetails
 
 
-class GuiArticleDetailsWindowHandler:
+class GuiArticleDetailsWindowHandler(gobject.GObject):
     def __init__(self):
         self.listOfWindows = []
+        self.citationmap = None
 
-    def openNewArticleDetailsWindow(self, url, citationmap):
+    def article_clicked_in_details_window(self, placeholder_one, article_id, placeholder_two):
+        self.openNewArticleDetailsWindow(article_id)
+
+    def set_citationmap(self, citationmapin):
+        self.citationmap = citationmapin
+
+    def openNewArticleDetailsWindow(self, url):
         articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
         try:
-            article = citationmap.articles[url]
-            articleDetailsWindow.update_article_information(url, citationmap, article)
+            article = self.citationmap.articles[url]
+            articleDetailsWindow.update_article_information(url, self.citationmap, article)
         except:
             print("openNewArticleDetailsWindow url = \'%s\'" % url)
-            articleDetailsWindow.update_article_information(url, citationmap)
+            articleDetailsWindow.update_article_information(url, self.citationmap)
+        articleDetailsWindow.connect("citation_clicked", self.article_clicked_in_details_window, None)
         self.listOfWindows.append(articleDetailsWindow)
 
     def closeAll(self, action):
