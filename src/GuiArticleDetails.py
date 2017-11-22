@@ -65,8 +65,13 @@ class GuiArticleDetails:
         self.vbox.pack_start(self.link_label, False, False, 0)
 
     def add_text_area(self):
-        self.text = gtk.TextView()
+        self.text_tag_table = gtk.TextTagTable()
+        self.text_buffer = gtk.TextBuffer(self.text_tag_table)
+        self.text = gtk.TextView(self.text_buffer)
         self.text.set_wrap_mode(gtk.WRAP_WORD)
+        self.citation_tag = gtk.TextTag()
+        self.citation_tag.set_property('underline', True)
+        self.text_tag_table.add(self.citation_tag)
 
     def add_request_doi_information_button(self):
         self.requestDOIInformation = gtk.Button(
@@ -169,9 +174,12 @@ class GuiArticleDetails:
 
     def list_citation_of_current_article(self, url, graph):
         list_of_edges = graph.out_edges(url)
-        self.text.get_buffer().insert_at_cursor("\nCited by\n")
+        end_iter = self.text.get_buffer().get_end_iter()
+        self.text.get_buffer().insert(end_iter, "\nCited by\n")
+
         for edge in list_of_edges:
-            self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[1])
+            end_iter = self.text.get_buffer().get_end_iter()
+            self.text.get_buffer().insert_with_tags(end_iter, " * %s\n" % edge[1], self.citation_tag)
 
     def list_references_of_current_article(self, url, graph):
         list_of_edges = graph.in_edges(url)
