@@ -87,8 +87,8 @@ class GuiArticleDetails:
         self.text.get_buffer().insert(end_iterator, '\nDOI Information: \n')
 
         for k, v in text.items():
-            end_iterator = self.text.get_buffer().get_end_iter()
-            self.text.get_buffer().insert(end_iterator, "%-*s: %s\n" % (15, k, v))
+            end_iterator = self.text_buffer.get_end_iter()
+            self.text_buffer.insert(end_iterator, "%-*s: %s\n" % (15, k, v))
 
         self.requestDOIInformation.hide()
 
@@ -114,15 +114,15 @@ class GuiArticleDetails:
             # TODO: does not respond when opening detailed information about a paper.
             # TODO: The delay is on the order of five seconds.
             article = self.use_doi_information(article)
-            self.text.get_buffer().insert_at_cursor('%s\n' % url)
-            self.text.get_buffer().insert_at_cursor('%d %s\n' % (int(article.year), article.firstAuthor))
+            self.text_buffer.insert_at_cursor('%s\n' % url)
+            self.text_buffer.insert_at_cursor('%d %s\n' % (int(article.year), article.firstAuthor))
             article.print_information()
             self.doi = article.doi
-            self.text.get_buffer().insert_at_cursor('%s\n\n' % article.title)
-            self.text.get_buffer().insert_at_cursor('Source: %s\n\n' % article.origin)
-            self.text.get_buffer().insert_at_cursor('%s\n\n' % article.abstract)
-            self.text.get_buffer().insert_at_cursor('ncites: %d\n' % article.ncites)
-            self.text.get_buffer().insert_at_cursor('%s\n' % article.references)
+            self.text_buffer.insert_at_cursor('%s\n\n' % article.title)
+            self.text_buffer.insert_at_cursor('Source: %s\n\n' % article.origin)
+            self.text_buffer.insert_at_cursor('%s\n\n' % article.abstract)
+            self.text_buffer.insert_at_cursor('ncites: %d\n' % article.ncites)
+            self.text_buffer.insert_at_cursor('%s\n' % article.references)
 
             self.insert_graph_information(article, citationmapbuild.graph)
 
@@ -130,7 +130,7 @@ class GuiArticleDetails:
             self.list_references_of_current_article(url, citationmapbuild.graph)
 
             full_info_as_text = self.get_all_information_as_text(article)
-            self.text.get_buffer().insert_at_cursor(
+            self.text_buffer.insert_at_cursor(
                 '\nAll available information:\n%s' % full_info_as_text)
             return
         else:
@@ -167,25 +167,25 @@ class GuiArticleDetails:
     def insert_graph_information(self, article, graph):
         n_references_in_graph = graph.in_degree(article.id)
         n_citations_in_graph = graph.out_degree(article.id)
-        self.text.get_buffer().insert_at_cursor(
+        self.text_buffer.insert_at_cursor(
             'Number of references in graph: %s\n' % n_references_in_graph)
-        self.text.get_buffer().insert_at_cursor(
+        self.text_buffer.insert_at_cursor(
             'Number of citations in graph: %s\n' % n_citations_in_graph)
 
     def list_citation_of_current_article(self, url, graph):
         list_of_edges = graph.out_edges(url)
-        end_iter = self.text.get_buffer().get_end_iter()
-        self.text.get_buffer().insert(end_iter, "\nCited by\n")
+        end_iter = self.text_buffer.get_end_iter()
+        self.text_buffer.insert(end_iter, "\nCited by\n")
 
         for edge in list_of_edges:
-            end_iter = self.text.get_buffer().get_end_iter()
-            self.text.get_buffer().insert_with_tags(end_iter, " * %s\n" % edge[1], self.citation_tag)
+            end_iter = self.text_buffer.get_end_iter()
+            self.text_buffer.insert_with_tags(end_iter, " * %s\n" % edge[1], self.citation_tag)
 
     def list_references_of_current_article(self, url, graph):
         list_of_edges = graph.in_edges(url)
-        self.text.get_buffer().insert_at_cursor("\nReferences\n")
+        self.text_buffer.insert_at_cursor("\nReferences\n")
         for edge in list_of_edges:
-            self.text.get_buffer().insert_at_cursor(" * %s\n" % edge[0])
+            self.text_buffer.insert_at_cursor(" * %s\n" % edge[0])
 
     def update_doi_information(self, doi):
         print("Updating doi information: %s" % doi)
