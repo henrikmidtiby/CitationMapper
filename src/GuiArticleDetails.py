@@ -83,8 +83,8 @@ class GuiArticleDetails:
 
     def request_doi_information_callback(self, p1, p2):
         text = DoiLookup.get_doi_information(self.doi)
-        end_iterator = self.text.get_buffer().get_end_iter()
-        self.text.get_buffer().insert(end_iterator, '\nDOI Information: \n')
+        end_iterator = self.text_buffer.get_end_iter()
+        self.text_buffer.insert(end_iterator, '\nDOI Information: \n')
 
         for k, v in text.items():
             end_iterator = self.text_buffer.get_end_iter()
