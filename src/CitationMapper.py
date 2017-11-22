@@ -196,9 +196,9 @@ class GuiMainWindow:
                 data, self.citationmap)
             self.change_color_of_node(data, (1, 0.75, 0.75, 1))
         else:
-            articleContextMenu = GuiArticleContextMenu.GuiArticleContextMenu(
+            article_context_menu = GuiArticleContextMenu.GuiArticleContextMenu(
                 self.openfilename)
-            articleContextMenu.show_context_menu(widget, data, event)
+            article_context_menu.show_context_menu(widget, data, event)
 
     def update_min_number_of_references(self, adj):
         self.min_number_of_references = adj.value
