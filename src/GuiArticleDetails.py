@@ -179,7 +179,8 @@ class GuiArticleDetails:
 
         for edge in list_of_edges:
             end_iter = self.text_buffer.get_end_iter()
-            self.text_buffer.insert_with_tags(end_iter, " * %s\n" % edge[1], self.citation_tag)
+            self.text_buffer.insert(end_iter, " * ")
+            self.text_buffer.insert_with_tags(end_iter, "%s\n" % edge[1], self.citation_tag)
 
     def list_references_of_current_article(self, url, graph):
         list_of_edges = graph.in_edges(url)
