@@ -64,6 +64,14 @@ class GuiArticleDetails:
                                          label="Locate article on Web of Science")
         self.vbox.pack_start(self.link_label, False, False, 0)
 
+    def citation_tag_event_handler(self, tag, widget, event, iter):
+        if event.type == gtk.gdk.BUTTON_PRESS:
+            end_iter = iter.copy()
+            end_iter.forward_to_tag_toggle(self.citation_tag)
+            iter.backward_to_tag_toggle(self.citation_tag)
+            id_of_clicked_article = self.text_buffer.get_text(iter, end_iter)
+            print(id_of_clicked_article)
+
     def add_text_area(self):
         self.text_tag_table = gtk.TextTagTable()
         self.text_buffer = gtk.TextBuffer(self.text_tag_table)
@@ -71,6 +79,7 @@ class GuiArticleDetails:
         self.text.set_wrap_mode(gtk.WRAP_WORD)
         self.citation_tag = gtk.TextTag()
         self.citation_tag.set_property('underline', True)
+        self.citation_tag.connect('event', self.citation_tag_event_handler)
         self.text_tag_table.add(self.citation_tag)
 
     def add_request_doi_information_button(self):
