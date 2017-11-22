@@ -34,6 +34,7 @@ class GuiOptionsWindow:
     min_number_of_citations = 3
     min_number_of_references_two = 1
     min_number_of_citations_two = 3
+    min_year = 1950
     graph_size = 0
 
     def __init__(self, maxCitations=50, maxReferences=50):
@@ -44,6 +45,7 @@ class GuiOptionsWindow:
         self.adj_min_number_of_references = None
         self.adj_min_number_of_citations_two = None
         self.adj_min_number_of_references_two = None
+        self.adj_min_year = None
         self.export_graph_button = None
         self.label_graph_size = None
         self.list_of_nodes_button = None
@@ -61,6 +63,7 @@ class GuiOptionsWindow:
         self.add_hscrollbar_references_two(maxReferences)
         self.add_label_citations_two()
         self.add_hscrollbar_citations_two(maxCitations)
+        self.add_hscrollbar_min_year()
         self.add_label_graph_size()
         self.add_show_graph_button()
         self.add_export_graph_button()
@@ -146,6 +149,21 @@ class GuiOptionsWindow:
         self.hscrollbar_citations_two.set_value_pos(gtk.POS_LEFT)
         self.hscrollbar_citations_two.show()
         self.vbox.pack_start(self.hscrollbar_citations_two, True, True, 0)
+
+    def add_hscrollbar_min_year(self):
+        self.adj_min_year = gtk.Adjustment(
+            value=self.min_year,
+            lower=1900,
+            upper=2020,
+            step_incr=1,
+            page_incr=5,
+            page_size=0)
+        self.hscrollbar_min_year = gtk.HScale(
+            self.adj_min_year)
+        self.hscrollbar_min_year.set_digits(0)
+        self.hscrollbar_min_year.set_value_pos(gtk.POS_LEFT)
+        self.hscrollbar_min_year.show()
+        self.vbox.pack_start(self.hscrollbar_min_year, True, True, 0)
 
     def add_label_graph_size(self):
         self.label_graph_size = gtk.Label("Graph size: nodes")

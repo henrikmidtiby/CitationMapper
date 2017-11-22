@@ -84,6 +84,7 @@ class GuiMainWindow:
     min_number_of_citations = 3
     min_number_of_references_two = 1
     min_number_of_citations_two = 3
+    min_year = 1950
 
     def __init__(self):
         self.orig_network_pre_filtered = None
@@ -216,6 +217,10 @@ class GuiMainWindow:
         self.min_number_of_citations_two = adj.value
         self.calculate_new_graph_size_and_update_options_window()
 
+    def update_min_year(self, adj):
+        self.min_year = adj.value
+        self.calculate_new_graph_size_and_update_options_window()
+
     def calculate_new_graph_size_and_update_options_window(self):
         # Count the number of articles with the required number of references and citations.
         number_of_matching_nodes = 0
@@ -230,7 +235,13 @@ class GuiMainWindow:
             test_two = (
                 number_of_citations >= self.min_number_of_citations_two
                 and number_of_references >= self.min_number_of_references_two)
-            if test_one or test_two:
+            test_three = False
+            try:
+                if self.citationmap.articles[key].year > self.min_year:
+                    test_three = True
+            except KeyError:
+                pass
+            if (test_one or test_two) and test_three:
                 number_of_matching_nodes += 1
                 self.included_node_names.append(key)
             else:
