@@ -237,8 +237,8 @@ class GuiMainWindow:
                 self.excluded_node_names.append(key)
 
         self.citationmap.remove_named_nodes(self.excluded_node_names)
-        self.options_window.graphSize = number_of_matching_nodes
-        self.options_window.labelGraphSize.set_text("Graph size: %d" % number_of_matching_nodes)
+        self.options_window.graph_size = number_of_matching_nodes
+        self.options_window.label_graph_size.set_text("Graph size: %d" % number_of_matching_nodes)
 
     def show_options_window(self, action=None):
         try:
@@ -247,14 +247,15 @@ class GuiMainWindow:
             pass
 
         self.options_window = GuiOptionsWindow.GuiOptionsWindow(self.max_citations, self.max_references)
-        self.options_window.adjMinNumberOfReferences.connect("value_changed", self.update_min_number_of_references)
-        self.options_window.adjMinNumberOfCitations.connect("value_changed", self.update_min_number_of_citations)
-        self.options_window.adjMinNumberOfReferencesTwo.connect("value_changed", self.update_min_number_of_references_two)
-        self.options_window.adjMinNumberOfCitationsTwo.connect("value_changed", self.update_min_number_of_citations_two)
-        self.options_window.showgraphbutton.connect("clicked", self.filter_and_show_current_citation_map, None)
-        self.options_window.exportgraphbutton.connect("clicked", self.export_filtered_citation_map, None)
-        self.options_window.listofnodesbutton.connect("clicked", self.get_list_of_nodes, None)
-        self.options_window.ignoreArticlesButton.connect("clicked", self.ignore_articles_in_ban_file, None)
+        self.options_window.adj_min_number_of_references.connect("value_changed", self.update_min_number_of_references)
+        self.options_window.adj_min_number_of_citations.connect("value_changed", self.update_min_number_of_citations)
+        self.options_window.adj_min_number_of_references_two.connect("value_changed", self.update_min_number_of_references_two)
+        self.options_window.adj_min_number_of_citations_two.connect("value_changed", self.update_min_number_of_citations_two)
+        self.options_window.adj_min_year.connect("value_changed", self.update_min_year)
+        self.options_window.show_graph_button.connect("clicked", self.filter_and_show_current_citation_map, None)
+        self.options_window.export_graph_button.connect("clicked", self.export_filtered_citation_map, None)
+        self.options_window.list_of_nodes_button.connect("clicked", self.get_list_of_nodes, None)
+        self.options_window.ignore_articles_button.connect("clicked", self.ignore_articles_in_ban_file, None)
         self.calculate_new_graph_size_and_update_options_window()
 
     def on_open(self, action):
@@ -321,7 +322,7 @@ class GuiMainWindow:
         return dotcode
 
     def filter_and_show_current_citation_map(self, action, data):
-        if self.options_window.graphSize > 200:
+        if self.options_window.graph_size > 200:
             if not self.dialog_show_large_graph(self.options_window.graphSize):
                 return
         dotcode = self.filter_and_export_current_citation_map()
