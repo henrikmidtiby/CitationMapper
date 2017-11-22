@@ -30,11 +30,11 @@ import gtk
 
 
 class GuiOptionsWindow:
-    minNumberOfReferences = 1
-    minNumberOfCitations = 3
-    minNumberOfReferencesTwo = 1
-    minNumberOfCitationsTwo = 3
-    graphSize = 0
+    min_number_of_references = 1
+    min_number_of_citations = 3
+    min_number_of_references_two = 1
+    min_number_of_citations_two = 3
+    graph_size = 0
 
     def __init__(self, maxCitations=50, maxReferences=50):
         self.ignoreArticlesButton = None
@@ -76,7 +76,7 @@ class GuiOptionsWindow:
 
     def addHscrollbarReferences(self, maxReferences):
         self.adjMinNumberOfReferences = gtk.Adjustment(
-            value=self.minNumberOfReferences,
+            value=self.min_number_of_references,
             lower=0,
             upper=maxReferences,
             step_incr=1,
@@ -95,7 +95,7 @@ class GuiOptionsWindow:
 
     def addHscrollbarCitations(self, maxCitations):
         self.adjMinNumberOfCitations = gtk.Adjustment(
-            value=self.minNumberOfCitations,
+            value=self.min_number_of_citations,
             lower=0,
             upper=maxCitations,
             step_incr=1,
@@ -114,7 +114,7 @@ class GuiOptionsWindow:
 
     def addHscrollbarReferencesTwo(self, maxReferences):
         self.adjMinNumberOfReferencesTwo = gtk.Adjustment(
-            value=self.minNumberOfReferencesTwo,
+            value=self.min_number_of_references_two,
             lower=0,
             upper=maxReferences,
             step_incr=1,
@@ -134,7 +134,7 @@ class GuiOptionsWindow:
 
     def addHscrollbarCitationsTwo(self, maxCitations):
         self.adjMinNumberOfCitationsTwo = gtk.Adjustment(
-            value=self.minNumberOfCitationsTwo,
+            value=self.min_number_of_citations_two,
             lower=0,
             upper=maxCitations,
             step_incr=1,
