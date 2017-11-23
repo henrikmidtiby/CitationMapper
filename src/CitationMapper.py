@@ -232,10 +232,10 @@ class GuiMainWindow:
             pass
 
         self.options_window = GuiOptionsWindow.GuiOptionsWindow(self.max_citations, self.max_references)
-        self.options_window.show_graph_button.connect("clicked", self.filter_and_show_current_citation_map, None)
-        self.options_window.export_graph_button.connect("clicked", self.export_filtered_citation_map, None)
-        self.options_window.list_of_nodes_button.connect("clicked", self.get_list_of_nodes, None)
-        self.options_window.ignore_articles_button.connect("clicked", self.ignore_articles_in_ban_file, None)
+        self.options_window.connect("show_graph_activated", self.filter_and_show_current_citation_map, None)
+        self.options_window.connect("export_graph_activated", self.export_filtered_citation_map, None)
+        self.options_window.connect("show_list_of_nodes", self.get_list_of_nodes, None)
+        self.options_window.connect("ignore_articles_activated", self.ignore_articles_in_ban_file, None)
         self.calculate_new_graph_size_and_update_options_window()
 
         self.options_window.connect("search_parameters_changed", self.calculate_new_graph_size_and_update_options_window)

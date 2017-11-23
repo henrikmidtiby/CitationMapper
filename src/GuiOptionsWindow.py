@@ -181,21 +181,25 @@ class GuiOptionsWindow(gobject.GObject):
         self.show_graph_button = gtk.Button("Show graph")
         self.show_graph_button.show()
         self.vbox.pack_start(self.show_graph_button, True, True, 0)
+        self.show_graph_button.connect("clicked", lambda self, x: x.emit('show_graph_activated'), self)
 
     def add_export_graph_button(self):
         self.export_graph_button = gtk.Button("Export graph")
         self.export_graph_button.show()
         self.vbox.pack_start(self.export_graph_button, True, True, 0)
+        self.export_graph_button.connect("clicked", lambda self, x: x.emit('export_graph_activated'), self)
 
     def add_list_of_nodes_button(self):
         self.list_of_nodes_button = gtk.Button("Get list of nodes")
         self.list_of_nodes_button.show()
         self.vbox.pack_start(self.list_of_nodes_button, True, True, 0)
+        self.list_of_nodes_button.connect("clicked", lambda self, x: x.emit('show_list_of_nodes'), self)
 
     def add_ignore_articles_button(self):
         self.ignore_articles_button = gtk.Button("Ignore articles in ban file")
         self.ignore_articles_button.show()
         self.vbox.pack_start(self.ignore_articles_button, True, True, 0)
+        self.ignore_articles_button.connect("clicked", lambda self, x: x.emit('ignore_articles_activated'), self)
 
     def update_min_number_of_references(self, adj):
         self.min_number_of_references = adj.value
@@ -219,6 +223,14 @@ class GuiOptionsWindow(gobject.GObject):
 
 gobject.type_register(GuiOptionsWindow)
 gobject.signal_new("search_parameters_changed", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
+                   gobject.TYPE_NONE, ())
+gobject.signal_new("show_graph_activated", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
+                   gobject.TYPE_NONE, ())
+gobject.signal_new("export_graph_activated", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
+                   gobject.TYPE_NONE, ())
+gobject.signal_new("show_list_of_nodes", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
+                   gobject.TYPE_NONE, ())
+gobject.signal_new("ignore_articles_activated", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
                    gobject.TYPE_NONE, ())
 
 
