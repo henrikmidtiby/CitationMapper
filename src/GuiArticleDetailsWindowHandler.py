@@ -54,7 +54,7 @@ class GuiArticleDetailsWindowHandler(gobject.GObject):
 
     def closeAll(self, action):
         for window in self.listOfWindows:
-            window.nodeinformationwindow.destroy()
+            window.node_information_window.destroy()
         self.listOfWindows = []
 
 
