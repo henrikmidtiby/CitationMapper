@@ -189,20 +189,20 @@ class GuiArticleDetails(gobject.GObject):
         self.text_buffer.insert(end_iter, "\nCited by\n")
 
         for edge in list_of_edges:
-            end_iter = self.text_buffer.get_end_iter()
-            self.text_buffer.insert(end_iter, " * ")
-            self.text_buffer.insert_with_tags(end_iter, "%s" % edge[1], self.citation_tag)
-            self.text_buffer.insert(end_iter, "\n")
+            self.insert_citation_with_proper_tag(edge[1])
 
     def list_references_of_current_article(self, url, graph):
         list_of_edges = graph.in_edges(url)
         end_iter = self.text_buffer.get_end_iter()
         self.text_buffer.insert(end_iter, "\nReferences\n")
         for edge in list_of_edges:
-            end_iter = self.text_buffer.get_end_iter()
-            self.text_buffer.insert(end_iter, " * ")
-            self.text_buffer.insert_with_tags(end_iter, "%s" % edge[0], self.citation_tag)
-            self.text_buffer.insert(end_iter, "\n")
+            self.insert_citation_with_proper_tag(edge[0])
+
+    def insert_citation_with_proper_tag(self, edge):
+        end_iter = self.text_buffer.get_end_iter()
+        self.text_buffer.insert(end_iter, " * ")
+        self.text_buffer.insert_with_tags(end_iter, "%s" % edge, self.citation_tag)
+        self.text_buffer.insert(end_iter, "\n")
 
     def update_doi_information(self, doi):
         print("Updating doi information: %s" % doi)
