@@ -70,7 +70,6 @@ class GuiArticleDetails(gobject.GObject):
         if event.type == gtk.gdk.BUTTON_PRESS:
             end_iter = iter.copy()
             end_iter.forward_to_tag_toggle(self.citation_tag)
-            end_iter.backward_char()
             iter.backward_to_tag_toggle(self.citation_tag)
             id_of_clicked_article = self.text_buffer.get_text(iter, end_iter)
             self.emit('citation_clicked', id_of_clicked_article)
@@ -192,13 +191,18 @@ class GuiArticleDetails(gobject.GObject):
         for edge in list_of_edges:
             end_iter = self.text_buffer.get_end_iter()
             self.text_buffer.insert(end_iter, " * ")
-            self.text_buffer.insert_with_tags(end_iter, "%s\n" % edge[1], self.citation_tag)
+            self.text_buffer.insert_with_tags(end_iter, "%s" % edge[1], self.citation_tag)
+            self.text_buffer.insert(end_iter, "\n")
 
     def list_references_of_current_article(self, url, graph):
         list_of_edges = graph.in_edges(url)
-        self.text_buffer.insert_at_cursor("\nReferences\n")
+        end_iter = self.text_buffer.get_end_iter()
+        self.text_buffer.insert(end_iter, "\nReferences\n")
         for edge in list_of_edges:
-            self.text_buffer.insert_at_cursor(" * %s\n" % edge[0])
+            end_iter = self.text_buffer.get_end_iter()
+            self.text_buffer.insert(end_iter, " * ")
+            self.text_buffer.insert_with_tags(end_iter, "%s" % edge[0], self.citation_tag)
+            self.text_buffer.insert(end_iter, "\n")
 
     def update_doi_information(self, doi):
         print("Updating doi information: %s" % doi)
