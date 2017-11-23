@@ -43,14 +43,17 @@ class GuiArticleDetailsWindowHandler(gobject.GObject):
 
     def open_new_article_details_window(self, url):
         article_details_window = GuiArticleDetails.GuiArticleDetails()
+        self.show_article_details(article_details_window, url)
+        self.listen_to_signals_from_window(article_details_window)
+        self.list_of_windows.append(article_details_window)
+
+    def show_article_details(self, article_details_window, url):
         try:
             article = self.citationmap.articles[url]
             article_details_window.update_article_information(url, self.citationmap, article)
         except KeyError:
             print("openNewArticleDetailsWindow url = \'%s\'" % url)
             article_details_window.update_article_information(url, self.citationmap)
-        self.listen_to_signals_from_window(article_details_window)
-        self.list_of_windows.append(article_details_window)
 
     def listen_to_signals_from_window(self, article_details_window):
         article_details_window.connect("citation_clicked", self.article_clicked_in_details_window, None)
