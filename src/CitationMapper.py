@@ -222,8 +222,7 @@ class GuiMainWindow:
                 self.excluded_node_names.append(key)
 
         self.citationmap.remove_named_nodes(self.excluded_node_names)
-        self.options_window.graph_size = number_of_matching_nodes
-        self.options_window.label_graph_size.set_text("Graph size: %d" % number_of_matching_nodes)
+        self.options_window.set_graph_size(number_of_matching_nodes)
 
     def show_options_window(self, action=None):
         try:

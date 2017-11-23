@@ -221,6 +221,11 @@ class GuiOptionsWindow(gobject.GObject):
         self.min_year = adj.value
         self.emit('search_parameters_changed')
 
+    def set_graph_size(self, new_graph_size):
+        self.graph_size = new_graph_size
+        self.label_graph_size.set_text("Graph size: %d" % new_graph_size)
+
+
 gobject.type_register(GuiOptionsWindow)
 gobject.signal_new("search_parameters_changed", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
                    gobject.TYPE_NONE, ())
