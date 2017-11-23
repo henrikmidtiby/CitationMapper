@@ -227,7 +227,7 @@ class GuiMainWindow:
 
     def show_options_window(self, action=None):
         try:
-            self.options_window.searchoptionswindow.destroy()
+            self.options_window.searchoptions_window.destroy()
         except:
             pass
 
