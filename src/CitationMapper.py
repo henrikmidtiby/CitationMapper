@@ -142,7 +142,7 @@ class GuiMainWindow:
         actiongroup.add_actions([
             ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
             ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C',
-                    None, self.article_details_windows.closeAll),
+                    None, self.article_details_windows.close_all),
             ('OpenOptionsDialog', None, '_Options', 'O', None, self.show_options_window),
             ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
             ('About', None, '_About', None, None, self.show_about_dialog),
@@ -193,7 +193,7 @@ class GuiMainWindow:
 
     def article_clicked(self, widget, data, event):
         if event.button == 1:
-            self.article_details_windows.openNewArticleDetailsWindow(data)
+            self.article_details_windows.open_new_article_details_window(data)
             self.change_color_of_node(data, (1, 0.75, 0.75, 1))
         else:
             article_context_menu = GuiArticleContextMenu.GuiArticleContextMenu(

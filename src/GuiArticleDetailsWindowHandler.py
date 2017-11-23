@@ -32,30 +32,33 @@ import GuiArticleDetails
 
 class GuiArticleDetailsWindowHandler(gobject.GObject):
     def __init__(self):
-        self.listOfWindows = []
+        self.list_of_windows = []
         self.citationmap = None
 
     def article_clicked_in_details_window(self, placeholder_one, article_id, placeholder_two):
-        self.openNewArticleDetailsWindow(article_id)
+        self.open_new_article_details_window(article_id)
 
     def set_citationmap(self, citationmap_in):
         self.citationmap = citationmap_in
 
-    def openNewArticleDetailsWindow(self, url):
-        articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
+    def open_new_article_details_window(self, url):
+        article_details_window = GuiArticleDetails.GuiArticleDetails()
         try:
             article = self.citationmap.articles[url]
-            articleDetailsWindow.update_article_information(url, self.citationmap, article)
-        except:
+            article_details_window.update_article_information(url, self.citationmap, article)
+        except KeyError:
             print("openNewArticleDetailsWindow url = \'%s\'" % url)
-            articleDetailsWindow.update_article_information(url, self.citationmap)
-        articleDetailsWindow.connect("citation_clicked", self.article_clicked_in_details_window, None)
-        self.listOfWindows.append(articleDetailsWindow)
+            article_details_window.update_article_information(url, self.citationmap)
+        self.listen_to_signals_from_window(article_details_window)
+        self.list_of_windows.append(article_details_window)
 
-    def closeAll(self, action):
-        for window in self.listOfWindows:
+    def listen_to_signals_from_window(self, article_details_window):
+        article_details_window.connect("citation_clicked", self.article_clicked_in_details_window, None)
+
+    def close_all(self, action):
+        for window in self.list_of_windows:
             window.node_information_window.destroy()
-        self.listOfWindows = []
+        self.list_of_windows = []
 
 
 def main():
