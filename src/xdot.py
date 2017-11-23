@@ -1787,6 +1787,9 @@ class DotWidget(gtk.DrawingArea):
         return False
 
     print_settings = None
+    print_settings = gtk.PrintSettings()
+    print_settings.set_paper_width(1000, gtk.UNIT_MM)
+    print_settings.set_paper_height(1000, gtk.UNIT_MM)
     def on_print(self, action=None):
         print_op = gtk.PrintOperation()
 
