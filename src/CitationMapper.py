@@ -80,11 +80,6 @@ class GuiMainWindow:
     '''
 
     openfilename = None
-    min_number_of_references = 1
-    min_number_of_citations = 3
-    min_number_of_references_two = 1
-    min_number_of_citations_two = 3
-    min_year = 1950
 
     def __init__(self):
         self.orig_network_pre_filtered = None
@@ -200,27 +195,7 @@ class GuiMainWindow:
                 self.openfilename)
             article_context_menu.show_context_menu(widget, data, event)
 
-    def update_min_number_of_references(self, adj):
-        self.min_number_of_references = adj.value
-        self.calculate_new_graph_size_and_update_options_window()
-
-    def update_min_number_of_citations(self, adj):
-        self.min_number_of_citations = adj.value
-        self.calculate_new_graph_size_and_update_options_window()
-
-    def update_min_number_of_references_two(self, adj):
-        self.min_number_of_references_two = adj.value
-        self.calculate_new_graph_size_and_update_options_window()
-
-    def update_min_number_of_citations_two(self, adj):
-        self.min_number_of_citations_two = adj.value
-        self.calculate_new_graph_size_and_update_options_window()
-
-    def update_min_year(self, adj):
-        self.min_year = adj.value
-        self.calculate_new_graph_size_and_update_options_window()
-
-    def calculate_new_graph_size_and_update_options_window(self):
+    def calculate_new_graph_size_and_update_options_window(self, placeholder=None):
         # Count the number of articles with the required number of references and citations.
         number_of_matching_nodes = 0
         self.included_node_names = []
@@ -229,14 +204,14 @@ class GuiMainWindow:
             number_of_citations = self.orig_network.out_degree(key)
             number_of_references = self.orig_network.in_degree(key)
             test_one = (
-                number_of_citations >= self.min_number_of_citations and
-                number_of_references >= self.min_number_of_references)
+                number_of_citations >= self.options_window.min_number_of_citations and
+                number_of_references >= self.options_window.min_number_of_references)
             test_two = (
-                number_of_citations >= self.min_number_of_citations_two
-                and number_of_references >= self.min_number_of_references_two)
+                number_of_citations >= self.options_window.min_number_of_citations_two
+                and number_of_references >= self.options_window.min_number_of_references_two)
             test_three = False
             try:
-                if self.citationmap.articles[key].year > self.min_year:
+                if self.citationmap.articles[key].year > self.options_window.min_year:
                     test_three = True
             except KeyError:
                 pass
@@ -257,16 +232,13 @@ class GuiMainWindow:
             pass
 
         self.options_window = GuiOptionsWindow.GuiOptionsWindow(self.max_citations, self.max_references)
-        self.options_window.adj_min_number_of_references.connect("value_changed", self.update_min_number_of_references)
-        self.options_window.adj_min_number_of_citations.connect("value_changed", self.update_min_number_of_citations)
-        self.options_window.adj_min_number_of_references_two.connect("value_changed", self.update_min_number_of_references_two)
-        self.options_window.adj_min_number_of_citations_two.connect("value_changed", self.update_min_number_of_citations_two)
-        self.options_window.adj_min_year.connect("value_changed", self.update_min_year)
         self.options_window.show_graph_button.connect("clicked", self.filter_and_show_current_citation_map, None)
         self.options_window.export_graph_button.connect("clicked", self.export_filtered_citation_map, None)
         self.options_window.list_of_nodes_button.connect("clicked", self.get_list_of_nodes, None)
         self.options_window.ignore_articles_button.connect("clicked", self.ignore_articles_in_ban_file, None)
         self.calculate_new_graph_size_and_update_options_window()
+
+        self.options_window.connect("search_parameters_changed", self.calculate_new_graph_size_and_update_options_window)
 
     def on_open(self, action):
         chooser = gtk.FileChooserDialog(

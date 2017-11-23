@@ -26,10 +26,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import gobject
 import gtk
 
 
-class GuiOptionsWindow:
+class GuiOptionsWindow(gobject.GObject):
     min_number_of_references = 1
     min_number_of_citations = 3
     min_number_of_references_two = 1
@@ -38,6 +39,7 @@ class GuiOptionsWindow:
     graph_size = 0
 
     def __init__(self, maxCitations=50, maxReferences=50):
+        self.__gobject_init__()
         self.ignore_articles_button = None
         self.hscrollbar_citations = None
         self.hscrollbar_references = None
@@ -85,6 +87,7 @@ class GuiOptionsWindow:
             step_incr=1,
             page_incr=5,
             page_size=0)
+        self.adj_min_number_of_references.connect("value_changed", self.update_min_number_of_references)
         self.hscrollbar_references = gtk.HScale(self.adj_min_number_of_references)
         self.hscrollbar_references.set_digits(0)
         self.hscrollbar_references.set_value_pos(gtk.POS_LEFT)
@@ -104,6 +107,7 @@ class GuiOptionsWindow:
             step_incr=1,
             page_incr=5,
             page_size=0)
+        self.adj_min_number_of_citations.connect("value_changed", self.update_min_number_of_citations)
         self.hscrollbar_citations = gtk.HScale(self.adj_min_number_of_citations)
         self.hscrollbar_citations.set_digits(0)
         self.hscrollbar_citations.set_value_pos(gtk.POS_LEFT)
@@ -123,6 +127,7 @@ class GuiOptionsWindow:
             step_incr=1,
             page_incr=5,
             page_size=0)
+        self.adj_min_number_of_references_two.connect("value_changed", self.update_min_number_of_references_two)
         self.hscrollbar_references_two = gtk.HScale(
             self.adj_min_number_of_references_two)
         self.hscrollbar_references_two.set_digits(0)
@@ -143,6 +148,7 @@ class GuiOptionsWindow:
             step_incr=1,
             page_incr=5,
             page_size=0)
+        self.adj_min_number_of_citations_two.connect("value_changed", self.update_min_number_of_references_two)
         self.hscrollbar_citations_two = gtk.HScale(
             self.adj_min_number_of_citations_two)
         self.hscrollbar_citations_two.set_digits(0)
@@ -158,6 +164,7 @@ class GuiOptionsWindow:
             step_incr=1,
             page_incr=5,
             page_size=0)
+        self.adj_min_year.connect("value_changed", self.update_min_year)
         self.hscrollbar_min_year = gtk.HScale(
             self.adj_min_year)
         self.hscrollbar_min_year.set_digits(0)
@@ -189,6 +196,30 @@ class GuiOptionsWindow:
         self.ignore_articles_button = gtk.Button("Ignore articles in ban file")
         self.ignore_articles_button.show()
         self.vbox.pack_start(self.ignore_articles_button, True, True, 0)
+
+    def update_min_number_of_references(self, adj):
+        self.min_number_of_references = adj.value
+        self.emit('search_parameters_changed')
+
+    def update_min_number_of_citations(self, adj):
+        self.min_number_of_citations = adj.value
+        self.emit('search_parameters_changed')
+
+    def update_min_number_of_references_two(self, adj):
+        self.min_number_of_references_two = adj.value
+        self.emit('search_parameters_changed')
+
+    def update_min_number_of_citations_two(self, adj):
+        self.min_number_of_citations_two = adj.value
+        self.emit('search_parameters_changed')
+
+    def update_min_year(self, adj):
+        self.min_year = adj.value
+        self.emit('search_parameters_changed')
+
+gobject.type_register(GuiOptionsWindow)
+gobject.signal_new("search_parameters_changed", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
+                   gobject.TYPE_NONE, ())
 
 
 def main():
