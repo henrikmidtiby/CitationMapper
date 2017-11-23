@@ -148,7 +148,7 @@ class GuiOptionsWindow(gobject.GObject):
             step_incr=1,
             page_incr=5,
             page_size=0)
-        self.adj_min_number_of_citations_two.connect("value_changed", self.update_min_number_of_references_two)
+        self.adj_min_number_of_citations_two.connect("value_changed", self.update_min_number_of_citations_two)
         self.hscrollbar_citations_two = gtk.HScale(
             self.adj_min_number_of_citations_two)
         self.hscrollbar_citations_two.set_digits(0)
