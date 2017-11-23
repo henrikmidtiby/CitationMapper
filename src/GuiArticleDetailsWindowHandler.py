@@ -38,8 +38,8 @@ class GuiArticleDetailsWindowHandler(gobject.GObject):
     def article_clicked_in_details_window(self, placeholder_one, article_id, placeholder_two):
         self.openNewArticleDetailsWindow(article_id)
 
-    def set_citationmap(self, citationmapin):
-        self.citationmap = citationmapin
+    def set_citationmap(self, citationmap_in):
+        self.citationmap = citationmap_in
 
     def openNewArticleDetailsWindow(self, url):
         articleDetailsWindow = GuiArticleDetails.GuiArticleDetails()
