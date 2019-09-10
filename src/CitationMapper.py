@@ -350,7 +350,7 @@ class GuiMainWindow:
     def export_filtered_citation_map(self, action, data):
         chooser = Gtk.FileChooserDialog(
             title=None,
-            action=Gtk.FileChooseAction.SAVE,
+            action=Gtk.FileChooserAction.SAVE,
             buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE,
                      Gtk.ResponseType.OK))
         if chooser.run() == Gtk.ResponseType.OK:
