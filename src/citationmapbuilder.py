@@ -154,11 +154,11 @@ class citationmapbuilder:
                 ncitesingraph = self.graph.out_degree(key)
                 labelOnGraph = self.articles[key].firstAuthor
                 if 0.95 * ncites < ncitesingraph:
-                    color = "#00ff00"
+                    color = "#99ff99"
                 else:
-                    color = "#ff0000"
+                    color = "#ff9999"
                 if self.articles[key].origin == "ListedInCitations":
-                    color = "#0000ff"
+                    color = "#9999ff"
 
             except (KeyError):
                 print("output_node_information: KeyError: %s" % key)
