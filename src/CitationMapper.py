@@ -348,6 +348,12 @@ class GuiMainWindow:
         return response == 1
 
     def export_filtered_citation_map(self, action, data):
+        dialog = Gtk.MessageDialog(self.citationmapper_window, 0, Gtk.MessageType.INFO,
+                Gtk.ButtonsType.OK, "Guide for exporting the graph")
+        dialog.format_secondary_text(
+            "Choose a place for the .dot file that will be generated. Afterwards the dot command from graphviz can be used to convert the .dot file to a pdf.")
+        dialog.run()
+        dialog.destroy()
         chooser = Gtk.FileChooserDialog(
             title=None,
             action=Gtk.FileChooserAction.SAVE,
