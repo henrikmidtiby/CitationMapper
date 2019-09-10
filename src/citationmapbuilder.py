@@ -53,11 +53,15 @@ class citationmapbuilder:
     def parse_file(self, filename):
         parser = WebOfKnowledgeParser.WebOfKnowledgeParser()
         # parser = ScopusParser.ScopusParser()
-        parser.parsefile(filename)
-
-        for articleKey in parser.articles.keys():
-            article = parser.articles[articleKey]
-            self.add_article_to_graph(article)
+        try:
+            parser.parsefile(filename)
+    
+            for articleKey in parser.articles.keys():
+                article = parser.articles[articleKey]
+                self.add_article_to_graph(article)
+        except UnicodeDecodeError as e:
+            print("Cannot parse file \"%s\"" % filename)
+            print(e)
 
     def add_article_to_graph(self, article):
         """
