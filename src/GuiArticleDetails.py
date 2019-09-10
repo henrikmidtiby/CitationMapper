@@ -26,9 +26,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gi.repository import GObject
+from gi.repository import GObject, Gtk, Gdk
 import re
-import gtk
 import pprint
 import io
 import string
@@ -44,13 +43,13 @@ def open_url(widget, url):
 # noinspection PyAttributeOutsideInit
 class GuiArticleDetails(GObject.GObject):
     def __init__(self):
-        self.__gobject_init__()
+        GObject.GObject.__init__(self)
         self.doi = None
         self.node_scrolled_window = None
-        self.node_information_window = gtk.Window()
+        self.node_information_window = Gtk.Window()
         self.node_information_window.set_title("Article details")
         self.node_information_window.set_size_request(500, 300)
-        self.vbox = gtk.VBox(False, 0)
+        self.vbox = Gtk.VBox(False, 0)
         self.add_link_button()
         self.add_text_area()
         self.generate_node_scrolled_window()
@@ -59,33 +58,35 @@ class GuiArticleDetails(GObject.GObject):
         self.vbox.pack_start(self.node_scrolled_window, True, True, 0)
         self.node_information_window.add(self.vbox)
         self.node_information_window.show_all()
-        gtk.link_button_set_uri_hook(open_url)
+        #Gtk.link_button_set_uri_hook(open_url)
 
     def add_link_button(self):
-        self.link_label = gtk.LinkButton("http://www.sdu.dk",
+        self.link_label = Gtk.LinkButton("http://www.sdu.dk",
                                          label="Locate article on Web of Science")
         self.vbox.pack_start(self.link_label, False, False, 0)
 
     def citation_tag_event_handler(self, tag, widget, event, iter):
-        if event.type == gtk.gdk.BUTTON_PRESS:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
             end_iter = iter.copy()
             end_iter.forward_to_tag_toggle(self.citation_tag)
             iter.backward_to_tag_toggle(self.citation_tag)
-            id_of_clicked_article = self.text_buffer.get_text(iter, end_iter)
+            id_of_clicked_article = self.text_buffer.get_text(iter, end_iter, False)
             self.emit('citation_clicked', id_of_clicked_article)
 
     def add_text_area(self):
-        self.text_tag_table = gtk.TextTagTable()
-        self.text_buffer = gtk.TextBuffer(self.text_tag_table)
-        self.text = gtk.TextView(self.text_buffer)
-        self.text.set_wrap_mode(gtk.WRAP_WORD)
-        self.citation_tag = gtk.TextTag()
-        self.citation_tag.set_property('underline', True)
+        self.text_tag_table = Gtk.TextTagTable()
+        self.text = Gtk.TextView()
+        self.text_buffer = self.text.get_buffer()
+        # Gtk.TextBuffer.new(self.text_tag_table)
+        self.text.set_wrap_mode(Gtk.WrapMode.WORD)
+        self.citation_tag = self.text_buffer.create_tag("internal_link", 
+                underline = True)
+        #self.citation_tag.set_property('underline', True)
         self.citation_tag.connect('event', self.citation_tag_event_handler)
-        self.text_tag_table.add(self.citation_tag)
+        #self.text_tag_table.add(self.citation_tag)
 
     def add_request_doi_information_button(self):
-        self.requestDOIInformation = gtk.Button(
+        self.requestDOIInformation = Gtk.Button(
             "Fetch more information based on DOI")
         self.requestDOIInformation.show()
         self.vbox.pack_start(self.requestDOIInformation, False, False, 5)
@@ -104,9 +105,9 @@ class GuiArticleDetails(GObject.GObject):
         self.requestDOIInformation.hide()
 
     def generate_node_scrolled_window(self):
-        self.node_scrolled_window = gtk.ScrolledWindow()
-        self.node_scrolled_window.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        self.node_scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.node_scrolled_window = Gtk.ScrolledWindow()
+        self.node_scrolled_window.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
+        self.node_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.node_scrolled_window.add(self.text)
 
     def update_article_information(self, url,
@@ -218,7 +219,7 @@ GObject.signal_new("citation_clicked", GuiArticleDetails, GObject.SIGNAL_RUN_FIR
 
 def main():
     GuiArticleDetails()
-    gtk.main()
+    Gtk.main()
 
 
 if __name__ == "__main__":
