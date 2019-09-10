@@ -65,13 +65,13 @@ class citationmapbuilder:
         Args:
             article (ArticleWithReferences.ArticleWithReferences):
         """
-        if not type(article.year) is types.IntType:
+        if not isinstance(article.year, int):
             print("Year is not a number")
 
         # not in the database already.
         if (article.origin == "PrimaryRecord"):
             self.articles[article.id] = article
-        elif (not self.articles.has_key(article.id)):
+        elif (not article.id in self.articles):
             self.articles[article.id] = article
         self.articles[article.id] = article
         self.graph.add_node(article.id)
@@ -128,7 +128,7 @@ class citationmapbuilder:
 
     def output_year_nodes_and_mark_objects_with_the_same_rank(self, stream):
         years = self.get_years_and_articles()
-        yeartags = years.keys()
+        yeartags = list(years.keys())
         yeartags.sort()
         for year in yeartags:
             stream.write(

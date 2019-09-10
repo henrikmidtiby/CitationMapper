@@ -83,12 +83,12 @@ class WebOfKnowledgeParser:
                 try:
                     article = ArticleWithReferences.ArticleWithReferences()
                     article.id = identifier
-                    article.title = string.join(values["TI"], " ")
+                    article.title = " ".join(values["TI"])
                     article.year = int(values["PY"][0])
                     article.ncites = int(values["TC"][0])
                     article.origin = "PrimaryRecord"
                     try:
-                        article.abstract = string.join(values["AB"], " ")
+                        article.abstract = " ".join(values["AB"])
                     except (KeyError):
                         article.abstract = None
                     try:
@@ -244,6 +244,10 @@ class WebOfKnowledgeParser:
             return self.idsAndYears[ident]
         except KeyError:
             print("Could not determine year from %s" % ident)
+            return -1
+        except Exception as e:
+            print("ident: ", ident)
+            print(e)
             return -1
 
     def getAuthorFromIdentity(self, ident):

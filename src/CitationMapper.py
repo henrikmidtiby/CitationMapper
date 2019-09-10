@@ -246,11 +246,11 @@ class GuiMainWindow:
     def on_open(self, action):
         chooser = Gtk.FileChooserDialog(
             title="Open directory with bibliography",
-            action=Gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.RESPONSE_CANCEL, Gtk.STOCK_OPEN,
-                     Gtk.RESPONSE_OK))
-        chooser.set_default_response(Gtk.RESPONSE_OK)
-        if chooser.run() == Gtk.RESPONSE_OK:
+            action=Gtk.FileChooserAction.SELECT_FOLDER,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN,
+                     Gtk.ResponseType.OK))
+        chooser.set_default_response(Gtk.ResponseType.OK)
+        if chooser.run() == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
             chooser.destroy()
             self.open_directory(filename)
@@ -313,7 +313,7 @@ class GuiMainWindow:
             if not self.dialog_show_large_graph(self.options_window.graphSize):
                 return
         dotcode = self.filter_and_export_current_citation_map()
-        self.mapview.set_dotcode(dotcode)
+        self.mapview.set_dotcode(bytes(dotcode, encoding='UTF-8'))
         self.mapview.zoom_to_fit()
         self.article_details_windows.set_citationmap(self.citationmap)
 
