@@ -204,23 +204,24 @@ class GuiOptionsWindow(GObject.GObject):
         self.ignore_articles_button.connect("clicked", lambda self, x: x.emit('ignore_articles_activated'), self)
 
     def update_min_number_of_references(self, adj):
-        self.min_number_of_references = adj.value
+        print(adj)
+        self.min_number_of_references = adj.get_value()
         self.emit('search_parameters_changed')
 
     def update_min_number_of_citations(self, adj):
-        self.min_number_of_citations = adj.value
+        self.min_number_of_citations = adj.get_value()
         self.emit('search_parameters_changed')
 
     def update_min_number_of_references_two(self, adj):
-        self.min_number_of_references_two = adj.value
+        self.min_number_of_references_two = adj.get_value()
         self.emit('search_parameters_changed')
 
     def update_min_number_of_citations_two(self, adj):
-        self.min_number_of_citations_two = adj.value
+        self.min_number_of_citations_two = adj.get_value()
         self.emit('search_parameters_changed')
 
     def update_min_year(self, adj):
-        self.min_year = adj.value
+        self.min_year = adj.get_value()
         self.emit('search_parameters_changed')
 
     def set_graph_size(self, new_graph_size):

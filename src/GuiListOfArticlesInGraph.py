@@ -26,7 +26,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gtk
+from gi.repository import Gtk
 import io
 
 
@@ -37,15 +37,15 @@ class GuiListOfArticlesInGraph:
         self.nodesTreeview = None
         self.nodescrolledwindow = None
 
-        self.nodewindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.nodewindow = Gtk.Window()
         self.nodewindow.set_title("List of nodes")
         self.nodewindow.set_size_request(200, 200)
         self.generateNodesTreeStore()
         self.generateNodesTreeView()
         self.generateNodeScrolledWindow()
-        vbox = gtk.VBox(False, 0)
+        vbox = Gtk.VBox(False, 0)
         self.nodewindow.add(vbox)
-        exportlistofnodesbutton = gtk.Button("Export list of nodes")
+        exportlistofnodesbutton = Gtk.Button("Export list of nodes")
         exportlistofnodesbutton.connect("clicked", self.exportListOfNodes, None)
         exportlistofnodesbutton.show()
         vbox.pack_start(self.nodescrolledwindow, True, True, 0)
@@ -55,13 +55,13 @@ class GuiListOfArticlesInGraph:
 
     def generateNodesTreeStore(self):
         # create a TreeStore with one string column to use as the model
-        self.nodesTreestore = gtk.TreeStore(str, int, int, int, int, int, str, str, str)
+        self.nodesTreestore = Gtk.TreeStore(str, int, int, int, int, int, str, str, str)
 
 
     def generateNodesTreeView(self):
-        tmsort = gtk.TreeModelSort(self.nodesTreestore
+        tmsort = Gtk.TreeModelSort(self.nodesTreestore
                                    )  # produce a sortable treemodel
-        self.nodesTreeview = gtk.TreeView(tmsort)
+        self.nodesTreeview = Gtk.TreeView(tmsort)
         self.nodesTreeview.connect("row-activated", self.row_clicked)
 
         column_names = ['ID', 'Year', 'In graph citations',
@@ -70,8 +70,8 @@ class GuiListOfArticlesInGraph:
 
         self.tvcolumn = [None] * len(column_names)
         for n in range(0, len(column_names)):
-            cell = gtk.CellRendererText()
-            self.tvcolumn[n] = gtk.TreeViewColumn(column_names[n])
+            cell = Gtk.CellRendererText()
+            self.tvcolumn[n] = Gtk.TreeViewColumn(column_names[n])
             self.tvcolumn[n].pack_start(cell, True)
             self.tvcolumn[n].add_attribute(cell, 'text', n)
             self.tvcolumn[n].set_sort_column_id(n)
@@ -82,10 +82,10 @@ class GuiListOfArticlesInGraph:
             self.nodesTreeview.append_column(self.tvcolumn[n])
 
     def generateNodeScrolledWindow(self):
-        self.nodescrolledwindow = gtk.ScrolledWindow()
-        self.nodescrolledwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        self.nodescrolledwindow.set_policy(gtk.POLICY_AUTOMATIC,
-                                           gtk.POLICY_AUTOMATIC)
+        self.nodescrolledwindow = Gtk.ScrolledWindow()
+        self.nodescrolledwindow.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
+        self.nodescrolledwindow.set_policy(Gtk.PolicyType.AUTOMATIC,
+                                           Gtk.PolicyType.AUTOMATIC)
         self.nodescrolledwindow.add(self.nodesTreeview)
 
     def row_clicked(self, widget, row, col):
@@ -95,12 +95,12 @@ class GuiListOfArticlesInGraph:
         print(text)
 
     def exportListOfNodes(self, widget, temp2=None):
-        chooser = gtk.FileChooserDialog(
+        chooser = Gtk.FileChooserDialog(
             title=None,
-            action=gtk.FILE_CHOOSER_ACTION_SAVE,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE,
-                     gtk.RESPONSE_OK))
-        if chooser.run() == gtk.RESPONSE_OK:
+            action=Gtk.FileChooserAction.SAVE,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE,
+                     Gtk.ResponseType.OK))
+        if chooser.run() == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
             chooser.destroy()
 
@@ -132,8 +132,8 @@ class GuiListOfArticlesInGraph:
 
 def main():
     loaig = GuiListOfArticlesInGraph()
-    loaig.nodewindow.connect('destroy', gtk.main_quit)
-    gtk.main()
+    loaig.nodewindow.connect('destroy', Gtk.main_quit)
+    Gtk.main()
 
 
 if __name__ == '__main__':

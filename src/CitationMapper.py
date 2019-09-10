@@ -177,11 +177,11 @@ class GuiMainWindow:
     def change_color_of_node(self, url, newcolor):
         temp = self.mapview.graph
         for node in temp.nodes:
-            if isinstance(node, xdot.Node) and node.url == url:
+            if isinstance(node, xdot.ui.elements.Node) and node.url == url:
                 for shape in node.shapes:
-                    if isinstance(shape, xdot.TextShape):
+                    if isinstance(shape, xdot.ui.elements.TextShape):
                         print(shape.t)
-                    if isinstance(shape, xdot.EllipseShape):
+                    if isinstance(shape, xdot.ui.elements.EllipseShape):
                         shape.pen.fillcolor = newcolor
                         shape.pen.color = newcolor
         self.mapview.queue_draw()
@@ -350,10 +350,10 @@ class GuiMainWindow:
     def export_filtered_citation_map(self, action, data):
         chooser = Gtk.FileChooserDialog(
             title=None,
-            action=Gtk.FILE_CHOOSER_ACTION_SAVE,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.RESPONSE_CANCEL, Gtk.STOCK_SAVE,
-                     Gtk.RESPONSE_OK))
-        if chooser.run() == Gtk.RESPONSE_OK:
+            action=Gtk.FileChooseAction.SAVE,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE,
+                     Gtk.ResponseType.OK))
+        if chooser.run() == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
             chooser.destroy()
 
@@ -379,7 +379,7 @@ class GuiMainWindow:
                 year = article.year
                 fieldSO = article.journal
                 fieldTitle = article.title
-                fieldAuthors = string.join(article.authors, ' and ')
+                fieldAuthors = " and ".join(article.authors)
                 fieldTC = 0 #int(article['TC'][0])
                 fieldNR = 0 #int(article['NR'][0])
                 list_of_nodes.nodesTreestore.append(None,
