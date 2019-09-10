@@ -31,13 +31,14 @@ import re
 import sys
 import networkx
 import math
-import StringIO
+import io
 import ArticleWithReferences
 import WebOfKnowledgeParser
 #import ScopusParser
 import types
 
-assert(networkx.__version__ == '2.0')
+print(networkx.__version__)
+# assert(networkx.__version__ == '2.0')
 
 class citationmapbuilder:
     def __init__(self):
@@ -113,9 +114,9 @@ class citationmapbuilder:
                     years[curYear] = []
                 years[curYear].append(elem)
             except KeyError:
-                print "get_years_and_articles - KeyError - \'%s\''" % elem
+                print("get_years_and_articles - KeyError - \'%s\''" % elem)
 
-        print years
+        print(years)
         return years
 
     def output_graph(self, stream, direction="TD"):
@@ -174,7 +175,7 @@ class citationmapbuilder:
         res = authorYearPattern.match(crline)
         if (res):
             return res.group(1)
-        print crline
+        print(crline)
         return crline
 
     def output_edges(self, stream):
@@ -208,7 +209,7 @@ class citationmapbuilder:
 
 
 def main():
-    output = StringIO.StringIO()
+    output = io.StringIO()
     cmb = citationmapbuilder()
 
     if len(sys.argv) > 1:

@@ -30,7 +30,7 @@ import pprint
 import re
 import sys
 import string
-import StringIO
+import io
 
 import ArticleWithReferences
 
@@ -121,7 +121,7 @@ class WebOfKnowledgeParser:
                     self.articles[identifier] = article
 
                 except (KeyError):
-                    print values
+                    print(values)
 
                 crlines = []
                 values = {}
@@ -326,9 +326,9 @@ class WebOfKnowledgeParser:
                 pass
             return (identString)
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
             logfile = open('logfile.txt', 'a')
-            allKnowledgeAboutArticle = StringIO.StringIO()
+            allKnowledgeAboutArticle = io.StringIO()
             formattedValues = pprint.PrettyPrinter(
                 stream=allKnowledgeAboutArticle)
             formattedValues.pprint(values)

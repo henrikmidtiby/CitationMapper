@@ -26,11 +26,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gobject
+from gi.repository import GObject
 import GuiArticleDetails
 
 
-class GuiArticleDetailsWindowHandler(gobject.GObject):
+class GuiArticleDetailsWindowHandler(GObject.GObject):
     def __init__(self):
         self.list_of_windows = []
         self.citationmap = None

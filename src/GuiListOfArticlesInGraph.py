@@ -27,7 +27,7 @@
 #
 
 import gtk
-import StringIO
+import io
 
 
 class GuiListOfArticlesInGraph:
@@ -114,7 +114,7 @@ class GuiListOfArticlesInGraph:
         return False
 
     def encodeCurrentListAsHTML(self):
-        output = StringIO.StringIO()
+        output = io.StringIO()
 
         output.write("<html><body><table>")
         values = self.nodesTreeview.get_model()

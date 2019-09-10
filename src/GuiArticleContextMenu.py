@@ -18,7 +18,7 @@ class GuiArticleContextMenu:
         self.opendirectory = directoryName
 
     def add_to_ban_list(self, widget, data=None):
-        print "AddingToBanList dir: %s  item: %s" % (self.opendirectory, data)
+        print("AddingToBanList dir: %s  item: %s" % (self.opendirectory, data))
         filename = "%s/banlist" % self.opendirectory
         try:
             filehandle = open(filename, 'a')
@@ -29,8 +29,8 @@ class GuiArticleContextMenu:
         return False
 
     def hello(self, widget, data=None):
-        print "hello"
-        print data
+        print("hello")
+        print(data)
         return False
 
     def show_context_menu_old(self, widget, data, event):

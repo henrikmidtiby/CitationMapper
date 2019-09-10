@@ -26,11 +26,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gobject
+from gi.repository import GObject
 import re
 import gtk
 import pprint
-import StringIO
+import io
 import string
 import webbrowser
 import DoiLookup
@@ -42,7 +42,7 @@ def open_url(widget, url):
 
 
 # noinspection PyAttributeOutsideInit
-class GuiArticleDetails(gobject.GObject):
+class GuiArticleDetails(GObject.GObject):
     def __init__(self):
         self.__gobject_init__()
         self.doi = None
@@ -157,7 +157,7 @@ class GuiArticleDetails(gobject.GObject):
         return article
 
     def get_all_information_as_text(self, article):
-        all_knowledge_about_article = StringIO.StringIO()
+        all_knowledge_about_article = io.StringIO()
         pp = pprint.PrettyPrinter(stream=all_knowledge_about_article)
         pp.pprint(article)
         full_info_as_text = all_knowledge_about_article.getvalue()
@@ -211,9 +211,9 @@ class GuiArticleDetails(gobject.GObject):
         self.doi = doi
 
 
-gobject.type_register(GuiArticleDetails)
-gobject.signal_new("citation_clicked", GuiArticleDetails, gobject.SIGNAL_RUN_FIRST,
-                   gobject.TYPE_NONE, (gobject.TYPE_STRING,))
+GObject.type_register(GuiArticleDetails)
+GObject.signal_new("citation_clicked", GuiArticleDetails, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, (GObject.TYPE_STRING,))
 
 
 def main():

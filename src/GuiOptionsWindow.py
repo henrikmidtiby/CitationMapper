@@ -26,11 +26,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gobject
+from gi.repository import GObject
 import gtk
 
 
-class GuiOptionsWindow(gobject.GObject):
+class GuiOptionsWindow(GObject.GObject):
     min_number_of_references = 1
     min_number_of_citations = 3
     min_number_of_references_two = 1
@@ -39,7 +39,7 @@ class GuiOptionsWindow(gobject.GObject):
     graph_size = 0
 
     def __init__(self, maxCitations=50, maxReferences=50):
-        self.__gobject_init__()
+        self.__GObject_init__()
         self.ignore_articles_button = None
         self.hscrollbar_citations = None
         self.hscrollbar_references = None
@@ -226,17 +226,17 @@ class GuiOptionsWindow(gobject.GObject):
         self.label_graph_size.set_text("Graph size: %d" % new_graph_size)
 
 
-gobject.type_register(GuiOptionsWindow)
-gobject.signal_new("search_parameters_changed", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
-                   gobject.TYPE_NONE, ())
-gobject.signal_new("show_graph_activated", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
-                   gobject.TYPE_NONE, ())
-gobject.signal_new("export_graph_activated", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
-                   gobject.TYPE_NONE, ())
-gobject.signal_new("show_list_of_nodes", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
-                   gobject.TYPE_NONE, ())
-gobject.signal_new("ignore_articles_activated", GuiOptionsWindow, gobject.SIGNAL_RUN_FIRST,
-                   gobject.TYPE_NONE, ())
+GObject.type_register(GuiOptionsWindow)
+GObject.signal_new("search_parameters_changed", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, ())
+GObject.signal_new("show_graph_activated", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, ())
+GObject.signal_new("export_graph_activated", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, ())
+GObject.signal_new("show_list_of_nodes", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, ())
+GObject.signal_new("ignore_articles_activated", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, ())
 
 
 def main():

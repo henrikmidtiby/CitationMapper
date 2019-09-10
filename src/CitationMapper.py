@@ -27,8 +27,10 @@
 #
 
 import os
-import gtk
-import StringIO
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+import io
 import sys
 import string
 
@@ -104,38 +106,38 @@ class GuiMainWindow:
         self.citationmap = citationmapbuilder.citationmapbuilder()
 
     def setup_window_contents(self):
-        self.citationmapper_window = gtk.Window()
+        self.citationmapper_window = Gtk.Window()
         self.citationmapper_window.set_title("Citation mapper")
         self.citationmapper_window.set_size_request(500, 200)
 
         # Create a UIManager instance
-        uimanager = self.uimanager = gtk.UIManager()
+        uimanager = self.uimanager = Gtk.UIManager()
 
         # Outer vertical box
-        vbox = gtk.VBox(False, 0)
+        vbox = Gtk.VBox(False, 0)
 
         # Network window
         self.mapview = xdot.DotWidget()
 
         # Action bar
         # Create an ActionGroup
-        actiongroup = gtk.ActionGroup('Actions')
+        actiongroup = Gtk.ActionGroup('Actions')
         self.actiongroup = actiongroup
 
         # Create actions
         actiongroup.add_actions((
-            ('Open', gtk.STOCK_OPEN, None, None, None, self.on_open),
-            ('Reload', gtk.STOCK_REFRESH, None, None, None, self.on_reload),
-            ('ZoomIn', gtk.STOCK_ZOOM_IN, None, None, None, self.mapview.on_zoom_in),
-            ('ZoomOut', gtk.STOCK_ZOOM_OUT, None, None, None, self.mapview.on_zoom_out),
-            ('ZoomFit', gtk.STOCK_ZOOM_FIT, None, None, None, self.mapview.on_zoom_fit),
-            ('Zoom100', gtk.STOCK_ZOOM_100, None, None, None, self.mapview.on_zoom_100),
-            ('Print', gtk.STOCK_PRINT, None, None, None, self.mapview.on_print),
+            ('Open', Gtk.STOCK_OPEN, None, None, None, self.on_open),
+            ('Reload', Gtk.STOCK_REFRESH, None, None, None, self.on_reload),
+            ('ZoomIn', Gtk.STOCK_ZOOM_IN, None, None, None, self.mapview.on_zoom_in),
+            ('ZoomOut', Gtk.STOCK_ZOOM_OUT, None, None, None, self.mapview.on_zoom_out),
+            ('ZoomFit', Gtk.STOCK_ZOOM_FIT, None, None, None, self.mapview.on_zoom_fit),
+            ('Zoom100', Gtk.STOCK_ZOOM_100, None, None, None, self.mapview.on_zoom_100),
+            ('Print', Gtk.STOCK_PRINT, None, None, None, self.mapview.on_print),
         ))
 
 
         actiongroup.add_actions([
-            ('Quit', gtk.STOCK_QUIT, '_Quit', None, None, gtk.main_quit),
+            ('Quit', Gtk.STOCK_QUIT, '_Quit', None, None, Gtk.main_quit),
             ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C',
                     None, self.article_details_windows.close_all),
             ('OpenOptionsDialog', None, '_Options', 'O', None, self.show_options_window),
@@ -156,11 +158,11 @@ class GuiMainWindow:
 
         # Create a menu
         menuline = uimanager.get_widget('/MenuBar')
-        vbox.pack_start(menuline, False)
+        vbox.pack_start(menuline, False, False, 0)
 
         # Create a Toolbar
         toolbar = uimanager.get_widget('/ToolBar')
-        vbox.pack_start(toolbar, False)
+        vbox.pack_start(toolbar, False, False, 0)
         #vbox.pack_start(labelReferences, False, True, 0)
         vbox.pack_start(self.mapview, True, True, 0)
 
@@ -168,7 +170,9 @@ class GuiMainWindow:
         self.citationmapper_window.add(vbox)
         self.citationmapper_window.show()
 
-        self.mapview.set_dotcode(self.dotcode)
+        print(type(self.dotcode))
+        print(repr(self.dotcode))
+        self.mapview.set_dotcode(bytes(self.dotcode, encoding='UTF-8'))
 
     def change_color_of_node(self, url, newcolor):
         temp = self.mapview.graph
@@ -184,7 +188,7 @@ class GuiMainWindow:
 
     def setup_connections(self):
         self.mapview.connect('clicked', self.article_clicked)
-        self.citationmapper_window.connect('destroy', gtk.main_quit)
+        self.citationmapper_window.connect('destroy', Gtk.main_quit)
 
     def article_clicked(self, widget, data, event):
         if event.button == 1:
@@ -240,13 +244,13 @@ class GuiMainWindow:
         self.options_window.connect("search_parameters_changed", self.calculate_new_graph_size_and_update_options_window)
 
     def on_open(self, action):
-        chooser = gtk.FileChooserDialog(
+        chooser = Gtk.FileChooserDialog(
             title="Open directory with bibliography",
-            action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OPEN,
-                     gtk.RESPONSE_OK))
-        chooser.set_default_response(gtk.RESPONSE_OK)
-        if chooser.run() == gtk.RESPONSE_OK:
+            action=Gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.RESPONSE_CANCEL, Gtk.STOCK_OPEN,
+                     Gtk.RESPONSE_OK))
+        chooser.set_default_response(Gtk.RESPONSE_OK)
+        if chooser.run() == Gtk.RESPONSE_OK:
             filename = chooser.get_filename()
             chooser.destroy()
             self.open_directory(filename)
@@ -299,7 +303,7 @@ class GuiMainWindow:
 
     def filter_and_export_current_citation_map(self):
         self.filter_current_citation_map()
-        output = StringIO.StringIO()
+        output = io.StringIO()
         self.citationmap.output_graph(output, "BT")
         dotcode = output.getvalue()
         return dotcode
@@ -314,7 +318,7 @@ class GuiMainWindow:
         self.article_details_windows.set_citationmap(self.citationmap)
 
     def dialog_show_large_graph(self, nNodes):
-        self.quit_dialog = gtk.Dialog()
+        self.quit_dialog = Gtk.Dialog()
 
         # Set it modal and transient for main window.
         self.quit_dialog.set_modal(True)
@@ -324,11 +328,11 @@ class GuiMainWindow:
         self.quit_dialog.set_title('Confirmation')
 
         # Add buttons.
-        self.quit_dialog.add_button(gtk.STOCK_YES, 1)
-        self.quit_dialog.add_button(gtk.STOCK_NO, 2)
+        self.quit_dialog.add_button(Gtk.STOCK_YES, 1)
+        self.quit_dialog.add_button(Gtk.STOCK_NO, 2)
 
         # Create label
-        label = gtk.Label(
+        label = Gtk.Label(
             'Will you really visualize this huge graph? (# nodes = %d)' %
             nNodes)
 
@@ -344,12 +348,12 @@ class GuiMainWindow:
         return response == 1
 
     def export_filtered_citation_map(self, action, data):
-        chooser = gtk.FileChooserDialog(
+        chooser = Gtk.FileChooserDialog(
             title=None,
-            action=gtk.FILE_CHOOSER_ACTION_SAVE,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE,
-                     gtk.RESPONSE_OK))
-        if chooser.run() == gtk.RESPONSE_OK:
+            action=Gtk.FILE_CHOOSER_ACTION_SAVE,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.RESPONSE_CANCEL, Gtk.STOCK_SAVE,
+                     Gtk.RESPONSE_OK))
+        if chooser.run() == Gtk.RESPONSE_OK:
             filename = chooser.get_filename()
             chooser.destroy()
 
@@ -432,7 +436,7 @@ def main():
         gmw.open_directory(sys.argv[1])
         gmw.show_options_window()
 
-    gtk.main()
+    Gtk.main()
 
 
 if __name__ == '__main__':

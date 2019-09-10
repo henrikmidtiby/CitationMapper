@@ -1,0 +1,13 @@
+bibtexparser
+decorator
+future
+networkx
+pip
+pkg-resources
+pyparsing
+ruamel.yaml
+ruamel.yaml.clib
+setuptools
+vext
+vext.gi
+xdot

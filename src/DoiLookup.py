@@ -9,18 +9,19 @@
 # Licence:     LGPL
 #-------------------------------------------------------------------------------
 
-import httplib
+import http.client
 import json
 import percache
 import tempfile
 import os
-TESTFILE = os.path.join(tempfile.gettempdir(), "doilookup.cache")
+TESTFILE = os.path.join(tempfile.gettempdir(), "doilookup.cache.db")
+print(TESTFILE)
 cache = percache.Cache(TESTFILE, livesync=True)
 
 
 @cache
 def get_doi_information(doi):
-    conn = httplib.HTTPConnection("data.crossref.org")
+    conn = http.client.HTTPConnection("data.crossref.org")
     headers = {"Accept": "application/vnd.citationstyles.csl+json"}
     conn.request("GET", "/" + doi, headers=headers)
     res = conn.getresponse()
