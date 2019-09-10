@@ -32,8 +32,8 @@ from gi.repository import GObject, Gtk
 class GuiOptionsWindow(GObject.GObject):
     min_number_of_references = 1
     min_number_of_citations = 3
-    min_number_of_references_two = 1
-    min_number_of_citations_two = 3
+    min_number_of_references_two = 0
+    min_number_of_citations_two = 20
     min_year = 1950
     graph_size = 0
 
