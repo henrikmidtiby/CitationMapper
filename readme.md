@@ -11,6 +11,11 @@ git clone git@github.com:henrikmidtiby/CitationMapper.git
 cd CitationMapper
 ```
 
+Install graphviz
+```
+sudo apt-get install graphviz
+```
+
 Create and activate a virtual environment
 ```
 python3 -m venv env
