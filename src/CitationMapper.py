@@ -310,7 +310,7 @@ class GuiMainWindow:
 
     def filter_and_show_current_citation_map(self, action, data):
         if self.options_window.graph_size > 200:
-            if not self.dialog_show_large_graph(self.options_window.graphSize):
+            if not self.dialog_show_large_graph(self.options_window.graph_size):
                 return
         dotcode = self.filter_and_export_current_citation_map()
         self.mapview.set_dotcode(bytes(dotcode, encoding='UTF-8'))
@@ -336,7 +336,7 @@ class GuiMainWindow:
             'Will you really visualize this huge graph? (# nodes = %d)' %
             nNodes)
 
-        self.quit_dialog.vbox.pack_start(label)
+        self.quit_dialog.vbox.pack_start(label, False, False, 0)
 
         # Show dialog
         self.quit_dialog.show_all()
