@@ -214,6 +214,7 @@ class ScopusParser:
 
     def test3(self, reference):
         reference = reference.encode('latin-1', 'replace')
+        reference = reference.decode('ISO-8859-1')
         print("Reference: '%s'" % reference)
         # Author, title and year
         pattern = re.compile(
