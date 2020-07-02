@@ -39,7 +39,7 @@ class ScopusParser:
         self.referenceUnmatchCounter = 0
 
     def parsefile(self, filename):
-        print("parse_file filename = %s", filename)
+        print("parse_file filename = %s" % filename)
         bibtex_file = open(filename)
         bibtex_str = bibtex_file.read()
         bib_database = bibtexparser.loads(bibtex_str)
