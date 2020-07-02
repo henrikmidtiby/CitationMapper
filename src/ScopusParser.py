@@ -102,11 +102,11 @@ class ScopusParser:
             #print("id: '%s'" % id)
         except KeyError as KE:
             print("<generateArticleID>")
-            print sys.exc_info()[0]
+            print(sys.exc_info()[0])
             print("Could not find %s" % KE)
             #print article
             for key in article.keys():
-                print key,
+                print(key,)
             print
             id = "test"
             print("</generateArticleID>")
@@ -153,7 +153,7 @@ class ScopusParser:
                 id = "%d %s %s" % (year, firstAuthor, pages)
             except:
                 print("<generateReference>")
-                print sys.exc_info()[0]
+                print(sys.exc_info()[0])
                 id = "test"
                 print("ID = %s", id)
                 print("</generateReference>")
