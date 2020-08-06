@@ -134,20 +134,21 @@ class WebOfKnowledgeParser:
 
     def get_doi_from_cr_line(self, cr_line):
         doi = None
-        doiPattern = re.compile("^DOI (.*)")
+        doiPattern = re.compile(".*DOI (.*)")
         doiRes = doiPattern.match(cr_line)
         if(doiRes):
             doi = doiRes.group(1)
-        return doi    
+            doi_parts = doi.split(", ")
+            doi = doi_parts[0]
+        return doi
 
     def newIdentifierInspiredByWos2Pajek(self, ident):
         # Basically ignore the abbreviated journal name
         self.getYearFromIdentity(ident)
 
-        pattern = re.compile(".*DOI (.*)")
-        res = pattern.match(ident)
-        if (res):
-            return "DOI %s" % res.group(1)
+        doi = self.get_doi_from_cr_line(ident)
+        if doi is not None:
+            return "DOI %s" % doi
 
         # Match journal entries (Volume and page present)
         # VIENOT TC, 2007, LIB Q, V77, P157
