@@ -138,8 +138,8 @@ class WebOfKnowledgeParser:
         if (res):
             return "DOI %s" % res.group(1)
 
-            # Match journal entries (Volume and page present)
-            # VIENOT TC, 2007, LIB Q, V77, P157
+        # Match journal entries (Volume and page present)
+        # VIENOT TC, 2007, LIB Q, V77, P157
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
         res = crPattern.match(ident)
         if (res):
