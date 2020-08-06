@@ -103,20 +103,11 @@ class WebOfKnowledgeParser:
                         article.firstAuthor = None
 
                     for cr_line in crlines:
-                        year = self.getYearFromIdentity(cr_line)
-                        crIdentifier = self.newIdentifierInspiredByWos2Pajek(cr_line)
-                        article.references.append(crIdentifier)
-                        referenceArticle = ArticleWithReferences.ArticleWithReferences()
-                        referenceArticle.id = crIdentifier
-                        referenceArticle.year = year
-                        referenceArticle.firstAuthor = self.getAuthorFromIdentity(cr_line)
-                        doiPattern = re.compile("^DOI (.*)")
-                        doiRes = doiPattern.match(crIdentifier)
-                        if(doiRes):
-                            referenceArticle.doi = doiRes.group(1)
 
-                        referenceArticle.origin = "ListedInCitations"
-                        self.articles[crIdentifier] = referenceArticle
+
+                        referenceArticle = self.get_reference_article_from_cr_line(cr_line)
+                        article.references.append(referenceArticle.id)
+                        self.articles[referenceArticle.id] = referenceArticle
 
                     self.articles[identifier] = article
 
@@ -128,6 +119,21 @@ class WebOfKnowledgeParser:
         print("Analyzed %d entries." % erCounter)
         print("Found %d articles." % len(self.articles))
         #print("</parsing>")
+
+    def get_reference_article_from_cr_line(self, cr_line):
+        year = self.getYearFromIdentity(cr_line)
+        crIdentifier = self.newIdentifierInspiredByWos2Pajek(cr_line)
+        referenceArticle = ArticleWithReferences.ArticleWithReferences()
+        referenceArticle.id = crIdentifier
+        referenceArticle.year = year
+        referenceArticle.firstAuthor = self.getAuthorFromIdentity(cr_line)
+        doiPattern = re.compile("^DOI (.*)")
+        doiRes = doiPattern.match(crIdentifier)
+        if(doiRes):
+            referenceArticle.doi = doiRes.group(1)
+
+        referenceArticle.origin = "ListedInCitations"
+        return referenceArticle
 
     def newIdentifierInspiredByWos2Pajek(self, ident):
         # Basically ignore the abbreviated journal name
