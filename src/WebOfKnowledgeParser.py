@@ -127,13 +127,18 @@ class WebOfKnowledgeParser:
         referenceArticle.id = crIdentifier
         referenceArticle.year = year
         referenceArticle.firstAuthor = self.getAuthorFromIdentity(cr_line)
-        doiPattern = re.compile("^DOI (.*)")
-        doiRes = doiPattern.match(crIdentifier)
-        if(doiRes):
-            referenceArticle.doi = doiRes.group(1)
+        referenceArticle.doi = self.get_doi_from_cr_line(cr_line)
 
         referenceArticle.origin = "ListedInCitations"
         return referenceArticle
+
+    def get_doi_from_cr_line(self, cr_line):
+        doi = None
+        doiPattern = re.compile("^DOI (.*)")
+        doiRes = doiPattern.match(cr_line)
+        if(doiRes):
+            doi = doiRes.group(1)
+        return doi    
 
     def newIdentifierInspiredByWos2Pajek(self, ident):
         # Basically ignore the abbreviated journal name
