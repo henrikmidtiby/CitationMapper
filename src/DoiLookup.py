@@ -14,10 +14,16 @@ import json
 import percache
 import tempfile
 import os
-TESTFILE = os.path.join(tempfile.gettempdir(), "doilookup.cache.db")
-print(TESTFILE)
-cache = percache.Cache(TESTFILE, livesync=True)
-
+cache_file = os.path.join(tempfile.gettempdir(), "doilookup.cache.db")
+print(cache_file)
+try:
+    cache = percache.Cache(cache_file, livesync=True)
+except Exception as e:
+    print("An exception occured while creating an instance of percache")
+    print("A solution could be to delete the cache file")
+    print("Path to cache file: '%s'" % cache_file)
+    print("Details about the exception")
+    print(e)
 
 @cache
 def get_doi_information(doi):
