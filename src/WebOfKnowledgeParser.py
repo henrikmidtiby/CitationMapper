@@ -38,9 +38,12 @@ import ArticleWithReferences
 class WebOfKnowledgeParser:
     def __init__(self):
         self.articles = {}
+        self.current_filename = None
+        self.current_line_number = 0
 
     def parsefile(self, filename):
         print("<parsing alt=%s>" % filename)
+        self.current_filename = filename
         filehandle = open(filename)
         pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
         repeatedPattern = re.compile("^   (.*)")
@@ -51,8 +54,10 @@ class WebOfKnowledgeParser:
         lastSeenCode = "XX"
         values = {}
         erCounter = 0
+        self.current_line_number = 0
         # Parse file line by line
         for line in filehandle:
+            self.current_line_number += 1
             res = pattern.match(line)
             if (res):
                 lastSeenCode = res.group(1)
@@ -130,6 +135,7 @@ class WebOfKnowledgeParser:
         referenceArticle.doi = self.get_doi_from_cr_line(cr_line)
 
         referenceArticle.origin = "ListedInCitations"
+        referenceArticle.originDetails = "%s - %d" % (self.current_filename, self.current_line_number)
         return referenceArticle
 
     def get_doi_from_cr_line(self, cr_line):

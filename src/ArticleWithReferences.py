@@ -42,6 +42,7 @@ class ArticleWithReferences:
         self.abstract = None
         self.ncites = 0
         self.origin = None
+        self.originDetails = None
 
     def print_information(self):
         print("Article")
@@ -51,6 +52,7 @@ class ArticleWithReferences:
         print("Year: %s" % self.year)
         print("First author: %s" % self.firstAuthor)
         print("Origin: %s" % self.origin)
+        print("Origin details: %s" % self.originDetails)
         #print("Abstract: %s" % self.abstract)
         #print("References:")
         #for reference in self.references:
