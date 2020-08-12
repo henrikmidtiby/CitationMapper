@@ -23,3 +23,19 @@ class Test(unittest.TestCase):
         id = self.parser.newIdentifierInspiredByWos2Pajek(cr_string)
         self.assertEqual(id, "DOI 10.1117/12.799503")
 
+    def test_newIdentifierInspiredByWos2Pajek_4(self):
+        cr_string = "Douglas D.H., 1973, CANADIAN CARTOGRAPHE, V10, P112, DOI [10.3138/FM57-6770-U75U-7727, DOI 10.3138/FM57-6770-U75U-7727]"
+        id = self.parser.newIdentifierInspiredByWos2Pajek(cr_string)
+        self.assertEqual(id, "DOI 10.3138/FM57-6770-U75U-7727")
+
+    def test_remove_DOI_prefix_1(self):
+        string = "10.3138/FM57-6770-U75U-7727"
+        id = self.parser.remove_DOI_prefix(string)
+        self.assertEqual(id, "10.3138/FM57-6770-U75U-7727")
+
+    def test_remove_DOI_prefix_2(self):
+        string = "DOI 10.3138/FM57-6770-U75U-7727"
+        id = self.parser.remove_DOI_prefix(string)
+        self.assertEqual(id, "10.3138/FM57-6770-U75U-7727")
+
+

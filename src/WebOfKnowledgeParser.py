@@ -138,8 +138,26 @@ class WebOfKnowledgeParser:
         referenceArticle.originDetails = "%s - %d" % (self.current_filename, self.current_line_number)
         return referenceArticle
 
+    def remove_DOI_prefix(self, string):
+        pattern = re.compile("DOI (.*)")
+        res = pattern.match(string)
+        if res:
+            return res.group(1)
+        return string
+
+
     def get_doi_from_cr_line(self, cr_line):
         doi = None
+        # Deal with multiple dois in a [] list.
+        doiPattern = re.compile(".*DOI \[(.*)\]")
+        doiRes = doiPattern.match(cr_line)
+        if(doiRes):
+            doi = doiRes.group(1)
+            doi_parts = doi.split(", ")
+            doi = self.remove_DOI_prefix(doi_parts[0])
+            return doi
+
+        # Deal with the standard setup
         doiPattern = re.compile(".*DOI (.*)")
         doiRes = doiPattern.match(cr_line)
         if(doiRes):
