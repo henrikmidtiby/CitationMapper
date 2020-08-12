@@ -108,8 +108,6 @@ class WebOfKnowledgeParser:
                         article.firstAuthor = None
 
                     for cr_line in crlines:
-
-
                         referenceArticle = self.get_reference_article_from_cr_line(cr_line)
                         article.references.append(referenceArticle.id)
                         self.articles[referenceArticle.id] = referenceArticle
