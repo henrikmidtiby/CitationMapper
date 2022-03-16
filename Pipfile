@@ -12,6 +12,7 @@ xdot = "*"
 vext = "*"
 "vext.gi" = "*"
 numpy = "*"
+pygobject = "*"
 
 [dev-packages]
 
