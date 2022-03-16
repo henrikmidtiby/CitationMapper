@@ -39,8 +39,7 @@ def get_doi_information(doi):
 def show_doi_information(doi):
     print("show_doi_information('%s')" % doi)
     parsed_data = get_doi_information(doi)
-    for k, v in parsed_data.items():
-        print("%-*s: %s" % (15, k, v))
+    print(json.dumps(parsed_data, indent = 3))
 
     print("\n\n")
 
