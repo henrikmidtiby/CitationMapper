@@ -27,9 +27,8 @@ except Exception as e:
 
 @cache
 def get_doi_information(doi):
-    conn = http.client.HTTPConnection("data.crossref.org")
-    headers = {"Accept": "application/vnd.citationstyles.csl+json"}
-    conn.request("GET", "/" + doi, headers=headers)
+    conn = http.client.HTTPConnection("api.crossref.org")
+    conn.request("GET", "/v1/works/" + doi)
     res = conn.getresponse()
     data = res.read()
     res.close()
