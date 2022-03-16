@@ -149,10 +149,18 @@ class GuiArticleDetails(GObject.GObject):
     def use_doi_information(self, article):
         try:
             doi_information = DoiLookup.get_doi_information(article.doi)
-            article.title = doi_information['title']
-            article.journal = doi_information['container-title']
-        except:
-            pass
+            print("Trying to get title and container-title based on doi")
+            print(doi_information)
+            temp = doi_information['message']['title']
+            print(temp)
+            article.title = temp[0]
+            print(article.title)
+            article.journal = doi_information['message']['container-title']
+            print(article.journal)
+        except Exception as e:
+            print("lookup failed")
+            print(e)
+
         return article
 
     def get_all_information_as_text(self, article):
