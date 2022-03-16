@@ -31,6 +31,7 @@ import re
 import pprint
 import io
 import string
+import json
 import webbrowser
 import DoiLookup
 import ArticleWithReferences
@@ -97,10 +98,7 @@ class GuiArticleDetails(GObject.GObject):
         text = DoiLookup.get_doi_information(self.doi)
         end_iterator = self.text_buffer.get_end_iter()
         self.text_buffer.insert(end_iterator, '\nDOI Information: \n')
-
-        for k, v in text.items():
-            end_iterator = self.text_buffer.get_end_iter()
-            self.text_buffer.insert(end_iterator, "%-*s: %s\n" % (15, k, v))
+        self.text_buffer.insert(end_iterator, json.dumps(text, indent = 3))
 
         self.requestDOIInformation.hide()
 
