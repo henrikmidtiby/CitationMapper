@@ -48,6 +48,7 @@ class WebOfKnowledgeParser:
         pattern = re.compile("^([A-Z][A-Z0-9]) (.*)")
         repeatedPattern = re.compile("^   (.*)")
         crPattern = re.compile("^.. (.*?, \d{4}, .*?, V\d+, P\d+)")
+        crPattern = re.compile("^.. (.*?)")
         erPattern = re.compile("^ER")
         state = 0  # Are we currently looking for cross references?
         crlines = []
