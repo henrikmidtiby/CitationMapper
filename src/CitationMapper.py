@@ -372,10 +372,14 @@ class GuiMainWindow:
             chooser.destroy()
         return False
 
+    def handle_click_in_list_of_nodes(self, v1, article_id, v3):
+        self.article_details_windows.open_new_article_details_window(article_id)
+
     def get_list_of_nodes(self, action, data):
         list_of_nodes = GuiListOfArticlesInGraph.GuiListOfArticlesInGraph()
         self.filter_current_citation_map()
         list_of_nodes.nodesTreestore.clear()
+        list_of_nodes.connect("citation_clicked", self.handle_click_in_list_of_nodes, None)
         for key in self.citationmap.graphForAnalysis.nodes():
             try:
                 network_citations = self.orig_network.out_degree(key)
