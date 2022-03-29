@@ -384,7 +384,11 @@ class GuiMainWindow:
                 article.retrieve_information_based_on_doi()
                 year = article.year
                 fieldSO = article.journal
+                if type(fieldSO) is list:
+                    fieldSO = "".join(fieldSO)
                 fieldTitle = article.title
+                if type(fieldTitle) is list:
+                    fieldTitle = "".join(article.title)
                 fieldAuthors = " and ".join(article.authors)
                 fieldTC = 0 #int(article['TC'][0])
                 fieldNR = 0 #int(article['NR'][0])
