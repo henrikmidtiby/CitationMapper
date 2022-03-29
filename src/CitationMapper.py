@@ -293,7 +293,7 @@ class GuiMainWindow:
             self.max_citations = max(self.orig_network_citations.values())
             self.max_references = max(self.orig_network_references.values())
         except:
-            self.max_citations = 20
+            self.max_citations = 120
             self.max_references = 20
 
     def filter_current_citation_map(self):
