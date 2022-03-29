@@ -26,12 +26,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gi.repository import Gtk
+from gi.repository import GObject, Gtk
 import io
 
 
-class GuiListOfArticlesInGraph:
+class GuiListOfArticlesInGraph(GObject.GObject):
     def __init__(self):
+        GObject.GObject.__init__(self)
         self.tvcolumn = None
         self.nodesTreestore = None
         self.nodesTreeview = None
@@ -93,6 +94,7 @@ class GuiListOfArticlesInGraph:
         text = "%s %d %d %d" % (model[row][0], model[row][1], model[row][2],
                                 model[row][3])
         print(text)
+        self.emit('citation_clicked', model[row][0])
 
     def exportListOfNodes(self, widget, temp2=None):
         chooser = Gtk.FileChooserDialog(
@@ -128,6 +130,11 @@ class GuiListOfArticlesInGraph:
         output.write("</html>\n")
 
         return output.getvalue()
+
+
+GObject.type_register(GuiListOfArticlesInGraph)
+GObject.signal_new("citation_clicked", GuiListOfArticlesInGraph, GObject.SIGNAL_RUN_FIRST,
+                   GObject.TYPE_NONE, (GObject.TYPE_STRING,))
 
 
 def main():
