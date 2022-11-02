@@ -35,6 +35,7 @@ import json
 import webbrowser
 import DoiLookup
 import ArticleWithReferences
+import logging
 
 
 def open_url(widget, url):
@@ -111,14 +112,16 @@ class GuiArticleDetails(GObject.GObject):
     def update_article_information(self, url,
                                    citationmapbuild=None,
                                    article=None):
-        print("update_article_information url = '%s'" % url)
+        logging.info("update_article_information url = '%s'" % url)
         try:
             article = citationmapbuild.articles[url]
         except:
             print("Lookup failed")
 
+        logging.info("step one")
         self.update_buttons(url)
 
+        logging.info("step two")
         if isinstance(article, ArticleWithReferences.ArticleWithReferences):
             # TODO: Consider to make this an asynchronous call, as it feels like the GUI
             # TODO: does not respond when opening detailed information about a paper.
@@ -142,15 +145,18 @@ class GuiArticleDetails(GObject.GObject):
             full_info_as_text = self.get_all_information_as_text(article)
             self.text_buffer.insert_at_cursor(
                 '\nAll available information:\n%s' % full_info_as_text)
+            logging.info("step four")
             return
         else:
             print("Not an article")
+        logging.info("step three")
 
     def use_doi_information(self, article):
+        logging.info("<use_doi_information>")
         try:
             doi_information = DoiLookup.get_doi_information(article.doi)
             print("Trying to get title and container-title based on doi")
-            print(doi_information)
+            #print(doi_information)
             temp = doi_information['message']['title']
             print(temp)
             article.title = temp[0]
@@ -161,6 +167,7 @@ class GuiArticleDetails(GObject.GObject):
             print("lookup failed")
             print(e)
 
+        logging.info("</use_doi_information>")
         return article
 
     def get_all_information_as_text(self, article):
