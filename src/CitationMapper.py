@@ -26,6 +26,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import logging
+logging.basicConfig(level='DEBUG', 
+                    format="%(asctime)s: %(levelname)8s: %(message)s", 
+                    force=True)
 import os
 import gi
 gi.require_version('Gtk', '3.0')
