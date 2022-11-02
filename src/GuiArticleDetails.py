@@ -184,7 +184,7 @@ class GuiArticleDetails(GObject.GObject):
             print(res.group(1))
             self.update_doi_information(res.group(1))
         else:
-            self.link_label.set_uri("http://google.com/#q=%s" % url)
+            self.link_label.set_uri("http://google.com/search?q=%s" % url)
             self.link_label.set_label("Google this article")
             self.requestDOIInformation.hide()
             print("Not found")
