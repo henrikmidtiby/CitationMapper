@@ -31,6 +31,7 @@ def get_doi_information(doi):
     conn.request("GET", "/v1/works/" + doi)
     res = conn.getresponse()
     data = res.read()
+    #print(data)
     res.close()
     parsed_data = json.JSONDecoder().decode(data.decode('utf-8'))
     return parsed_data
