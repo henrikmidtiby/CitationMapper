@@ -2,7 +2,7 @@
 
 ## Installation guide
 
-Tested on Ubuntu 18.04 LTS.
+Tested on Ubuntu 22.04 LTS.
 
 
 Download or clone from github
@@ -24,7 +24,7 @@ source env/bin/activate
 
 Install python requirements
 ```
-pip install -r src/requirements.txt
+pip install -r requirements.txt
 ```
 
 Launch the program.

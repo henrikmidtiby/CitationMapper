@@ -1,5 +1,5 @@
 run:
-	pipenv run python src/CitationMapper.py inputfiles/case1/
+	python src/CitationMapper.py inputfiles/case1/
 
 test:
 	cd src && python -m unittest discover -v -p "*Test.py"
