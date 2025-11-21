@@ -30,8 +30,8 @@ except Exception as e:
 
 @cache
 def get_doi_information(doi):
-    conn = http.client.HTTPConnection("api.crossref.org")
-    conn.request("GET", "/v1/works/" + doi)
+    conn = http.client.HTTPSConnection("api.crossref.org")
+    conn.request("GET", "/works/" + doi)
     res = conn.getresponse()
     data = res.read()
     ic(data)
