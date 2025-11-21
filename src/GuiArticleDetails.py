@@ -36,6 +36,7 @@ import webbrowser
 import DoiLookup
 import ArticleWithReferences
 import logging
+from icecream import ic
 
 
 def open_url(widget, url):
@@ -96,6 +97,7 @@ class GuiArticleDetails(GObject.GObject):
             "clicked", self.request_doi_information_callback, None)
 
     def request_doi_information_callback(self, p1, p2):
+        ic(self.doi)
         text = DoiLookup.get_doi_information(self.doi)
         end_iterator = self.text_buffer.get_end_iter()
         self.text_buffer.insert(end_iterator, '\nDOI Information: \n')

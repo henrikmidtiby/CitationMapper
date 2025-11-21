@@ -14,6 +14,8 @@ import json
 import percache
 import tempfile
 import os
+from icecream import ic
+
 cache_file = os.path.join(tempfile.gettempdir(), "doilookup.cache.db")
 print(cache_file)
 try:
@@ -31,7 +33,7 @@ def get_doi_information(doi):
     conn.request("GET", "/v1/works/" + doi)
     res = conn.getresponse()
     data = res.read()
-    #print(data)
+    ic(data)
     res.close()
     parsed_data = json.JSONDecoder().decode(data.decode('utf-8'))
     return parsed_data
