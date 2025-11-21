@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        GuiMainWindow
 # Purpose:     Main window for the citation mapper program
 #
@@ -7,7 +7,7 @@
 # Created:     2011-02-25
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2011 Henrik Skov Midtiby
@@ -27,12 +27,14 @@
 #
 
 import logging
-logging.basicConfig(level='DEBUG', 
-                    format="%(asctime)s: %(levelname)8s: %(message)s", 
-                    force=True)
+
+logging.basicConfig(
+    level="DEBUG", format="%(asctime)s: %(levelname)8s: %(message)s", force=True
+)
 import os
 import gi
-gi.require_version('Gtk', '3.0')
+
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import io
 import sys
@@ -57,7 +59,7 @@ class GuiMainWindow:
     }
     """
 
-    ui = '''
+    ui = """
     <ui>
         <menubar name="MenuBar">
             <menu action="File">
@@ -83,7 +85,7 @@ class GuiMainWindow:
             <toolitem action="Print"/>
         </toolbar>
     </ui>
-    '''
+    """
 
     openfilename = None
 
@@ -103,8 +105,9 @@ class GuiMainWindow:
         self.max_citations = None
         self.uimanager = None
         self.mapview = None
-        self.article_details_windows = \
+        self.article_details_windows = (
             GuiArticleDetailsWindowHandler.GuiArticleDetailsWindowHandler()
+        )
         self.setup_window_contents()
         self.setup_connections()
         self.citationmap = citationmapbuilder.citationmapbuilder()
@@ -125,30 +128,75 @@ class GuiMainWindow:
 
         # Action bar
         # Create an ActionGroup
-        actiongroup = Gtk.ActionGroup('Actions')
+        actiongroup = Gtk.ActionGroup("Actions")
         self.actiongroup = actiongroup
 
         # Create actions
-        actiongroup.add_actions((
-            ('Open', Gtk.STOCK_OPEN, None, None, None, self.on_open),
-            ('Reload', Gtk.STOCK_REFRESH, None, None, None, self.on_reload),
-            ('ZoomIn', Gtk.STOCK_ZOOM_IN, None, None, None, self.mapview.on_zoom_in),
-            ('ZoomOut', Gtk.STOCK_ZOOM_OUT, None, None, None, self.mapview.on_zoom_out),
-            ('ZoomFit', Gtk.STOCK_ZOOM_FIT, None, None, None, self.mapview.on_zoom_fit),
-            ('Zoom100', Gtk.STOCK_ZOOM_100, None, None, None, self.mapview.on_zoom_100),
-            ('Print', Gtk.STOCK_PRINT, None, None, None, self.mapview.on_print),
-        ))
+        actiongroup.add_actions(
+            (
+                ("Open", Gtk.STOCK_OPEN, None, None, None, self.on_open),
+                ("Reload", Gtk.STOCK_REFRESH, None, None, None, self.on_reload),
+                (
+                    "ZoomIn",
+                    Gtk.STOCK_ZOOM_IN,
+                    None,
+                    None,
+                    None,
+                    self.mapview.on_zoom_in,
+                ),
+                (
+                    "ZoomOut",
+                    Gtk.STOCK_ZOOM_OUT,
+                    None,
+                    None,
+                    None,
+                    self.mapview.on_zoom_out,
+                ),
+                (
+                    "ZoomFit",
+                    Gtk.STOCK_ZOOM_FIT,
+                    None,
+                    None,
+                    None,
+                    self.mapview.on_zoom_fit,
+                ),
+                (
+                    "Zoom100",
+                    Gtk.STOCK_ZOOM_100,
+                    None,
+                    None,
+                    None,
+                    self.mapview.on_zoom_100,
+                ),
+                ("Print", Gtk.STOCK_PRINT, None, None, None, self.mapview.on_print),
+            )
+        )
 
-
-        actiongroup.add_actions([
-            ('Quit', Gtk.STOCK_QUIT, '_Quit', None, None, Gtk.main_quit),
-            ('CloseArticleDetailsWindows', None, '_Close all article details windows', 'C',
-                    None, self.article_details_windows.close_all),
-            ('OpenOptionsDialog', None, '_Options', 'O', None, self.show_options_window),
-            ('Print', None, '_Export to pdf', 'E', None, self.mapview.on_print),
-            ('About', None, '_About', None, None, self.show_about_dialog),
-            ('File', None, '_File'),
-            ('Help', None, '_Help')])
+        actiongroup.add_actions(
+            [
+                ("Quit", Gtk.STOCK_QUIT, "_Quit", None, None, Gtk.main_quit),
+                (
+                    "CloseArticleDetailsWindows",
+                    None,
+                    "_Close all article details windows",
+                    "C",
+                    None,
+                    self.article_details_windows.close_all,
+                ),
+                (
+                    "OpenOptionsDialog",
+                    None,
+                    "_Options",
+                    "O",
+                    None,
+                    self.show_options_window,
+                ),
+                ("Print", None, "_Export to pdf", "E", None, self.mapview.on_print),
+                ("About", None, "_About", None, None, self.show_about_dialog),
+                ("File", None, "_File"),
+                ("Help", None, "_Help"),
+            ]
+        )
 
         # Add the actiongroup to the uimanager
         uimanager.insert_action_group(actiongroup, 0)
@@ -161,13 +209,13 @@ class GuiMainWindow:
         uimanager.add_ui_from_string(self.ui)
 
         # Create a menu
-        menuline = uimanager.get_widget('/MenuBar')
+        menuline = uimanager.get_widget("/MenuBar")
         vbox.pack_start(menuline, False, False, 0)
 
         # Create a Toolbar
-        toolbar = uimanager.get_widget('/ToolBar')
+        toolbar = uimanager.get_widget("/ToolBar")
         vbox.pack_start(toolbar, False, False, 0)
-        #vbox.pack_start(labelReferences, False, True, 0)
+        # vbox.pack_start(labelReferences, False, True, 0)
         vbox.pack_start(self.mapview, True, True, 0)
 
         vbox.show_all()
@@ -176,7 +224,7 @@ class GuiMainWindow:
 
         print(type(self.dotcode))
         print(repr(self.dotcode))
-        self.mapview.set_dotcode(bytes(self.dotcode, encoding='UTF-8'))
+        self.mapview.set_dotcode(bytes(self.dotcode, encoding="UTF-8"))
 
     def change_color_of_node(self, url, newcolor):
         temp = self.mapview.graph
@@ -191,8 +239,8 @@ class GuiMainWindow:
         self.mapview.queue_draw()
 
     def setup_connections(self):
-        self.mapview.connect('clicked', self.article_clicked)
-        self.citationmapper_window.connect('destroy', Gtk.main_quit)
+        self.mapview.connect("clicked", self.article_clicked)
+        self.citationmapper_window.connect("destroy", Gtk.main_quit)
 
     def article_clicked(self, widget, data, event):
         if event.button == 1:
@@ -200,7 +248,8 @@ class GuiMainWindow:
             self.change_color_of_node(data, (1, 0.75, 0.75, 1))
         else:
             article_context_menu = GuiArticleContextMenu.GuiArticleContextMenu(
-                self.openfilename)
+                self.openfilename
+            )
             article_context_menu.show_context_menu(widget, data, event)
 
     def calculate_new_graph_size_and_update_options_window(self, placeholder=None):
@@ -212,11 +261,14 @@ class GuiMainWindow:
             number_of_citations = self.orig_network.out_degree(key)
             number_of_references = self.orig_network.in_degree(key)
             test_one = (
-                number_of_citations >= self.options_window.min_number_of_citations and
-                number_of_references >= self.options_window.min_number_of_references)
+                number_of_citations >= self.options_window.min_number_of_citations
+                and number_of_references >= self.options_window.min_number_of_references
+            )
             test_two = (
                 number_of_citations >= self.options_window.min_number_of_citations_two
-                and number_of_references >= self.options_window.min_number_of_references_two)
+                and number_of_references
+                >= self.options_window.min_number_of_references_two
+            )
             test_three = False
             try:
                 if self.citationmap.articles[key].year > self.options_window.min_year:
@@ -238,21 +290,37 @@ class GuiMainWindow:
         except:
             pass
 
-        self.options_window = GuiOptionsWindow.GuiOptionsWindow(self.max_citations, self.max_references)
-        self.options_window.connect("show_graph_activated", self.filter_and_show_current_citation_map, None)
-        self.options_window.connect("export_graph_activated", self.export_filtered_citation_map, None)
+        self.options_window = GuiOptionsWindow.GuiOptionsWindow(
+            self.max_citations, self.max_references
+        )
+        self.options_window.connect(
+            "show_graph_activated", self.filter_and_show_current_citation_map, None
+        )
+        self.options_window.connect(
+            "export_graph_activated", self.export_filtered_citation_map, None
+        )
         self.options_window.connect("show_list_of_nodes", self.get_list_of_nodes, None)
-        self.options_window.connect("ignore_articles_activated", self.ignore_articles_in_ban_file, None)
+        self.options_window.connect(
+            "ignore_articles_activated", self.ignore_articles_in_ban_file, None
+        )
         self.calculate_new_graph_size_and_update_options_window()
 
-        self.options_window.connect("search_parameters_changed", self.calculate_new_graph_size_and_update_options_window)
+        self.options_window.connect(
+            "search_parameters_changed",
+            self.calculate_new_graph_size_and_update_options_window,
+        )
 
     def on_open(self, action):
         chooser = Gtk.FileChooserDialog(
             title="Open directory with bibliography",
             action=Gtk.FileChooserAction.SELECT_FOLDER,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN,
-                     Gtk.ResponseType.OK))
+            buttons=(
+                Gtk.STOCK_CANCEL,
+                Gtk.ResponseType.CANCEL,
+                Gtk.STOCK_OPEN,
+                Gtk.ResponseType.OK,
+            ),
+        )
         chooser.set_default_response(Gtk.ResponseType.OK)
         if chooser.run() == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
@@ -291,8 +359,7 @@ class GuiMainWindow:
     def calculate_network_properties(self):
         self.orig_network_citations = self.orig_network.out_degree()
         self.orig_network_references = self.orig_network.in_degree()
-        assert (len(self.orig_network_citations) ==
-                len(self.orig_network_references))
+        assert len(self.orig_network_citations) == len(self.orig_network_references)
         try:
             self.max_citations = max(self.orig_network_citations.values())
             self.max_references = max(self.orig_network_references.values())
@@ -317,7 +384,7 @@ class GuiMainWindow:
             if not self.dialog_show_large_graph(self.options_window.graph_size):
                 return
         dotcode = self.filter_and_export_current_citation_map()
-        self.mapview.set_dotcode(bytes(dotcode, encoding='UTF-8'))
+        self.mapview.set_dotcode(bytes(dotcode, encoding="UTF-8"))
         self.mapview.zoom_to_fit()
         self.article_details_windows.set_citationmap(self.citationmap)
 
@@ -326,10 +393,10 @@ class GuiMainWindow:
 
         # Set it modal and transient for main window.
         self.quit_dialog.set_modal(True)
-        #self.quit_dialog.set_transient_for( self )
+        # self.quit_dialog.set_transient_for( self )
 
         # Set title
-        self.quit_dialog.set_title('Confirmation')
+        self.quit_dialog.set_title("Confirmation")
 
         # Add buttons.
         self.quit_dialog.add_button(Gtk.STOCK_YES, 1)
@@ -337,8 +404,8 @@ class GuiMainWindow:
 
         # Create label
         label = Gtk.Label(
-            'Will you really visualize this huge graph? (# nodes = %d)' %
-            nNodes)
+            "Will you really visualize this huge graph? (# nodes = %d)" % nNodes
+        )
 
         self.quit_dialog.vbox.pack_start(label, False, False, 0)
 
@@ -352,22 +419,33 @@ class GuiMainWindow:
         return response == 1
 
     def export_filtered_citation_map(self, action, data):
-        dialog = Gtk.MessageDialog(self.citationmapper_window, 0, Gtk.MessageType.INFO,
-                Gtk.ButtonsType.OK, "Guide for exporting the graph")
+        dialog = Gtk.MessageDialog(
+            self.citationmapper_window,
+            0,
+            Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK,
+            "Guide for exporting the graph",
+        )
         dialog.format_secondary_text(
-            "Choose a place for the .dot file that will be generated. Afterwards the dot command from graphviz can be used to convert the .dot file to a pdf.")
+            "Choose a place for the .dot file that will be generated. Afterwards the dot command from graphviz can be used to convert the .dot file to a pdf."
+        )
         dialog.run()
         dialog.destroy()
         chooser = Gtk.FileChooserDialog(
             title=None,
             action=Gtk.FileChooserAction.SAVE,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE,
-                     Gtk.ResponseType.OK))
+            buttons=(
+                Gtk.STOCK_CANCEL,
+                Gtk.ResponseType.CANCEL,
+                Gtk.STOCK_SAVE,
+                Gtk.ResponseType.OK,
+            ),
+        )
         if chooser.run() == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
             chooser.destroy()
 
-            exportfile = open(filename, 'w')
+            exportfile = open(filename, "w")
             dotcode = self.filter_and_export_current_citation_map()
             exportfile.write(dotcode)
             exportfile.close()
@@ -383,7 +461,9 @@ class GuiMainWindow:
         list_of_nodes = GuiListOfArticlesInGraph.GuiListOfArticlesInGraph()
         self.filter_current_citation_map()
         list_of_nodes.nodesTreestore.clear()
-        list_of_nodes.connect("citation_clicked", self.handle_click_in_list_of_nodes, None)
+        list_of_nodes.connect(
+            "citation_clicked", self.handle_click_in_list_of_nodes, None
+        )
         for key in self.citationmap.graphForAnalysis.nodes():
             try:
                 network_citations = self.orig_network.out_degree(key)
@@ -398,18 +478,37 @@ class GuiMainWindow:
                 if type(fieldTitle) is list:
                     fieldTitle = "".join(article.title)
                 fieldAuthors = " and ".join(article.authors)
-                fieldTC = 0 #int(article['TC'][0])
-                fieldNR = 0 #int(article['NR'][0])
-                list_of_nodes.nodesTreestore.append(None,
-                                                  [key, year, network_citations,
-                                                   network_references, fieldTC,
-                                                   fieldNR, fieldSO,
-                                                   fieldAuthors, fieldTitle])
+                fieldTC = 0  # int(article['TC'][0])
+                fieldNR = 0  # int(article['NR'][0])
+                list_of_nodes.nodesTreestore.append(
+                    None,
+                    [
+                        key,
+                        year,
+                        network_citations,
+                        network_references,
+                        fieldTC,
+                        fieldNR,
+                        fieldSO,
+                        fieldAuthors,
+                        fieldTitle,
+                    ],
+                )
             except KeyError:
-                list_of_nodes.nodesTreestore.append(None,
-                                                  [key, -1, network_citations,
-                                                   network_references, -1, -1,
-                                                   "", "", ""])
+                list_of_nodes.nodesTreestore.append(
+                    None,
+                    [
+                        key,
+                        -1,
+                        network_citations,
+                        network_references,
+                        -1,
+                        -1,
+                        "",
+                        "",
+                        "",
+                    ],
+                )
 
     def ignore_articles_in_ban_file(self, action, data):
         self.orig_network = self.orig_network_pre_filtered.copy()
@@ -420,14 +519,14 @@ class GuiMainWindow:
                 article_identifier = line[:-1]
                 try:
                     # Remove things that are only mentioned by the node
-                    things_referenced = self.orig_network.in_edges(
-                        [article_identifier])
+                    things_referenced = self.orig_network.in_edges([article_identifier])
                     for edge in things_referenced:
                         referenced_article = edge[0]
                         number_of_citations = self.orig_network.out_degree(
-                            referenced_article)
+                            referenced_article
+                        )
                         if number_of_citations == 1:
-                            print( referenced_article)
+                            print(referenced_article)
                             self.orig_network.remove_node(referenced_article)
 
                     # Remove node
@@ -457,5 +556,5 @@ def main():
     Gtk.main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

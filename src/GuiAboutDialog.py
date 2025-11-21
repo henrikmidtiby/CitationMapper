@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        GuiAboutDialog
 # Purpose:     About dialog for the citation mapper program
 #
@@ -7,7 +7,7 @@
 # Created:     2011-03-07
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2011 Henrik Skov Midtiby
@@ -51,8 +51,9 @@ class GuiAboutDialog:
 
     def addLabel(self):
         self.label = gtk.Label(
-            "Citation mapper was developed by " +
-            "Henrik Skov Midtiby (hemi@mmmi.sdu.dk), University of Southern Denmark. ")
+            "Citation mapper was developed by "
+            + "Henrik Skov Midtiby (hemi@mmmi.sdu.dk), University of Southern Denmark. "
+        )
         self.label.set_line_wrap(True)
         self.label.show()
         self.vbox.pack_start(self.label, True, True, 5)
@@ -76,9 +77,9 @@ class GuiAboutDialog:
 
 def main():
     gab = GuiAboutDialog()
-    gab.aboutdialog.connect('destroy', gtk.main_quit)
+    gab.aboutdialog.connect("destroy", gtk.main_quit)
     gtk.main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

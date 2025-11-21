@@ -1,13 +1,13 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        ScopusParser
-# Purpose:     
+# Purpose:
 #
 # Author:      Henrik Skov Midtiby
 #
 # Created:     2015-06-30
 # Copyright:   (c) Henrik Skov Midtiby 2015
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2015 Henrik Skov Midtiby
@@ -45,41 +45,41 @@ class ScopusParser:
         bib_database = bibtexparser.loads(bibtex_str)
 
         for bibtexArticle in bib_database.entries:
-            #print(bibtexArticle['year'], bibtexArticle['author'])
-            #print(bibtexArticle['title'])
+            # print(bibtexArticle['year'], bibtexArticle['author'])
+            # print(bibtexArticle['title'])
 
             article = ArticleWithReferences.ArticleWithReferences()
             article.id = self.generateArticleID(bibtexArticle)
-            article.origin = 'Bibtex entry'
+            article.origin = "Bibtex entry"
             try:
-                article.title = bibtexArticle['title']
+                article.title = bibtexArticle["title"]
             except:
                 print("No title information")
                 article.title = "None given"
-            article.year = int(bibtexArticle['year'])
+            article.year = int(bibtexArticle["year"])
             article.ncites = 0  # TODO
             try:
                 article.abstract = bibtexArticle["abstract"]
-            except (KeyError):
+            except KeyError:
                 article.abstract = None
             try:
                 article.doi = bibtexArticle["doi"]
-            except (KeyError):
+            except KeyError:
                 article.doi = None
             try:
                 article.authors = [bibtexArticle["author"]]
-            except (KeyError):
+            except KeyError:
                 article.authors = None
 
             try:
-                references = bibtexArticle['references'].split('; ')
+                references = bibtexArticle["references"].split("; ")
                 for reference in references:
                     referenceArticle = self.generateReference(reference)
-                    if (not referenceArticle.id in self.articles):
+                    if not referenceArticle.id in self.articles:
                         self.articles[referenceArticle.id] = referenceArticle
                     article.references.append(referenceArticle.id)
 
-            except (KeyError):
+            except KeyError:
                 pass
 
             self.articles[article.id] = article
@@ -88,25 +88,27 @@ class ScopusParser:
 
     def generateArticleID(self, article):
         try:
-            #authors = article['author'].replace(' and ',  ', ')
-            #id = article['year'] + " " + authors + article['title']
-            #id = article['year'] + " " + article['title']
-            year = int(article['year'])
-            firstAuthor = article['author'].split(',', 1)[0]
-            pages = article['pages']
-            #print("Year: %s" % year)
-            #print("Firstauthor: %s" % firstAuthor)
-            #print("Pages: '%s'" % pages)
+            # authors = article['author'].replace(' and ',  ', ')
+            # id = article['year'] + " " + authors + article['title']
+            # id = article['year'] + " " + article['title']
+            year = int(article["year"])
+            firstAuthor = article["author"].split(",", 1)[0]
+            pages = article["pages"]
+            # print("Year: %s" % year)
+            # print("Firstauthor: %s" % firstAuthor)
+            # print("Pages: '%s'" % pages)
 
             id = "%d %s %s" % (year, firstAuthor, pages)
-            #print("id: '%s'" % id)
+            # print("id: '%s'" % id)
         except KeyError as KE:
             print("<generateArticleID>")
             print(sys.exc_info()[0])
             print("Could not find %s" % KE)
-            #print article
+            # print article
             for key in article.keys():
-                print(key,)
+                print(
+                    key,
+                )
             print
             id = "test"
             print("</generateArticleID>")
@@ -114,34 +116,34 @@ class ScopusParser:
 
     def generateReference(self, reference):
         # Observations
-        # 1. semicolon ; can appear within references 
-        # 2. authors lists have 
+        # 1. semicolon ; can appear within references
+        # 2. authors lists have
         # #############
         self.test3(reference)
-        #print("Could not match reference: '%s'" % reference)
+        # print("Could not match reference: '%s'" % reference)
         # #############
         # Authors, Titel (year) Journal, vol (issue), pp pagestart-pageend
         # Zwiggelaar, R., A review of spectral properties of plants and their potential use for crop/weed discrimination in row-crops (1998) Crop Prot., 17 (3), pp. 189-206
         pattern = re.compile("(.*) \((\d\d\d\d)\) (.*), (.*), pp. (.*)")
         res = pattern.match(reference)
 
-        if (res):
+        if res:
             authorandtitle = res.group(1)
-            values = authorandtitle.rsplit(', ', 1)
-            if (len(values) == 2):
+            values = authorandtitle.rsplit(", ", 1)
+            if len(values) == 2:
                 authors = values[0]
                 title = values[1]
             else:
                 authors = ""
                 title = "authorandtitle"
-            firstAuthor = authorandtitle.split(',', 1)[0]
+            firstAuthor = authorandtitle.split(",", 1)[0]
             year = int(res.group(2))
             journal = res.group(3)
             volumeandnumber = res.group(4)
             pages = res.group(5)
-            #print(authorandtitle)
-            #print(year)
-            #print(remaining)
+            # print(authorandtitle)
+            # print(year)
+            # print(remaining)
             try:
                 #                print("Authors: '%s'" % authors)
                 #                print("Firstauthor: '%s'" % firstAuthor)
@@ -164,44 +166,47 @@ class ScopusParser:
         referenceArticle = ArticleWithReferences.ArticleWithReferences()
         referenceArticle.id = id
         referenceArticle.year = year
-        referenceArticle.origin = 'Rerefence'
+        referenceArticle.origin = "Rerefence"
         return referenceArticle
 
     def test1(self, reference):
-        print("Reference: '%s'" % reference.encode('latin-1', 'ignore'))
+        print("Reference: '%s'" % reference.encode("latin-1", "ignore"))
         pattern = re.compile("(.*)\((\d\d\d\d)\) ?(.*)")
-        res = pattern.match(reference.encode('latin-1', 'ignore'))
-        if (res):
+        res = pattern.match(reference.encode("latin-1", "ignore"))
+        if res:
             print("Matched 1: '%s'" % res.group(1))
             pattern2 = re.compile("([^,]*), ([A-Z]\.)+, (.*)")
             tempString = res.group(1)
             res2 = pattern2.match(tempString)
-            while (res2):
+            while res2:
                 tempString = res2.group(3)
-                print("Matched 1 author: '%s' - rest '%s'" %
-                      (res2.group(1), res2.group(3)))
+                print(
+                    "Matched 1 author: '%s' - rest '%s'"
+                    % (res2.group(1), res2.group(3))
+                )
                 res2 = pattern2.match(tempString)
             print("Matched 1 title: '%s'" % tempString)
             print("Matched 2: '%s'" % res.group(2))
             print("Matched 3: '%s'" % res.group(3))
             self.referenceMatchCounter += 1
         else:
-            print("Unmatched: %s" % reference.encode('latin-1', 'ignore'))
+            print("Unmatched: %s" % reference.encode("latin-1", "ignore"))
             self.referenceUnmatchCounter += 1
 
     def test2(self, reference):
-        reference = reference.encode('latin-1', 'replace')
+        reference = reference.encode("latin-1", "replace")
         print("Reference: '%s'" % reference)
         # Author, title and year
         pattern = re.compile(
-            "^(?P<authors>(?P<author>[^,]+, (?:[A-Z]\.)+, )+)(?P<title>.*)\((?P<year>\d\d\d\d)\) ?(?P<rest>.*)")
+            "^(?P<authors>(?P<author>[^,]+, (?:[A-Z]\.)+, )+)(?P<title>.*)\((?P<year>\d\d\d\d)\) ?(?P<rest>.*)"
+        )
         res = pattern.match(reference)
-        if (res):
-            authors = res.group('authors')
-            firstAuthor = authors.partition(',')[0]
-            title = res.group('title').strip()  # Remove trailing spaces
-            year = int(res.group('year'))
-            restOfString = res.group('rest')
+        if res:
+            authors = res.group("authors")
+            firstAuthor = authors.partition(",")[0]
+            title = res.group("title").strip()  # Remove trailing spaces
+            year = int(res.group("year"))
+            restOfString = res.group("rest")
             print("Matched 1: '%s'" % authors)
             print("Matched 1 first author: '%s'" % firstAuthor)
             print("Matched 2: '%s'" % title)
@@ -213,21 +218,22 @@ class ScopusParser:
             self.referenceUnmatchCounter += 1
 
     def test3(self, reference):
-        reference = reference.encode('latin-1', 'replace')
-        reference = reference.decode('ISO-8859-1')
+        reference = reference.encode("latin-1", "replace")
+        reference = reference.decode("ISO-8859-1")
         print("Reference: '%s'" % reference)
         # Author, title and year
         pattern = re.compile(
-            "^(?P<authors>(?P<author>[^,]+, (?:[A-Z]\.)+, )+)(?P<title>.*)\((?P<year>\d\d\d\d)\) ?(?P<rest1>.*)(?P<pages>pp?. \d+(-\d+))(?P<rest2>).*")
+            "^(?P<authors>(?P<author>[^,]+, (?:[A-Z]\.)+, )+)(?P<title>.*)\((?P<year>\d\d\d\d)\) ?(?P<rest1>.*)(?P<pages>pp?. \d+(-\d+))(?P<rest2>).*"
+        )
         res = pattern.match(reference)
-        if (res):
-            authors = res.group('authors')
-            firstAuthor = authors.partition(',')[0]
-            title = res.group('title').strip()  # Remove trailing spaces
-            year = int(res.group('year'))
-            restOfString1 = res.group('rest1')
-            pages = res.group('pages')
-            restOfString2 = res.group('rest2')
+        if res:
+            authors = res.group("authors")
+            firstAuthor = authors.partition(",")[0]
+            title = res.group("title").strip()  # Remove trailing spaces
+            year = int(res.group("year"))
+            restOfString1 = res.group("rest1")
+            pages = res.group("pages")
+            restOfString2 = res.group("rest2")
             print("Matched 1: '%s'" % authors)
             print("Matched 1 first author: '%s'" % firstAuthor)
             print("Matched 2: '%s'" % title)
@@ -244,7 +250,7 @@ class ScopusParser:
 def main():
     cmb = ScopusParser()
 
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         for arg in sys.argv:
             cmb.parsefile(str(arg))
 
@@ -257,5 +263,5 @@ def main():
     print("No matches: %d" % cmb.referenceUnmatchCounter)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

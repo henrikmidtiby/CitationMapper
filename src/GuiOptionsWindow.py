@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        GuiOptionsWindow
 # Purpose:     Graph showing options window for the citation mapper program
 #
@@ -7,7 +7,7 @@
 # Created:     2011-02-25
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2011 Henrik Skov Midtiby
@@ -85,11 +85,16 @@ class GuiOptionsWindow(GObject.GObject):
             upper=max_references,
             step_incr=1,
             page_incr=5,
-            page_size=0)
-        self.adj_min_number_of_references.connect("value_changed", self.update_min_number_of_references)
-        self.hscrollbar_references = Gtk.Scale.new(Gtk.Orientation.HORIZONTAL, self.adj_min_number_of_references)
+            page_size=0,
+        )
+        self.adj_min_number_of_references.connect(
+            "value_changed", self.update_min_number_of_references
+        )
+        self.hscrollbar_references = Gtk.Scale.new(
+            Gtk.Orientation.HORIZONTAL, self.adj_min_number_of_references
+        )
         self.hscrollbar_references.set_digits(0)
-        #self.hscrollbar_references.set_value_pos(Gtk.POS_LEFT)
+        # self.hscrollbar_references.set_value_pos(Gtk.POS_LEFT)
         self.hscrollbar_references.show()
         self.vbox.pack_start(self.hscrollbar_references, True, True, 0)
 
@@ -105,11 +110,16 @@ class GuiOptionsWindow(GObject.GObject):
             upper=max_citations,
             step_incr=1,
             page_incr=5,
-            page_size=0)
-        self.adj_min_number_of_citations.connect("value_changed", self.update_min_number_of_citations)
-        self.hscrollbar_citations = Gtk.Scale.new(Gtk.Orientation.HORIZONTAL, self.adj_min_number_of_citations)
+            page_size=0,
+        )
+        self.adj_min_number_of_citations.connect(
+            "value_changed", self.update_min_number_of_citations
+        )
+        self.hscrollbar_citations = Gtk.Scale.new(
+            Gtk.Orientation.HORIZONTAL, self.adj_min_number_of_citations
+        )
         self.hscrollbar_citations.set_digits(0)
-        #self.hscrollbar_citations.set_value_pos(Gtk.POS_LEFT)
+        # self.hscrollbar_citations.set_value_pos(Gtk.POS_LEFT)
         self.hscrollbar_citations.show()
         self.vbox.pack_start(self.hscrollbar_citations, True, True, 0)
 
@@ -125,13 +135,16 @@ class GuiOptionsWindow(GObject.GObject):
             upper=max_references,
             step_incr=1,
             page_incr=5,
-            page_size=0)
-        self.adj_min_number_of_references_two.connect("value_changed", self.update_min_number_of_references_two)
+            page_size=0,
+        )
+        self.adj_min_number_of_references_two.connect(
+            "value_changed", self.update_min_number_of_references_two
+        )
         self.hscrollbar_references_two = Gtk.Scale.new(
-            Gtk.Orientation.HORIZONTAL,
-            self.adj_min_number_of_references_two)
+            Gtk.Orientation.HORIZONTAL, self.adj_min_number_of_references_two
+        )
         self.hscrollbar_references_two.set_digits(0)
-        #self.hscrollbar_references_two.set_value_pos(Gtk.POS_LEFT)
+        # self.hscrollbar_references_two.set_value_pos(Gtk.POS_LEFT)
         self.hscrollbar_references_two.show()
         self.vbox.pack_start(self.hscrollbar_references_two, True, True, 0)
 
@@ -147,13 +160,16 @@ class GuiOptionsWindow(GObject.GObject):
             upper=maxCitations,
             step_incr=1,
             page_incr=5,
-            page_size=0)
-        self.adj_min_number_of_citations_two.connect("value_changed", self.update_min_number_of_citations_two)
+            page_size=0,
+        )
+        self.adj_min_number_of_citations_two.connect(
+            "value_changed", self.update_min_number_of_citations_two
+        )
         self.hscrollbar_citations_two = Gtk.Scale.new(
-            Gtk.Orientation.HORIZONTAL, 
-            self.adj_min_number_of_citations_two)
+            Gtk.Orientation.HORIZONTAL, self.adj_min_number_of_citations_two
+        )
         self.hscrollbar_citations_two.set_digits(0)
-        #self.hscrollbar_citations_two.set_value_pos(Gtk.POS_LEFT)
+        # self.hscrollbar_citations_two.set_value_pos(Gtk.POS_LEFT)
         self.hscrollbar_citations_two.show()
         self.vbox.pack_start(self.hscrollbar_citations_two, True, True, 0)
 
@@ -164,13 +180,14 @@ class GuiOptionsWindow(GObject.GObject):
             upper=2020,
             step_incr=1,
             page_incr=5,
-            page_size=0)
+            page_size=0,
+        )
         self.adj_min_year.connect("value_changed", self.update_min_year)
         self.hscrollbar_min_year = Gtk.Scale.new(
-            Gtk.Orientation.HORIZONTAL,
-            self.adj_min_year)
+            Gtk.Orientation.HORIZONTAL, self.adj_min_year
+        )
         self.hscrollbar_min_year.set_digits(0)
-        #self.hscrollbar_min_year.set_value_pos(Gtk.POS_LEFT)
+        # self.hscrollbar_min_year.set_value_pos(Gtk.POS_LEFT)
         self.hscrollbar_min_year.show()
         self.vbox.pack_start(self.hscrollbar_min_year, True, True, 0)
 
@@ -183,46 +200,54 @@ class GuiOptionsWindow(GObject.GObject):
         self.show_graph_button = Gtk.Button("Show graph")
         self.show_graph_button.show()
         self.vbox.pack_start(self.show_graph_button, True, True, 0)
-        self.show_graph_button.connect("clicked", lambda self, x: x.emit('show_graph_activated'), self)
+        self.show_graph_button.connect(
+            "clicked", lambda self, x: x.emit("show_graph_activated"), self
+        )
 
     def add_export_graph_button(self):
         self.export_graph_button = Gtk.Button("Export graph")
         self.export_graph_button.show()
         self.vbox.pack_start(self.export_graph_button, True, True, 0)
-        self.export_graph_button.connect("clicked", lambda self, x: x.emit('export_graph_activated'), self)
+        self.export_graph_button.connect(
+            "clicked", lambda self, x: x.emit("export_graph_activated"), self
+        )
 
     def add_list_of_nodes_button(self):
         self.list_of_nodes_button = Gtk.Button("Get list of nodes")
         self.list_of_nodes_button.show()
         self.vbox.pack_start(self.list_of_nodes_button, True, True, 0)
-        self.list_of_nodes_button.connect("clicked", lambda self, x: x.emit('show_list_of_nodes'), self)
+        self.list_of_nodes_button.connect(
+            "clicked", lambda self, x: x.emit("show_list_of_nodes"), self
+        )
 
     def add_ignore_articles_button(self):
         self.ignore_articles_button = Gtk.Button("Ignore articles in ban file")
         self.ignore_articles_button.show()
         self.vbox.pack_start(self.ignore_articles_button, True, True, 0)
-        self.ignore_articles_button.connect("clicked", lambda self, x: x.emit('ignore_articles_activated'), self)
+        self.ignore_articles_button.connect(
+            "clicked", lambda self, x: x.emit("ignore_articles_activated"), self
+        )
 
     def update_min_number_of_references(self, adj):
         print(adj)
         self.min_number_of_references = adj.get_value()
-        self.emit('search_parameters_changed')
+        self.emit("search_parameters_changed")
 
     def update_min_number_of_citations(self, adj):
         self.min_number_of_citations = adj.get_value()
-        self.emit('search_parameters_changed')
+        self.emit("search_parameters_changed")
 
     def update_min_number_of_references_two(self, adj):
         self.min_number_of_references_two = adj.get_value()
-        self.emit('search_parameters_changed')
+        self.emit("search_parameters_changed")
 
     def update_min_number_of_citations_two(self, adj):
         self.min_number_of_citations_two = adj.get_value()
-        self.emit('search_parameters_changed')
+        self.emit("search_parameters_changed")
 
     def update_min_year(self, adj):
         self.min_year = adj.get_value()
-        self.emit('search_parameters_changed')
+        self.emit("search_parameters_changed")
 
     def set_graph_size(self, new_graph_size):
         self.graph_size = new_graph_size
@@ -230,16 +255,41 @@ class GuiOptionsWindow(GObject.GObject):
 
 
 GObject.type_register(GuiOptionsWindow)
-GObject.signal_new("search_parameters_changed", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, ())
-GObject.signal_new("show_graph_activated", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, ())
-GObject.signal_new("export_graph_activated", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, ())
-GObject.signal_new("show_list_of_nodes", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, ())
-GObject.signal_new("ignore_articles_activated", GuiOptionsWindow, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, ())
+GObject.signal_new(
+    "search_parameters_changed",
+    GuiOptionsWindow,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (),
+)
+GObject.signal_new(
+    "show_graph_activated",
+    GuiOptionsWindow,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (),
+)
+GObject.signal_new(
+    "export_graph_activated",
+    GuiOptionsWindow,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (),
+)
+GObject.signal_new(
+    "show_list_of_nodes",
+    GuiOptionsWindow,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (),
+)
+GObject.signal_new(
+    "ignore_articles_activated",
+    GuiOptionsWindow,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (),
+)
 
 
 def main():
@@ -247,5 +297,5 @@ def main():
     Gtk.main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

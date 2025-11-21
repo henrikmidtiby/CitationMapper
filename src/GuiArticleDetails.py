@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        GuiArticleDetails
 # Purpose:     Article details window for the citation mapper program
 #
@@ -7,7 +7,7 @@
 # Created:     2011-02-25
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2011 Henrik Skov Midtiby
@@ -61,11 +61,12 @@ class GuiArticleDetails(GObject.GObject):
         self.vbox.pack_start(self.node_scrolled_window, True, True, 0)
         self.node_information_window.add(self.vbox)
         self.node_information_window.show_all()
-        #Gtk.link_button_set_uri_hook(open_url)
+        # Gtk.link_button_set_uri_hook(open_url)
 
     def add_link_button(self):
-        self.link_label = Gtk.LinkButton("http://www.sdu.dk",
-                                         label="Locate article on Web of Science")
+        self.link_label = Gtk.LinkButton(
+            "http://www.sdu.dk", label="Locate article on Web of Science"
+        )
         self.vbox.pack_start(self.link_label, False, False, 0)
 
     def citation_tag_event_handler(self, tag, widget, event, iter):
@@ -74,7 +75,7 @@ class GuiArticleDetails(GObject.GObject):
             end_iter.forward_to_tag_toggle(self.citation_tag)
             iter.backward_to_tag_toggle(self.citation_tag)
             id_of_clicked_article = self.text_buffer.get_text(iter, end_iter, False)
-            self.emit('citation_clicked', id_of_clicked_article)
+            self.emit("citation_clicked", id_of_clicked_article)
 
     def add_text_area(self):
         self.text_tag_table = Gtk.TextTagTable()
@@ -82,38 +83,37 @@ class GuiArticleDetails(GObject.GObject):
         self.text_buffer = self.text.get_buffer()
         # Gtk.TextBuffer.new(self.text_tag_table)
         self.text.set_wrap_mode(Gtk.WrapMode.WORD)
-        self.citation_tag = self.text_buffer.create_tag("internal_link", 
-                underline = True)
-        #self.citation_tag.set_property('underline', True)
-        self.citation_tag.connect('event', self.citation_tag_event_handler)
-        #self.text_tag_table.add(self.citation_tag)
+        self.citation_tag = self.text_buffer.create_tag("internal_link", underline=True)
+        # self.citation_tag.set_property('underline', True)
+        self.citation_tag.connect("event", self.citation_tag_event_handler)
+        # self.text_tag_table.add(self.citation_tag)
 
     def add_request_doi_information_button(self):
-        self.requestDOIInformation = Gtk.Button(
-            "Fetch more information based on DOI")
+        self.requestDOIInformation = Gtk.Button("Fetch more information based on DOI")
         self.requestDOIInformation.show()
         self.vbox.pack_start(self.requestDOIInformation, False, False, 5)
         self.requestDOIInformation.connect(
-            "clicked", self.request_doi_information_callback, None)
+            "clicked", self.request_doi_information_callback, None
+        )
 
     def request_doi_information_callback(self, p1, p2):
         ic(self.doi)
         text = DoiLookup.get_doi_information(self.doi)
         end_iterator = self.text_buffer.get_end_iter()
-        self.text_buffer.insert(end_iterator, '\nDOI Information: \n')
-        self.text_buffer.insert(end_iterator, json.dumps(text, indent = 3))
+        self.text_buffer.insert(end_iterator, "\nDOI Information: \n")
+        self.text_buffer.insert(end_iterator, json.dumps(text, indent=3))
 
         self.requestDOIInformation.hide()
 
     def generate_node_scrolled_window(self):
         self.node_scrolled_window = Gtk.ScrolledWindow()
         self.node_scrolled_window.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
-        self.node_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        self.node_scrolled_window.set_policy(
+            Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC
+        )
         self.node_scrolled_window.add(self.text)
 
-    def update_article_information(self, url,
-                                   citationmapbuild=None,
-                                   article=None):
+    def update_article_information(self, url, citationmapbuild=None, article=None):
         logging.info("update_article_information url = '%s'" % url)
         try:
             article = citationmapbuild.articles[url]
@@ -129,15 +129,17 @@ class GuiArticleDetails(GObject.GObject):
             # TODO: does not respond when opening detailed information about a paper.
             # TODO: The delay is on the order of five seconds.
             article = self.use_doi_information(article)
-            self.text_buffer.insert_at_cursor('%s\n' % url)
-            self.text_buffer.insert_at_cursor('%d %s\n' % (int(article.year), article.firstAuthor))
+            self.text_buffer.insert_at_cursor("%s\n" % url)
+            self.text_buffer.insert_at_cursor(
+                "%d %s\n" % (int(article.year), article.firstAuthor)
+            )
             article.print_information()
             self.doi = article.doi
-            self.text_buffer.insert_at_cursor('%s\n\n' % article.title)
-            self.text_buffer.insert_at_cursor('Source: %s\n\n' % article.origin)
-            self.text_buffer.insert_at_cursor('%s\n\n' % article.abstract)
-            self.text_buffer.insert_at_cursor('ncites: %d\n' % article.ncites)
-            self.text_buffer.insert_at_cursor('%s\n' % article.references)
+            self.text_buffer.insert_at_cursor("%s\n\n" % article.title)
+            self.text_buffer.insert_at_cursor("Source: %s\n\n" % article.origin)
+            self.text_buffer.insert_at_cursor("%s\n\n" % article.abstract)
+            self.text_buffer.insert_at_cursor("ncites: %d\n" % article.ncites)
+            self.text_buffer.insert_at_cursor("%s\n" % article.references)
 
             self.insert_graph_information(article, citationmapbuild.graph)
 
@@ -146,7 +148,8 @@ class GuiArticleDetails(GObject.GObject):
 
             full_info_as_text = self.get_all_information_as_text(article)
             self.text_buffer.insert_at_cursor(
-                '\nAll available information:\n%s' % full_info_as_text)
+                "\nAll available information:\n%s" % full_info_as_text
+            )
             logging.info("step four")
             return
         else:
@@ -158,12 +161,12 @@ class GuiArticleDetails(GObject.GObject):
         try:
             doi_information = DoiLookup.get_doi_information(article.doi)
             print("Trying to get title and container-title based on doi")
-            #print(doi_information)
-            temp = doi_information['message']['title']
+            # print(doi_information)
+            temp = doi_information["message"]["title"]
             print(temp)
             article.title = temp[0]
             print(article.title)
-            article.journal = doi_information['message']['container-title']
+            article.journal = doi_information["message"]["container-title"]
             print(article.journal)
         except Exception as e:
             print("lookup failed")
@@ -182,7 +185,7 @@ class GuiArticleDetails(GObject.GObject):
     def update_buttons(self, url):
         pattern = re.compile(".*DOI (.*)")
         res = pattern.match(url)
-        if (res):
+        if res:
             print(res.group(1))
             self.update_doi_information(res.group(1))
         else:
@@ -195,9 +198,11 @@ class GuiArticleDetails(GObject.GObject):
         n_references_in_graph = graph.in_degree(article.id)
         n_citations_in_graph = graph.out_degree(article.id)
         self.text_buffer.insert_at_cursor(
-            'Number of references in graph: %s\n' % n_references_in_graph)
+            "Number of references in graph: %s\n" % n_references_in_graph
+        )
         self.text_buffer.insert_at_cursor(
-            'Number of citations in graph: %s\n' % n_citations_in_graph)
+            "Number of citations in graph: %s\n" % n_citations_in_graph
+        )
 
     def list_citation_of_current_article(self, url, graph):
         list_of_edges = graph.out_edges(url)
@@ -228,8 +233,13 @@ class GuiArticleDetails(GObject.GObject):
 
 
 GObject.type_register(GuiArticleDetails)
-GObject.signal_new("citation_clicked", GuiArticleDetails, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, (GObject.TYPE_STRING,))
+GObject.signal_new(
+    "citation_clicked",
+    GuiArticleDetails,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (GObject.TYPE_STRING,),
+)
 
 
 def main():

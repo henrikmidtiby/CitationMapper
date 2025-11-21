@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        citationmapbuilder
 # Purpose:     Library that builds citation networks based on files from
 #              isiknowledge.
@@ -8,7 +8,7 @@
 # Created:     2011-02-25
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2011 Henrik Skov Midtiby
@@ -34,11 +34,13 @@ import math
 import io
 import ArticleWithReferences
 import WebOfKnowledgeParser
-#import ScopusParser
+
+# import ScopusParser
 import types
 
 print(networkx.__version__)
 # assert(networkx.__version__ == '2.0')
+
 
 class citationmapbuilder:
     def __init__(self):
@@ -55,12 +57,12 @@ class citationmapbuilder:
         # parser = ScopusParser.ScopusParser()
         try:
             parser.parsefile(filename)
-    
+
             for articleKey in parser.articles.keys():
                 article = parser.articles[articleKey]
                 self.add_article_to_graph(article)
         except UnicodeDecodeError as e:
-            print("Cannot parse file \"%s\"" % filename)
+            print('Cannot parse file "%s"' % filename)
             print(e)
 
     def add_article_to_graph(self, article):
@@ -73,9 +75,9 @@ class citationmapbuilder:
             print("Year is not a number")
 
         # not in the database already.
-        if (article.origin == "PrimaryRecord"):
+        if article.origin == "PrimaryRecord":
             self.articles[article.id] = article
-        elif (not article.id in self.articles):
+        elif not article.id in self.articles:
             self.articles[article.id] = article
         self.articles[article.id] = article
         self.graph.add_node(article.id)
@@ -84,7 +86,7 @@ class citationmapbuilder:
         for reference in article.references:
             self.graph.add_edge(reference, article.id)
             halt = 1 == 1
-        if (halt):
+        if halt:
             # return
             pass
 
@@ -105,8 +107,10 @@ class citationmapbuilder:
 
         # Only keep articles that are cited by others
         for key in self.indegrees:
-            if self.graphForAnalysis.has_node(
-                    key) and self.indegrees[key] < minNumberOfReferences:
+            if (
+                self.graphForAnalysis.has_node(key)
+                and self.indegrees[key] < minNumberOfReferences
+            ):
                 self.graphForAnalysis.remove_node(key)
 
     def get_years_and_articles(self):
@@ -118,7 +122,7 @@ class citationmapbuilder:
                     years[curYear] = []
                 years[curYear].append(elem)
             except KeyError:
-                print("get_years_and_articles - KeyError - \'%s\''" % elem)
+                print("get_years_and_articles - KeyError - '%s''" % elem)
 
         print(years)
         return years
@@ -137,16 +141,18 @@ class citationmapbuilder:
         for year in yeartags:
             stream.write(
                 'y%s [fontsize="10", height="0.1668", label="%s", margin="0", rank="%s", shape="plaintext", width="0.398147893333333"]\n'
-                % (year, year, year))
+                % (year, year, year)
+            )
         for index in range(len(yeartags) - 1):
             stream.write(
-                "y%s -> y%s [arrowhead=\"normal\", arrowtail=\"none\", color=\"white\", style=\"invis\"];\n"
-                % (yeartags[index], yeartags[index + 1]))
+                'y%s -> y%s [arrowhead="normal", arrowtail="none", color="white", style="invis"];\n'
+                % (yeartags[index], yeartags[index + 1])
+            )
 
         for year in yeartags:
             yearElements = ""
             for element in years[year]:
-                yearElements = "%s \"%s\"" % (yearElements, element)
+                yearElements = '%s "%s"' % (yearElements, element)
             stream.write("{rank=same; y%s %s}\n" % (year, yearElements))
 
     def output_node_information(self, stream):
@@ -164,27 +170,28 @@ class citationmapbuilder:
                 if self.articles[key].origin == "ListedInCitations":
                     color = "#9999ff"
 
-            except (KeyError):
+            except KeyError:
                 print("output_node_information: KeyError: %s" % key)
                 pass
 
-            nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.)
+            nodesize = math.sqrt((self.outdegrees[key] + 1) / 75.0)
             fontsize = math.sqrt(self.outdegrees[key] + 1) * 2
             stream.write(
                 '"%s" [URL="%s", height="%f", label="%s", fontsize="%f", style=filled, color="%s"]\n'
-                % (key, key, nodesize, labelOnGraph, fontsize, color))
+                % (key, key, nodesize, labelOnGraph, fontsize, color)
+            )
 
     def create_label_from_cr_line(self, crline):
         authorYearPattern = re.compile("^(.*?,\s?\d{4})")
         res = authorYearPattern.match(crline)
-        if (res):
+        if res:
             return res.group(1)
         print(crline)
         return crline
 
     def output_edges(self, stream):
         for edge in self.graphForAnalysis.edges():
-            stream.write("\"%s\" -> \"%s\"\n" % edge)
+            stream.write('"%s" -> "%s"\n' % edge)
 
     def output_preamble(self, stream, direction="TD"):
         stream.write("digraph citations {\n")
@@ -192,11 +199,9 @@ class citationmapbuilder:
         stream.write("ranksep=0.2;\n")
         stream.write("nodesep=0.1;\n")
         stream.write('size="11.0729166666667,5.26041666666667";\n')
-        stream.write("ratio=\"fill\"\n")
-        stream.write(
-            "node [fixedsize=\"true\", fontsize=\"9\", shape=\"circle\"];\n")
-        stream.write(
-            'edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];\n')
+        stream.write('ratio="fill"\n')
+        stream.write('node [fixedsize="true", fontsize="9", shape="circle"];\n')
+        stream.write('edge [arrowhead="none", arrowsize="0.6", arrowtail="normal"];\n')
 
     def output_postamble(self, stream):
         stream.write("}")
@@ -207,7 +212,7 @@ class citationmapbuilder:
             try:
                 self.graphForAnalysis.remove_node(key)
             except networkx.NetworkXError as KE:
-                #print("NetworkXError: %s" % KE)
+                # print("NetworkXError: %s" % KE)
                 pass
         print("left nodes: %d" % len(self.graphForAnalysis.nodes()))
 
@@ -228,5 +233,5 @@ def main():
         print(temp)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

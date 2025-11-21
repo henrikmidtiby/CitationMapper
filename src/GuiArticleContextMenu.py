@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        GuiArticleContextMenu
 # Purpose:     Article context menu for the citation mapper program
 #
@@ -7,7 +7,7 @@
 # Created:     2011-02-25
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     <your licence>
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 
 import gtk
@@ -21,10 +21,10 @@ class GuiArticleContextMenu:
         print("AddingToBanList dir: %s  item: %s" % (self.opendirectory, data))
         filename = "%s/banlist" % self.opendirectory
         try:
-            filehandle = open(filename, 'a')
+            filehandle = open(filename, "a")
             filehandle.write("%s\n" % data)
             filehandle.close()
-        except (IOError):
+        except IOError:
             pass
         return False
 

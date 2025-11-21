@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        ArticleWithReferences
 # Purpose:     Data structure for representing articles.
 #
@@ -7,7 +7,7 @@
 # Created:     2015-06-30
 # Copyright:   (c) Henrik Skov Midtiby 2015
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2015 Henrik Skov Midtiby
@@ -28,6 +28,7 @@
 
 import re
 import DoiLookup
+
 
 class ArticleWithReferences:
     def __init__(self):
@@ -53,14 +54,14 @@ class ArticleWithReferences:
         print("First author: %s" % self.firstAuthor)
         print("Origin: %s" % self.origin)
         print("Origin details: %s" % self.originDetails)
-        #print("Abstract: %s" % self.abstract)
-        #print("References:")
-        #for reference in self.references:
+        # print("Abstract: %s" % self.abstract)
+        # print("References:")
+        # for reference in self.references:
         #    print("  %s" % reference)
         print("\n")
 
     def retrieve_information_based_on_doi(self):
-        pattern = re.compile('DOI (.*)')
+        pattern = re.compile("DOI (.*)")
         res = pattern.match(self.id)
         if res:
             try:
@@ -77,31 +78,33 @@ class ArticleWithReferences:
 
     def get_author_information_from_doi(self, res):
         try:
-            self.firstAuthor = res['author'][0]['family'] + ", " + res['author'][0]['given']
+            self.firstAuthor = (
+                res["author"][0]["family"] + ", " + res["author"][0]["given"]
+            )
             self.authors = []
-            for author in res['author']:
-                self.authors.append(author['family'] + ", " + author['given'])
+            for author in res["author"]:
+                self.authors.append(author["family"] + ", " + author["given"])
         except:
             print(res)
             print("No author information available")
 
     def get_journal_from_doi(self, res):
         try:
-            self.journal = res['container-title']
+            self.journal = res["container-title"]
         except:
             print(res)
             print("No journal information available")
 
     def get_publication_year_from_doi(self, res):
         try:
-            self.year = res['issued']['date-parts'][0][0]
+            self.year = res["issued"]["date-parts"][0][0]
         except:
             print(res)
             print("No publication year available")
 
     def get_title_from_doi(self, res):
         try:
-            self.title = res['title']
+            self.title = res["title"]
         except:
             print(res)
             print("No title available")

@@ -51,31 +51,32 @@ except NameError:
 
 # =============================================================================
 
+
 class Cache(object):
     """Persistent cache for results of callables."""
 
     def __init__(self, backend, repr=repr, livesync=False):
         """Create a new persistent cache using the given backend.
 
-    	If backend is a string, it is interpreted as a filename and a Python
-    	shelve is used as the backend. Otherwise it is interpreted as a
-    	mapping-like object with a `close()` and a `sync()`  method. This
-    	allows to use alternative backends like *shove* or *redis*.
+        If backend is a string, it is interpreted as a filename and a Python
+        shelve is used as the backend. Otherwise it is interpreted as a
+        mapping-like object with a `close()` and a `sync()`  method. This
+        allows to use alternative backends like *shove* or *redis*.
 
-    	The keyword `repr` may specify an alternative representation function
-    	to be applied to the arguments of callables to cache. The
-    	representation function is used when calculating a hash of the
-    	arguments. Representation functions need to differentiate argument
-    	values sufficiently (for the purpose of the callable) and identically
-    	across different invocations of the Python interpreter. The default
-    	representation function `repr()` is suitable for basic types, lists,
-    	tuples and combinations of them as well as for all types which
-    	implement the `__repr__()` method according to the requirements
-    	mentioned above.
+        The keyword `repr` may specify an alternative representation function
+        to be applied to the arguments of callables to cache. The
+        representation function is used when calculating a hash of the
+        arguments. Representation functions need to differentiate argument
+        values sufficiently (for the purpose of the callable) and identically
+        across different invocations of the Python interpreter. The default
+        representation function `repr()` is suitable for basic types, lists,
+        tuples and combinations of them as well as for all types which
+        implement the `__repr__()` method according to the requirements
+        mentioned above.
 
-        Normally changes are only written to the cache when it is closed or
-    	finalized. If `livesync` is `True`, the cache is written to the backend
-    	whenever it changes.
+           Normally changes are only written to the cache when it is closed or
+        finalized. If `livesync` is `True`, the cache is written to the backend
+        whenever it changes.
 
         """
         self.__livesync = livesync
@@ -84,7 +85,7 @@ class Cache(object):
             self.__cache = shelve.open(backend, protocol=-1)
         else:
             self.__cache = backend
-        self.check = self.__call__ # support old decorator interface
+        self.check = self.__call__  # support old decorator interface
 
     def __call__(self, func):
         """Decorator function for caching results of a callable."""
@@ -92,19 +93,19 @@ class Cache(object):
         def wrapper(*args, **kwargs):
             """Function wrapping the decorated function."""
 
-            ckey = [func.__name__] # parameter hash
+            ckey = [func.__name__]  # parameter hash
             for a in args:
                 ckey.append(self.__repr(a))
             for k in sorted(kwargs):
                 ckey.append("%s:%s" % (k, self.__repr(kwargs[k])))
-            ckey = hashlib.sha1(''.join(ckey).encode("UTF8")).hexdigest()
+            ckey = hashlib.sha1("".join(ckey).encode("UTF8")).hexdigest()
 
             if ckey in self.__cache:
                 result = self.__cache[ckey]
             else:
                 result = func(*args, **kwargs)
                 self.__cache[ckey] = result
-            self.__cache["%s:atime" % ckey] = time.time() # access time
+            self.__cache["%s:atime" % ckey] = time.time()  # access time
             if self.__livesync:
                 self.__cache.sync()
             return result
@@ -154,9 +155,11 @@ class Cache(object):
                 newest = max(newest, self.__cache[key])
         return num, oldest, newest
 
+
 # =============================================================================
 # Command line functionality
 # =============================================================================
+
 
 def _main():
     """Command line functionality."""
@@ -184,5 +187,6 @@ def _main():
     print("Oldest result usage age  : %s" % age(now - oldest))
     print("Latest result usage age  : %s" % age(now - newest))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     _main()

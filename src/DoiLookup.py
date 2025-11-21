@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        Doi Look Up
 # Purpose:     Access information about articles identified by their doi.
 #
@@ -7,7 +7,7 @@
 # Created:     2014-03-26
 # Copyright:   (c) Henrik Skov Midtiby, 2014
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 
 import http.client
 import json
@@ -27,6 +27,7 @@ except Exception as e:
     print("Details about the exception")
     print(e)
 
+
 @cache
 def get_doi_information(doi):
     conn = http.client.HTTPConnection("api.crossref.org")
@@ -35,14 +36,14 @@ def get_doi_information(doi):
     data = res.read()
     ic(data)
     res.close()
-    parsed_data = json.JSONDecoder().decode(data.decode('utf-8'))
+    parsed_data = json.JSONDecoder().decode(data.decode("utf-8"))
     return parsed_data
 
 
 def show_doi_information(doi):
     print("show_doi_information('%s')" % doi)
     parsed_data = get_doi_information(doi)
-    print(json.dumps(parsed_data, indent = 3))
+    print(json.dumps(parsed_data, indent=3))
 
     print("\n\n")
 
@@ -53,5 +54,5 @@ def main():
     show_doi_information("10.1007/978-3-642-02674-4_9")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

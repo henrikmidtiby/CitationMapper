@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        citationmapbuilder
 # Purpose:     Library that builds citation networks based on files from
 #              isiknowledge.
@@ -8,7 +8,7 @@
 # Created:     2015-06-30
 # Copyright:   (c) Henrik Skov Midtiby 2015
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2015 Henrik Skov Midtiby
@@ -60,28 +60,28 @@ class WebOfKnowledgeParser:
         for line in filehandle:
             self.current_line_number += 1
             res = pattern.match(line)
-            if (res):
+            if res:
                 lastSeenCode = res.group(1)
                 values[res.group(1)] = [res.group(2)]
-                if (res.group(1) == "CR"):
+                if res.group(1) == "CR":
                     state = 1
                 else:
                     state = 0
 
             res = repeatedPattern.match(line)
-            if (res):
-                if (state == 1):
+            if res:
+                if state == 1:
                     newres = crPattern.match(line)
-                    if (newres):
+                    if newres:
                         crlines.append(res.group(1))
 
                 tempkey = lastSeenCode
-                if (not tempkey in values):
+                if not tempkey in values:
                     values[tempkey] = []
                 values[tempkey].append(res.group(1))
 
             res = erPattern.match(line)
-            if (res):
+            if res:
                 erCounter += 1
                 rawIdentifier = self.formatIdentifier(values)
                 identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
@@ -95,34 +95,36 @@ class WebOfKnowledgeParser:
                     article.origin = "PrimaryRecord"
                     try:
                         article.abstract = " ".join(values["AB"])
-                    except (KeyError):
+                    except KeyError:
                         article.abstract = None
                     try:
                         article.doi = values["DI"][0]
-                    except (KeyError):
+                    except KeyError:
                         article.doi = None
                     try:
                         article.authors = values["AU"]
                         article.firstAuthor = values["AU"][0]
-                    except (KeyError):
+                    except KeyError:
                         article.authors = None
                         article.firstAuthor = None
 
                     for cr_line in crlines:
-                        referenceArticle = self.get_reference_article_from_cr_line(cr_line)
+                        referenceArticle = self.get_reference_article_from_cr_line(
+                            cr_line
+                        )
                         article.references.append(referenceArticle.id)
                         self.articles[referenceArticle.id] = referenceArticle
 
                     self.articles[identifier] = article
 
-                except (KeyError):
+                except KeyError:
                     print(values)
 
                 crlines = []
                 values = {}
         print("Analyzed %d entries." % erCounter)
         print("Found %d articles." % len(self.articles))
-        #print("</parsing>")
+        # print("</parsing>")
 
     def get_reference_article_from_cr_line(self, cr_line):
         year = self.getYearFromIdentity(cr_line)
@@ -134,7 +136,10 @@ class WebOfKnowledgeParser:
         referenceArticle.doi = self.get_doi_from_cr_line(cr_line)
 
         referenceArticle.origin = "ListedInCitations"
-        referenceArticle.originDetails = "%s - %d" % (self.current_filename, self.current_line_number)
+        referenceArticle.originDetails = "%s - %d" % (
+            self.current_filename,
+            self.current_line_number,
+        )
         return referenceArticle
 
     def remove_DOI_prefix(self, string):
@@ -144,13 +149,12 @@ class WebOfKnowledgeParser:
             return res.group(1)
         return string
 
-
     def get_doi_from_cr_line(self, cr_line):
         doi = None
         # Deal with multiple dois in a [] list.
         doiPattern = re.compile(".*DOI \[(.*)\]")
         doiRes = doiPattern.match(cr_line)
-        if(doiRes):
+        if doiRes:
             doi = doiRes.group(1)
             doi_parts = doi.split(", ")
             doi = self.remove_DOI_prefix(doi_parts[0])
@@ -159,7 +163,7 @@ class WebOfKnowledgeParser:
         # Deal with the standard setup
         doiPattern = re.compile(".*DOI (.*)")
         doiRes = doiPattern.match(cr_line)
-        if(doiRes):
+        if doiRes:
             doi = doiRes.group(1)
             doi_parts = doi.split(", ")
             doi = doi_parts[0]
@@ -177,50 +181,47 @@ class WebOfKnowledgeParser:
         # VIENOT TC, 2007, LIB Q, V77, P157
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
         res = crPattern.match(ident)
-        if (res):
+        if res:
             # VIENOT TC,2007,V77,P157
-            return ("%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4),
-                                     res.group(5))).upper()
+            return (
+                "%s,%s,%s,%s" % (res.group(1), res.group(2), res.group(4), res.group(5))
+            ).upper()
 
         # Match book entries
         crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
         res = crPattern2.match(ident)
-        if (res):
-            return ("%s,%s,%s" %
-                    (res.group(1), res.group(2), res.group(4))).upper()
+        if res:
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(4))).upper()
 
         # Match cases with only volume and not page numbers
         # OLANDER B, 2007, INFORM RES, V12
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
         res = crPattern.match(ident)
-        if (res):
+        if res:
             # OLANDER B,2007,V12
-            return ("%s,%s,%s" %
-                    (res.group(1), res.group(2), res.group(4))).upper()
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(4))).upper()
 
         # Match book entries
         # FRION P, 2009, P68
         crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # FRION P,2009,P68
-            return ("%s,%s,%s" %
-                    (res.group(1), res.group(2), res.group(3))).upper()
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
 
         # Match entries like
         # JACKSON MA, 2010, PROC FRONT EDUC CONF
         crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # JACKSON MA,2010,PROC FRONT EDUC CONF
-            return ("%s,%s,%s" %
-                    (res.group(1), res.group(2), res.group(3))).upper()
+            return ("%s,%s,%s" % (res.group(1), res.group(2), res.group(3))).upper()
 
         # Match entries like
         # ANTON G, 2010
         crPattern2 = re.compile("(.*?), (\d{4})")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # ANTON G,2010
             return ("%s,%s" % (res.group(1), res.group(2))).upper()
 
@@ -233,21 +234,21 @@ class WebOfKnowledgeParser:
         # VIENOT TC, 2007, LIB Q, V77, P157
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
         res = crPattern.match(ident)
-        if (res):
+        if res:
             # VIENOT TC,2007,V77,P157
             return int(res.group(2))
 
         # Match book entries
         crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             return int(res.group(2))
 
         # Match cases with only volume and not page numbers
         # OLANDER B, 2007, INFORM RES, V12
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
         res = crPattern.match(ident)
-        if (res):
+        if res:
             # OLANDER B,2007,V12
             return int(res.group(2))
 
@@ -255,7 +256,7 @@ class WebOfKnowledgeParser:
         # FRION P, 2009, P68
         crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # FRION P,2009,P68
             return int(res.group(2))
 
@@ -263,7 +264,7 @@ class WebOfKnowledgeParser:
         # JACKSON MA, 2010, PROC FRONT EDUC CONF
         crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # JACKSON MA,2010,PROC FRONT EDUC CONF
             return int(res.group(2))
 
@@ -271,7 +272,7 @@ class WebOfKnowledgeParser:
         # ANTON G, 2010
         crPattern2 = re.compile("(.*?), (\d{4})")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # ANTON G,2010
             return int(res.group(2))
 
@@ -290,21 +291,21 @@ class WebOfKnowledgeParser:
         # VIENOT TC, 2007, LIB Q, V77, P157
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+), (P\d+)")
         res = crPattern.match(ident)
-        if (res):
+        if res:
             # VIENOT TC,2007,V77,P157
             return res.group(1)
 
         # Match book entries
         crPattern2 = re.compile("(.*?), (\d{4}), (.*?), (P\d+)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             return res.group(1)
 
         # Match cases with only volume and not page numbers
         # OLANDER B, 2007, INFORM RES, V12
         crPattern = re.compile("(.*?), (\d{4}), (.*?), (V\d+)")
         res = crPattern.match(ident)
-        if (res):
+        if res:
             # OLANDER B,2007,V12
             return res.group(1)
 
@@ -312,7 +313,7 @@ class WebOfKnowledgeParser:
         # FRION P, 2009, P68
         crPattern2 = re.compile("(.*?), (\d{4}), (P\d+)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # FRION P,2009,P68
             return res.group(1)
 
@@ -320,7 +321,7 @@ class WebOfKnowledgeParser:
         # JACKSON MA, 2010, PROC FRONT EDUC CONF
         crPattern2 = re.compile("(.*?), (\d{4}), (.*)")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # JACKSON MA,2010,PROC FRONT EDUC CONF
             return res.group(1)
 
@@ -328,7 +329,7 @@ class WebOfKnowledgeParser:
         # ANTON G, 2010
         crPattern2 = re.compile("(.*?), (\d{4})")
         res = crPattern2.match(ident)
-        if (res):
+        if res:
             # ANTON G,2010
             return res.group(1)
 
@@ -342,7 +343,7 @@ class WebOfKnowledgeParser:
                 author = author.replace("'", "")
                 identString = author
             except KeyError:
-                identString = 'NoAuthorInformationWasPresent'
+                identString = "NoAuthorInformationWasPresent"
             try:
                 identString = "%s, %s" % (identString, values["PY"][0])
             except KeyError:
@@ -363,24 +364,26 @@ class WebOfKnowledgeParser:
                 identString = "%s, DOI %s" % (identString, values["DI"][0])
             except KeyError:
                 pass
-            return (identString)
+            return identString
         except:
             print("Unexpected error:", sys.exc_info()[0])
-            logfile = open('logfile.txt', 'a')
+            logfile = open("logfile.txt", "a")
             allKnowledgeAboutArticle = io.StringIO()
-            formattedValues = pprint.PrettyPrinter(
-                stream=allKnowledgeAboutArticle)
+            formattedValues = pprint.PrettyPrinter(stream=allKnowledgeAboutArticle)
             formattedValues.pprint(values)
             fullInfoAsText = allKnowledgeAboutArticle.getvalue()
             logfile.write(fullInfoAsText)
             return "Conversion error: %s %s %s" % (
-                values["PT"][0], values["AU"][0], values["PY"][0])
+                values["PT"][0],
+                values["AU"][0],
+                values["PY"][0],
+            )
 
 
 def main():
     cmb = WebOfKnowledgeParser()
 
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         for arg in sys.argv:
             cmb.parsefile(str(arg))
 
@@ -389,5 +392,5 @@ def main():
         break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

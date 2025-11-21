@@ -2,6 +2,7 @@ import unittest
 
 import WebOfKnowledgeParser
 
+
 class Test(unittest.TestCase):
     parser = WebOfKnowledgeParser.WebOfKnowledgeParser()
 
@@ -10,7 +11,9 @@ class Test(unittest.TestCase):
         self.assertEqual(id, 2007)
 
     def test_newIdentifierInspiredByWos2Pajek_1(self):
-        id = self.parser.newIdentifierInspiredByWos2Pajek("VIENOT TC, 2007, LIB Q, V77, P157")
+        id = self.parser.newIdentifierInspiredByWos2Pajek(
+            "VIENOT TC, 2007, LIB Q, V77, P157"
+        )
         self.assertEqual(id, "VIENOT TC,2007,V77,P157")
 
     def test_newIdentifierInspiredByWos2Pajek_2(self):
@@ -37,5 +40,3 @@ class Test(unittest.TestCase):
         string = "DOI 10.3138/FM57-6770-U75U-7727"
         id = self.parser.remove_DOI_prefix(string)
         self.assertEqual(id, "10.3138/FM57-6770-U75U-7727")
-
-

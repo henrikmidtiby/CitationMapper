@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        GuiListOfArticlesInGraph
 # Purpose:     List of articles in graph for the citation mapper program
 #
@@ -7,7 +7,7 @@
 # Created:     2011-02-25
 # Copyright:   (c) Henrik Skov Midtiby 2011
 # Licence:     LGPL
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 #!/usr/bin/env python
 #
 # Copyright 2011 Henrik Skov Midtiby
@@ -58,55 +58,71 @@ class GuiListOfArticlesInGraph(GObject.GObject):
         # create a TreeStore with one string column to use as the model
         self.nodesTreestore = Gtk.TreeStore(str, int, int, int, int, int, str, str, str)
 
-
     def generateNodesTreeView(self):
-        tmsort = Gtk.TreeModelSort(self.nodesTreestore
-                                   )  # produce a sortable treemodel
+        tmsort = Gtk.TreeModelSort(self.nodesTreestore)  # produce a sortable treemodel
         self.nodesTreeview = Gtk.TreeView(tmsort)
         self.nodesTreeview.connect("row-activated", self.row_clicked)
 
-        column_names = ['ID', 'Year', 'In graph citations',
-                        'In graph references', 'Total citations',
-                        'Total references', 'Journal', 'Authors', 'Title']
+        column_names = [
+            "ID",
+            "Year",
+            "In graph citations",
+            "In graph references",
+            "Total citations",
+            "Total references",
+            "Journal",
+            "Authors",
+            "Title",
+        ]
 
         self.tvcolumn = [None] * len(column_names)
         for n in range(0, len(column_names)):
             cell = Gtk.CellRendererText()
             self.tvcolumn[n] = Gtk.TreeViewColumn(column_names[n])
             self.tvcolumn[n].pack_start(cell, True)
-            self.tvcolumn[n].add_attribute(cell, 'text', n)
+            self.tvcolumn[n].add_attribute(cell, "text", n)
             self.tvcolumn[n].set_sort_column_id(n)
             self.tvcolumn[n].set_resizable(True)
             self.tvcolumn[n].set_reorderable(True)
             if n == 1:
-                cell.set_property('xalign', 1.0)
+                cell.set_property("xalign", 1.0)
             self.nodesTreeview.append_column(self.tvcolumn[n])
 
     def generateNodeScrolledWindow(self):
         self.nodescrolledwindow = Gtk.ScrolledWindow()
         self.nodescrolledwindow.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
-        self.nodescrolledwindow.set_policy(Gtk.PolicyType.AUTOMATIC,
-                                           Gtk.PolicyType.AUTOMATIC)
+        self.nodescrolledwindow.set_policy(
+            Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC
+        )
         self.nodescrolledwindow.add(self.nodesTreeview)
 
     def row_clicked(self, widget, row, col):
         model = widget.get_model()
-        text = "%s %d %d %d" % (model[row][0], model[row][1], model[row][2],
-                                model[row][3])
+        text = "%s %d %d %d" % (
+            model[row][0],
+            model[row][1],
+            model[row][2],
+            model[row][3],
+        )
         print(text)
-        self.emit('citation_clicked', model[row][0])
+        self.emit("citation_clicked", model[row][0])
 
     def exportListOfNodes(self, widget, temp2=None):
         chooser = Gtk.FileChooserDialog(
             title=None,
             action=Gtk.FileChooserAction.SAVE,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE,
-                     Gtk.ResponseType.OK))
+            buttons=(
+                Gtk.STOCK_CANCEL,
+                Gtk.ResponseType.CANCEL,
+                Gtk.STOCK_SAVE,
+                Gtk.ResponseType.OK,
+            ),
+        )
         if chooser.run() == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
             chooser.destroy()
 
-            exportfile = open(filename, 'w')
+            exportfile = open(filename, "w")
             htmlcode = self.encodeCurrentListAsHTML()
             exportfile.write(htmlcode)
             exportfile.close()
@@ -133,15 +149,20 @@ class GuiListOfArticlesInGraph(GObject.GObject):
 
 
 GObject.type_register(GuiListOfArticlesInGraph)
-GObject.signal_new("citation_clicked", GuiListOfArticlesInGraph, GObject.SIGNAL_RUN_FIRST,
-                   GObject.TYPE_NONE, (GObject.TYPE_STRING,))
+GObject.signal_new(
+    "citation_clicked",
+    GuiListOfArticlesInGraph,
+    GObject.SIGNAL_RUN_FIRST,
+    GObject.TYPE_NONE,
+    (GObject.TYPE_STRING,),
+)
 
 
 def main():
     loaig = GuiListOfArticlesInGraph()
-    loaig.nodewindow.connect('destroy', Gtk.main_quit)
+    loaig.nodewindow.connect("destroy", Gtk.main_quit)
     Gtk.main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
