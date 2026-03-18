@@ -1,0 +1,13 @@
+[project]
+name = "citationmapper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "icecream>=2.1.10",
+    "networkx>=3.6.1",
+    "percache>=0.4.4",
+    "pygobject==3.50.2",
+    "xdot>=1.6",
+]
