@@ -32,12 +32,12 @@ import sys
 import string
 import io
 
-import ArticleWithReferences
+from ArticleWithReferences import ArticleWithReferences
 
 
 class WebOfKnowledgeParser:
     def __init__(self):
-        self.articles = {}
+        self.articles: dict[str, ArticleWithReferences] = {}
         self.current_filename = None
         self.current_line_number = 0
 
@@ -87,7 +87,7 @@ class WebOfKnowledgeParser:
                 identifier = self.newIdentifierInspiredByWos2Pajek(rawIdentifier)
 
                 try:
-                    article = ArticleWithReferences.ArticleWithReferences()
+                    article = ArticleWithReferences()
                     article.id = identifier
                     article.title = " ".join(values["TI"])
                     article.year = int(values["PY"][0])
@@ -126,10 +126,10 @@ class WebOfKnowledgeParser:
         print("Found %d articles." % len(self.articles))
         # print("</parsing>")
 
-    def get_reference_article_from_cr_line(self, cr_line):
+    def get_reference_article_from_cr_line(self, cr_line) -> ArticleWithReferences:
         year = self.getYearFromIdentity(cr_line)
         crIdentifier = self.newIdentifierInspiredByWos2Pajek(cr_line)
-        referenceArticle = ArticleWithReferences.ArticleWithReferences()
+        referenceArticle = ArticleWithReferences()
         referenceArticle.id = crIdentifier
         referenceArticle.year = year
         referenceArticle.firstAuthor = self.getAuthorFromIdentity(cr_line)

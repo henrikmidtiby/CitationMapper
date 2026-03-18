@@ -110,7 +110,7 @@ class GuiMainWindow:
         )
         self.setup_window_contents()
         self.setup_connections()
-        self.citationmap = citationmapbuilder.citationmapbuilder()
+        self.citationmap: citationmapbuilder = citationmapbuilder.citationmapbuilder()
 
     def setup_window_contents(self):
         self.citationmapper_window = Gtk.Window()

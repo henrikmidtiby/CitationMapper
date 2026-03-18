@@ -32,7 +32,7 @@ import sys
 import networkx
 import math
 import io
-import ArticleWithReferences
+from ArticleWithReferences import ArticleWithReferences
 import WebOfKnowledgeParser
 
 # import ScopusParser
@@ -46,7 +46,7 @@ class citationmapbuilder:
     def __init__(self):
         self.graph = networkx.DiGraph()
         self.graphForAnalysis = self.graph.copy()
-        self.articles = {}
+        self.articles: dict[str, ArticleWithReferences] = {}
         self.outdegrees = None
         self.indegrees = None
         self.idsAndYears = {}
@@ -65,7 +65,7 @@ class citationmapbuilder:
             print('Cannot parse file "%s"' % filename)
             print(e)
 
-    def add_article_to_graph(self, article):
+    def add_article_to_graph(self, article: ArticleWithReferences) -> None:
         """
 
         Args:
@@ -93,13 +93,13 @@ class citationmapbuilder:
             # for node in self.graph.nodes():
             #    print node
 
-    def analyze_graph(self):
+    def analyze_graph(self) -> None:
         self.graphForAnalysis = self.graph.copy()
         # Extract node parameters
         self.outdegrees = self.graphForAnalysis.out_degree()
         self.indegrees = self.graphForAnalysis.in_degree()
 
-    def clean_up_graph(self, minNumberOfReferences=1, minNumberOfCitations=3):
+    def clean_up_graph(self, minNumberOfReferences: int=1, minNumberOfCitations: int=3) -> None:
         # Only keep articles that cite others (ie we have full information about them)
         for key in self.outdegrees:
             if self.outdegrees[key] < minNumberOfCitations:
@@ -113,7 +113,7 @@ class citationmapbuilder:
             ):
                 self.graphForAnalysis.remove_node(key)
 
-    def get_years_and_articles(self):
+    def get_years_and_articles(self) -> dict[int, ArticleWithReferences]:
         years = {}
         for elem in self.graphForAnalysis.nodes():
             try:
@@ -127,7 +127,7 @@ class citationmapbuilder:
         print(years)
         return years
 
-    def output_graph(self, stream, direction="TD"):
+    def output_graph(self, stream, direction="TD") -> None:
         self.output_preamble(stream, direction)
         self.output_year_nodes_and_mark_objects_with_the_same_rank(stream)
         self.output_node_information(stream)
