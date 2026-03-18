@@ -9,5 +9,6 @@ dependencies = [
     "networkx>=3.6.1",
     "percache>=0.4.4",
     "pygobject==3.50.2",
+    "ruff>=0.15.6",
     "xdot>=1.6",
 ]
