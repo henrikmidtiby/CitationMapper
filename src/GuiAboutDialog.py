@@ -26,7 +26,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gtk
+from gi.repository import Gtk as gtk
 
 
 class GuiAboutDialog:
@@ -44,7 +44,7 @@ class GuiAboutDialog:
         self.aboutdialog.show_all()
 
     def setupCanvas(self):
-        self.aboutdialog = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.aboutdialog = gtk.Window()
         self.aboutdialog.set_title("About dialog")
         self.aboutdialog.set_border_width(10)
         self.vbox = gtk.VBox(False, 0)
