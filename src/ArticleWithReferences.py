@@ -26,6 +26,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from icecream import ic
+
 import re
 import DoiLookup
 
@@ -67,6 +69,7 @@ class ArticleWithReferences:
             try:
                 doi = res.group(1)
                 res = DoiLookup.get_doi_information(doi)
+                res = res["message"]
                 self.get_title_from_doi(res)
                 self.get_publication_year_from_doi(res)
                 self.get_journal_from_doi(res)
@@ -85,26 +88,28 @@ class ArticleWithReferences:
             for author in res["author"]:
                 self.authors.append(author["family"] + ", " + author["given"])
         except:
-            print(res)
-            print("No author information available")
+            ic("No author information available")
+            ic(res)
+            ic(res["author"])
 
     def get_journal_from_doi(self, res):
         try:
             self.journal = res["container-title"]
         except:
-            print(res)
-            print("No journal information available")
+            ic("No journal information available")
+            ic(res)
+            ic(res["container-title"])
 
     def get_publication_year_from_doi(self, res):
         try:
             self.year = res["issued"]["date-parts"][0][0]
         except:
-            print(res)
-            print("No publication year available")
+            ic("No publication year available")
+            ic(res)
 
     def get_title_from_doi(self, res):
         try:
             self.title = res["title"]
         except:
-            print(res)
-            print("No title available")
+            ic("No title available")
+            ic(res)
