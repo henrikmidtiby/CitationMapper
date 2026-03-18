@@ -59,7 +59,7 @@ class GuiAboutDialog:
         self.vbox.pack_start(self.label, True, True, 5)
 
     def addLabel2(self):
-        self.label2 = gtk.Label("Version 2015-11-24")
+        self.label2 = gtk.Label("Version 2026-03-18")
         self.label2.set_line_wrap(True)
         self.label2.set_alignment(0, 0)
         self.label2.show()
