@@ -182,7 +182,7 @@ class citationmapbuilder:
             )
 
     def create_label_from_cr_line(self, crline):
-        authorYearPattern = re.compile("^(.*?,\s?\d{4})")
+        authorYearPattern = re.compile(r"^(.*?,\s?\d{4})")
         res = authorYearPattern.match(crline)
         if res:
             return res.group(1)
